@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/11/19 19:19:13 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/11/20 18:05:53 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ typedef struct	s_quare
 	t_vector3	orientation;
 	double		height;
 	int			colour;
-}				t_plane;
+}				t_square;
 
 typedef struct	s_cylindre
 {
@@ -84,5 +84,30 @@ typedef struct	s_triangle
 	t_vector3	p3;
 	int			colour;
 }				t_triangle;
+
+typedef struct	s_data
+{
+	void			*ptr;
+	void 			*win;
+	void			*img;
+
+	t_resolution	res;
+	t_ambiant_light	amb;
+	t_light			*lights;
+	t_camera		*cameras;
+	t_sphere		*spheres;
+	t_plane			*planes;
+	t_square		*squares;
+	t_cylindre		*cylinders;
+	t_triangle		*triangles;
+
+	int				pixsize;
+	int				pixsizeline;
+	int				endian;
+	char 			*pixtab;
+
+}				t_data;
+
+int solve_quadratic(t_vector3 abc, double *t0, double *t1);
 
 #endif

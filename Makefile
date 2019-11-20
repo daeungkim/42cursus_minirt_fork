@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2019/11/19 14:01:37 by cjaimes          ###   ########.fr        #
+#    Updated: 2019/11/20 19:55:30 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,8 @@ MLX_NAME	=	libmlx.a
 
 MLX_DIR		=	minilibx_opengl
 
-SRCS		=	main.c
+SRCS		=	main.c \
+				math_functions.c
 
 OBJ			=	${SRCS:.c=.o}
 
@@ -48,6 +49,9 @@ ${MLX_DIR}${MLX_NAME}:
 
 ${NAME}:	${MLX_DIR}${MLX_NAME} ${OBJ}
 	${CC} ${CFLAGS} -I ${MLX_DIR} -o ${NAME} ${OBJ} -L.${MLX_DIR}/${MLX_NAME} ${MLX_FLAGS}
+
+run : all
+	./${NAME}
 
 bonus: all
 
