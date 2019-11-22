@@ -6,12 +6,13 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/11/21 16:22:57 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/11/22 19:18:13 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mlx.h"
 #include "mini_rt.h"
+#include "libft.h"
 #include <unistd.h>
 #include <math.h>
 #include <stdio.h>
@@ -145,23 +146,15 @@ t_vector3 compute_ray(const t_data *data, const double x, const double y)
 	t_vector3 ray;
 	double temp;
 
-//printf("After Y axis rotation initia is      |%10.7g|%10.7g|%10.7g|\n", data->cameras->vector.x, data->cameras->vector.y, data->cameras->vector.z);
-	angle_h = (1.0 - x / (((double)data->res.x - 1.0)/ 2.0)) * data->cameras->fov / 2.0;
-	//printf("\nangle is %8.5g ", angle_h);
-	angle_v = (1.0 - y / (((double)data->res.y - 1.0)/ 2.0)) * data->cameras->fov / 2.0 * ((double)data->res.y /(double)data->res.x);
-	temp = data->cameras->vector.x;
-	ray.x = temp * cos(to_rad(angle_h)) + data->cameras->vector.z * sin(to_rad(angle_h));
-	ray.y = data->cameras->vector.y;
-	ray.z = -temp * sin(to_rad(angle_h)) + data->cameras->vector.z * cos(to_rad(angle_h));
-	//printf("x rot for %3g;%3g is |%10.7g|%10.7g|%10.7g|\n", x, y, ray.x, ray.y, ray.z);
-	// temp = ray.y;
-	// ray.y = ray.y * cos(to_rad(angle_v)) - ray.z * sin(to_rad(angle_v));
-	// ray.z = temp * sin(to_rad(angle_v)) + ray.z * cos(to_rad(angle_v));
+	angle_h = (1.0 - x / (((double)data->res.x - 1.0)/ 2.0)) * ((t_camera *)(data->cameras->content))->fov / 2.0;
+	angle_v = (1.0 - y / (((double)data->res.y - 1.0)/ 2.0)) * ((t_camera *)(data->cameras->content))->fov / 2.0 * ((double)data->res.y /(double)data->res.x);
+	temp = ((t_camera *)(data->cameras->content))->vector.x;
+	ray.x = temp * cos(to_rad(angle_h)) + ((t_camera *)(data->cameras->content))->vector.z * sin(to_rad(angle_h));
+	ray.y = ((t_camera *)(data->cameras->content))->vector.y;
+	ray.z = -temp * sin(to_rad(angle_h)) + ((t_camera *)(data->cameras->content))->vector.z * cos(to_rad(angle_h));
 	temp = ray.x;
 	ray.x = ray.x * cos(to_rad(angle_v)) - ray.y * sin(to_rad(angle_v));
 	ray.y = temp * sin(to_rad(angle_v)) + ray.y * cos(to_rad(angle_v));
-	//printf("angle is %8.5g", angle_v);
-	//printf("y rot for %3g;%3g is |%10.7g,%10.7g,%10.7g|\n", x, y, ray.x, ray.y, ray.z);
 	return (normalise_vector(ray));
 }
 
@@ -178,34 +171,45 @@ int	raytrace_sphere(t_data *data, t_vector3 ray, double *intersection)
 	double t1;
 
 	a = dot_prod(ray, ray);
-	b = 2 * dot_prod(ray, sub_vect(data->cameras->pos, data->spheres->centre));
-	c = dot_prod(sub_vect(data->cameras->pos, data->spheres->centre),
-				sub_vect(data->cameras->pos, data->spheres->centre)) -
-				(data->spheres->diametre * data->spheres->diametre / 4);
+	b = 2 * dot_prod(ray, sub_vect(((t_camera *)(data->cameras->content))->pos, ((t_sphere *)(data->spheres->content))->centre));
+	c = dot_prod(sub_vect(((t_camera *)(data->cameras->content))->pos, ((t_sphere *)(data->spheres->content))->centre),
+				sub_vect(((t_camera *)(data->cameras->content))->pos, ((t_sphere *)(data->spheres->content))->centre)) -
+				(((t_sphere *)(data->spheres->content))->diametre * (((t_sphere *)(data->spheres->content))->diametre / 4));
 	if (!solve_quadratic(create_vector(a, b, c), &t0, &t1))
 		return (0);
 	*intersection = t0;
 	return (1);
 }
 
-int main()
+void set_data(t_data *data)
 {
+	data->res.loaded = 0;
+	data->amb.loaded = 0;
+	data->cameras = 0;
+	data->spheres = 0;
+
+}
+
+int main(int ac, char **av)
+{
+	ac = 0;
 	void *mlx_ptr;
 	void *win_ptr;
-	t_camera camera;
-	camera.fov = 40.0;
-	camera.pos = create_vector(0, 5, 0);
-	camera.vector = normalise_vector(create_vector(1, 0, 0));
-	t_sphere sphere;
-	sphere.centre = create_vector(10, 5, 0);
-	sphere.colour = encode_rgb(255, 255, 0);
-	sphere.diametre = 3;
+	// t_camera camera;
+	// camera.fov = 40.0;
+	// camera.pos = create_vector(0, 5, 0);
+	// camera.vector = normalise_vector(create_vector(1, 0, 0));
+	// t_sphere sphere;
+	// sphere.centre = create_vector(10, 5, 3);
+	// sphere.colour = encode_rgb(255, 255, 0);
+	// sphere.diametre = 0.75;
 	t_data data;
-	data.cameras = &camera;
-	data.spheres = &sphere;
-	data.res.x = 1000;
-	data.res.y = 500;
-
+	set_data(&data);
+	// data.cameras = &camera;
+	// data.spheres = &sphere;
+	// data.res.x = 1000;
+	// data.res.y = 500;
+	load_data(&data, av[1]);
 	mlx_ptr = mlx_init();
 	win_ptr = mlx_new_window(mlx_ptr, data.res.x, data.res.y, "Dat_window");
 	int i = 0;
@@ -224,13 +228,12 @@ int main()
 				///printf("Sphere coordinates are |%10.7g,%10.7g,%10.7g|\n", sphere_inter.x, sphere_inter.y, sphere_inter.z);
 				//double dist = distance(sphere_inter, data.spheres->centre);
 				//printf("distance is %g\n", dist);
-				mlx_pixel_put(mlx_ptr, win_ptr, i, j, data.spheres->colour);
+				mlx_pixel_put(mlx_ptr, win_ptr, i, j, ((t_sphere*)(data.spheres->content))->colour);
 			}
 			j++;
 		}
 		i++;
 	}
-	printf("I got here");
 	mlx_loop(mlx_ptr);
 	return (0);
 }

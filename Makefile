@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2019/11/21 16:23:28 by cjaimes          ###   ########.fr        #
+#    Updated: 2019/11/22 18:43:01 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,8 +16,14 @@ MLX_NAME	=	libmlx.a
 
 MLX_DIR		=	minilibx_opengl
 
+LIB_NAME	=	libft.a
+
+LIB_DIR		=	libft
+
 SRCS		=	main.c \
-				math_functions.c
+				math_functions.c \
+				parser.c \
+				factories.c
 
 OBJ			=	${SRCS:.c=.o}
 
@@ -27,7 +33,7 @@ RM			=	rm -f
 
 CC			=	gcc
 
-CFLAGS		=	-Wall -Wextra -Werror
+CFLAGS		=	-Wall -Wextra -Werror -g
 
 MLX_FLAGS	=	-lmlx -framework OpenGL -framework AppKit
 
@@ -43,24 +49,34 @@ all:	${NAME}
 ${MLX_DIR}${MLX_NAME}:
 	${MAKE} -C ${MLX_DIR}
 
+${LIB_DIR}${LIB_NAME}:
+	${MAKE} -C ${LIB_DIR}
+	
+.PHONY: dependencies
+dependencies : ${LIB_DIR}${LIB_NAME} ${MLX_DIR}${MLX_NAME}
+
 %.o :	%.c
-			@${CC} ${CFLAGS} -I ${MLX_DIR} -c $< -o ${<:.c=.o}
+			@${CC} ${CFLAGS} -I ${MLX_DIR} -I ${LIB_DIR}/includes -c $< -o ${<:.c=.o}
 			@printf "%-60b\r" "${_CYAN}${ECHO}${_CYAN} Compiling $@"
 
-${NAME}:	${MLX_DIR}${MLX_NAME} ${OBJ}
-	${CC} ${CFLAGS} -I ${MLX_DIR} -o ${NAME} ${OBJ} -L.${MLX_DIR}/${MLX_NAME} ${MLX_FLAGS}
+${NAME}:	${OBJ}
+	${MAKE} -C ${MLX_DIR}
+	${MAKE} -C ${LIB_DIR}
+	${CC} ${CFLAGS} -o ${NAME} ${OBJ} -L${MLX_DIR} -lmlx -L${LIB_DIR} -lft ${MLX_FLAGS}
 
 run : all
-	./${NAME}
+	./${NAME} scene.rt
 
 bonus: all
 
 clean:
 	${RM} ${OBJ}
 	${MAKE} -C ${MLX_DIR} clean
+	${MAKE} -C ${LIB_DIR} clean
 
 fclean:	clean
 	${RM} ${NAME}
 	${RM} ${MLX_DIR}/${MLX_NAME}
+	${RM} ${LIB_DIR}/${LIB_NAME}
 
 re: fclean all

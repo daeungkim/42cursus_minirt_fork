@@ -6,17 +6,21 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/11/20 18:05:53 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/11/22 18:34:34 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINI_RT_H
 # define MINI_RT_H
 
+#include "stdlib.h"
+#include "libft.h"
+
 typedef struct	s_resolution
 {
 	int			x;
 	int 		y;
+	int			loaded;
 }				t_resolution;
 
 typedef struct	s_vector3
@@ -30,6 +34,7 @@ typedef struct	s_ambiant_light
 {
 	double		ratio;
 	int			colour;
+	int			loaded;
 }				t_ambiant_light;
 
 typedef struct	s_light
@@ -56,7 +61,7 @@ typedef struct	s_phere
 typedef struct	s_plane
 {
 	t_vector3	centre;
-	t_vector3	orientation;
+	t_vector3	normal;
 	int			colour;
 }				t_plane;
 
@@ -93,13 +98,13 @@ typedef struct	s_data
 
 	t_resolution	res;
 	t_ambiant_light	amb;
-	t_light			*lights;
-	t_camera		*cameras;
-	t_sphere		*spheres;
-	t_plane			*planes;
-	t_square		*squares;
-	t_cylindre		*cylinders;
-	t_triangle		*triangles;
+	t_list			*lights;
+	t_list			*cameras;
+	t_list			*spheres;
+	t_list			*planes;
+	t_list			*squares;
+	t_list			*cylinders;
+	t_list			*triangles;
 
 	int				pixsize;
 	int				pixsizeline;
@@ -109,5 +114,12 @@ typedef struct	s_data
 }				t_data;
 
 int solve_quadratic(t_vector3 abc, double *t0, double *t1);
+
+int load_data(t_data *data, char *rt_file);
+
+t_camera *camera_factory(t_vector3 pos, t_vector3 vector, double fov);
+t_light *light_factory(t_vector3 pos, double ratio, int colour);
+t_sphere *sphere_factory(t_vector3 centre, double diametre, int colour);
+t_plane *plane_factory(t_vector3 centre, t_vector3 normal, int colour);
 
 #endif
