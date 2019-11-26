@@ -6,13 +6,14 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 17:07:36 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/11/22 18:01:13 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/11/26 18:24:41 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
+#include "stdio.h"
 
-t_camera *camera_factory(t_vector3 pos, t_vector3 vector, double fov)
+t_camera *camera_factory(t_vector3 pos, t_vector3 orient, double fov)
 {
 	t_camera *cam;
 
@@ -22,9 +23,13 @@ t_camera *camera_factory(t_vector3 pos, t_vector3 vector, double fov)
 	cam->pos.x = pos.x;
 	cam->pos.y = pos.y;
 	cam->pos.z = pos.z;
-	cam->vector.x = vector.x;
-	cam->vector.y = vector.y;
-	cam->vector.z = vector.z;
+	cam->orient.x = orient.x;
+	cam->orient.y = orient.y;
+	cam->orient.z = orient.z;
+	cam->vector_x = apply_orientation(create_vector(1, 0, 0), cam->orient);
+	cam->vector_y = apply_orientation(create_vector(0, 1, 0), cam->orient);
+	cam->vector_z = apply_orientation(create_vector(0, 0, 1), cam->orient);
+	//printf("current ray : |%10.6g|%10.6g|%10.6g|\n", cam->vector_x.x, cam->vector_x.y, cam->vector_x.z);
 	return (cam);
 }
 

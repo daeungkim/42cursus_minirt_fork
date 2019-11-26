@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2019/11/22 18:43:01 by cjaimes          ###   ########.fr        #
+#    Updated: 2019/11/26 15:39:50 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,9 @@ LIB_DIR		=	libft
 SRCS		=	main.c \
 				math_functions.c \
 				parser.c \
-				factories.c
+				factories.c \
+				vector_maths.c \
+				vector_maths2.c
 
 OBJ			=	${SRCS:.c=.o}
 
