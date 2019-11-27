@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/11/26 15:40:10 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/11/27 17:20:58 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,14 @@ typedef struct	s_resolution
 	int 		y;
 	int			loaded;
 }				t_resolution;
+
+typedef struct s_rbg
+{
+	int			r;
+	int			g;
+	int			b;
+}				t_rgb;
+
 
 typedef struct	s_vector3
 {
@@ -61,14 +69,12 @@ typedef struct	s_phere
 {
 	t_vector3	centre;
 	double		diametre;
-	int			colour;
 }				t_sphere;
 
 typedef struct	s_plane
 {
 	t_vector3	centre;
 	t_vector3	normal;
-	int			colour;
 }				t_plane;
 
 typedef struct	s_quare
@@ -76,7 +82,6 @@ typedef struct	s_quare
 	t_vector3	centre;
 	t_vector3	orientation;
 	double		height;
-	int			colour;
 }				t_square;
 
 typedef struct	s_cylindre
@@ -85,7 +90,6 @@ typedef struct	s_cylindre
 	t_vector3	orientation;
 	double		diameter;
 	double		height;
-	int			colour;
 }				t_cylindre;
 
 typedef struct	s_triangle
@@ -93,14 +97,7 @@ typedef struct	s_triangle
 	t_vector3	p1;
 	t_vector3	p2;
 	t_vector3	p3;
-	int			colour;
 }				t_triangle;
-
-typedef struct	s_geo_obj
-{
-	void *obj;
-	//void (*find_inter)(void *obj, )
-}				t_geo;
 
 typedef struct	s_data
 {
@@ -112,11 +109,7 @@ typedef struct	s_data
 	t_ambiant_light	amb;
 	t_list			*lights;
 	t_list			*cameras;
-	t_list			*spheres;
-	t_list			*planes;
-	t_list			*squares;
-	t_list			*cylinders;
-	t_list			*triangles;
+	t_list			*objects;
 
 	int				pixsize;
 	int				pixsizeline;
@@ -125,28 +118,56 @@ typedef struct	s_data
 
 }					t_data;
 
+typedef struct	s_geo_obj
+{
+	void *obj;
+	int (*find_inter)(t_data *data, void *obj, t_vector3 ray, double *intersection);
+	t_vector3 (*get_normal_vector)(t_vector3 point, void *obj);
+	int			colour;
+	//leave room for reflection
+}				t_geo;
+
+//vector functions
 t_vector3	create_vector(const double x, const double y, const double z);
 t_vector3	add_vect(t_vector3 a, t_vector3 b);
 t_vector3	sub_vect(t_vector3 a, t_vector3 b);
 t_vector3	scalar_vect(t_vector3 a, double b);
 double		distance(t_vector3 a, t_vector3 b);
+double		magnitude(t_vector3 a);
 
 t_vector3	get_point_from_ray(t_vector3 origin, t_vector3 ray, double t);
 t_vector3	direction_vector(t_vector3 a, t_vector3 b);
 t_vector3	normalise_vector(t_vector3 v);
 double		dot_prod(t_vector3 a, t_vector3 b);
 t_vector3	cross_prod(t_vector3 a, t_vector3 b);
+double		angle_between_vectors(t_vector3 a, t_vector3 b);
 
 
 t_vector3	apply_orientation(t_vector3 base, t_vector3 orient);
 
 int			solve_quadratic(t_vector3 abc, double *t0, double *t1);
+double to_rad(double deg);
 
 int			load_data(t_data *data, char *rt_file);
 
+//sphere
+int	raytrace_sphere(t_data *data, void *sphere, t_vector3 ray, double *intersection);
+t_vector3 normal_vector_sphere(t_vector3 point, void *sphere);
+
+//factories
 t_camera	*camera_factory(t_vector3 pos, t_vector3 vector, double fov);
 t_light		*light_factory(t_vector3 pos, double ratio, int colour);
-t_sphere	*sphere_factory(t_vector3 centre, double diametre, int colour);
-t_plane		*plane_factory(t_vector3 centre, t_vector3 normal, int colour);
+t_geo		*sphere_factory(t_vector3 centre, double diametre, int colour);
+t_geo		*plane_factory(t_vector3 centre, t_vector3 normal, int colour);
+
+//rgb functions
+int			get_blue(int colour);
+int			get_green(int colour);
+int			get_red(int colour);
+int			encode_rgb(int red, int green, int blue);
+void		decode_rgb(int colour, int *red, int *green, int *blue);
+int			apply_intensity_rgb(int colour, double intensity);
+int			filter_colours_rgb(int source, int surface);
+int			add_lights(int a, int b);
 
 #endif

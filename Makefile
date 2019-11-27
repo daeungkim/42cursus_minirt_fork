@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2019/11/26 15:39:50 by cjaimes          ###   ########.fr        #
+#    Updated: 2019/11/27 17:04:56 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,9 @@ SRCS		=	main.c \
 				parser.c \
 				factories.c \
 				vector_maths.c \
-				vector_maths2.c
+				vector_maths2.c \
+				vector_maths3.c \
+				colour_functions.c
 
 OBJ			=	${SRCS:.c=.o}
 
@@ -64,7 +66,8 @@ dependencies : ${LIB_DIR}${LIB_NAME} ${MLX_DIR}${MLX_NAME}
 ${NAME}:	${OBJ}
 	${MAKE} -C ${MLX_DIR}
 	${MAKE} -C ${LIB_DIR}
-	${CC} ${CFLAGS} -o ${NAME} ${OBJ} -L${MLX_DIR} -lmlx -L${LIB_DIR} -lft ${MLX_FLAGS}
+	#export DYLD_LIBRARY_PATH=${MLX_DIR}
+	${CC} ${CFLAGS} -o ${NAME} ${OBJ} ${MLX_DIR}/${MLX_NAME} -L${LIB_DIR} -lft ${MLX_FLAGS}
 
 run : all
 	./${NAME} scene.rt

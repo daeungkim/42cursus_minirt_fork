@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/20 17:25:46 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/11/21 14:51:00 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/11/27 14:06:50 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,9 @@ int solve_quadratic(t_vector3 abc, double *t0, double *t1)
 		//add check to see if t is negative to prevent tracing objects behind camera
 	}
 	return (1);
+}
+
+double to_rad(double deg)
+{
+	return (deg * M_PI / 180.0);
 }

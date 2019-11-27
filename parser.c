@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 12:05:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/11/22 19:18:01 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/11/27 17:49:41 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,22 @@ int parse_error(char *err)
 	return (0);
 }
 
+int extra_info(char *err)
+{
+	ft_putstr(err);
+	ft_putstr("\n");
+	return (0);
+}
+
 static int is_white_space(char c)
 {
 	return (c == ' ' || c == '\t');
+}
+
+static void skip_whitespace(char **line)
+{
+	while (is_white_space(**line))
+		(*line)++;
 }
 
 int ft_atoi_live(char **line)
@@ -127,18 +140,17 @@ int	load_res(t_data *data, char **line)
 	data->res.y = 0;
 	data->res.loaded = 1;
 	(*line)++;
-	while (is_white_space(**line))
-		(*line)++;
+	skip_whitespace(line);
 	if (ft_isdigit(**line) || **line == '-')
 		data->res.x = ft_atoi_live(line);
-	while (is_white_space(**line))
-		(*line)++;
+	skip_whitespace(line);
 	if (ft_isdigit(**line) || **line == '-')
 		data->res.y = ft_atoi_live(line);
 	if (data->res.x <= 0)
 		return (parse_error("Resolution X is not defined or is set to 0"));
 	if (data->res.y <= 0)
 		return (parse_error("Resolution Y is not defined or is set to 0"));
+	extra_info("Resolution set");
 	return (1);
 }
 
@@ -150,16 +162,45 @@ int load_amb(t_data *data, char **line)
 	data->amb.ratio = -1;
 	data->amb.colour = -1;
 	(*line)++;
-	while (is_white_space(**line))
-		(*line)++;
+	skip_whitespace(line);
 	if (ft_isdigit(**line) || **line == '-')
 		data->amb.ratio = ft_atof_live(line);
 	if (data->amb.ratio < 0 || data->amb.ratio > 1)
 		return (parse_error("Ambient light ratio not between [0.0;1.0]"));
-	while (is_white_space(**line))
-		(*line)++;
+	skip_whitespace(line);
 	if (!get_rgb(line, &(data->amb.colour), 0))
 		return (parse_error("Wrong RGB values for ambient light settings"));
+	data->amb.colour = apply_intensity_rgb(data->amb.colour, data->amb.ratio);
+	extra_info("Ambiant light loaded");
+	return (1);
+}
+
+int load_light(t_data *data, char **line)
+{
+	t_vector3 coor;
+	double	intensity;
+	int		colour;
+	t_list	*light;
+
+	(*line)++;
+	skip_whitespace(line);
+	if (!get_vector3(line, &coor))
+		return (parse_error("Wrong coordinate vector of a light"));
+	skip_whitespace(line);
+	if (ft_isdigit(**line))
+		intensity = ft_atof_live(line);
+	else
+		return (parse_error("Error in a light ratio"));
+	if (intensity < 0 || intensity > 1)
+		return (parse_error("Light ratio not between [0.0;1.0]"));
+	skip_whitespace(line);
+	if (!get_rgb(line, &colour, 0))
+		return (parse_error("Wrong RGB values for light"));
+	colour = apply_intensity_rgb(colour, intensity);
+	if (!(light = ft_lstnew(light_factory(coor, intensity, colour))) && !((t_light *)(light->content)))
+		return (parse_error("Malloc failed for light"));
+	ft_lstadd_back(&(data->lights), light);
+	extra_info("Light loaded");
 	return (1);
 }
 
@@ -171,24 +212,22 @@ int load_camera(t_data *data, char **line)
 	t_list		*cam;
 
 	(*line)++;
-	while (is_white_space(**line))
-		(*line)++;
+	skip_whitespace(line);
 	if (!get_vector3(line, &coor))
 		return (parse_error("Wrong coordinate vector of a camera"));
-	while (is_white_space(**line))
-		(*line)++;
+	skip_whitespace(line);
 	if (!get_vector3(line, &vector))
 		return (parse_error("Wrong orientation vector of a camera"));
 	if (vector.x > 1 || vector.y > 1 ||vector.z > 1 ||
 		vector.x < -1 || vector.y < -1 || vector.z < -1)
 		return (parse_error("Camera orienation values not between [0.0;1.0]"));
-	while (is_white_space(**line))
-		(*line)++;
+	skip_whitespace(line);
 	if ((fov = ft_atof_live(line)) <= 0)
 		return (parse_error("Error in camera fov"));
 	if (!(cam = ft_lstnew(camera_factory(coor, vector, fov))) && !((t_camera *)(cam->content)))
 		return (0);
 	ft_lstadd_back(&(data->cameras), cam);
+	extra_info("Camera loaded");
 	return (1);
 }
 
@@ -198,22 +237,21 @@ int load_sphere(t_data *data, char **line)
 	double		diametre;
 	int 		colour;
 	t_list		*sp;
+	
 	(*line)+= 2;
-	while (is_white_space(**line))
-		(*line)++;
+	skip_whitespace(line);
 	if (!get_vector3(line, &centre))
 		return (parse_error("Wrong centre vector of a sphere"));
-	while (is_white_space(**line))
-		(*line)++;
+	skip_whitespace(line);
 	if ((diametre = ft_atof_live(line)) <= 0)
 		return (parse_error("Error in sphere diametre"));
-	while (is_white_space(**line))
-		(*line)++;
+	skip_whitespace(line);
 	if (!get_rgb(line, &colour, 0))
 		return (parse_error("Wrong RGB values for sphere"));
-	if (!(sp = ft_lstnew(sphere_factory(centre, diametre, colour))) && !((t_sphere *)(sp->content)))
-		return (0);
-	ft_lstadd_back(&(data->spheres), sp);
+	if (!(sp = ft_lstnew(sphere_factory(centre, diametre, colour))) && !((t_geo *)(sp->content)))
+		return (parse_error("Malloc for sphere failed"));
+	ft_lstadd_back(&(data->objects), sp);
+	extra_info("Sphere loaded");
 	return (1);
 }
 
@@ -241,6 +279,13 @@ int load_line(t_data *data, char *line)
 		if (!load_sphere(data, &line))
 			return (0);
 	}
+	else if (*line == 'l')
+	{
+		if (!load_light(data, &line))
+			return (0);
+	}
+	else if (*line == '#')
+		return (1);
 	else
 		return (parse_error("wrong input in .rt file"));
 	
@@ -263,7 +308,12 @@ int load_data(t_data *data, char *rt_file)
 			free(line);
 			return (0);
 		}
-		load_line(data, line);
+		if (!load_line(data, line))
+		{
+			extra_info("Parsing stopped.");
+			free(line);
+			break ;
+		}
 		free(line);
 	}
 	close(fd);
