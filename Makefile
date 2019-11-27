@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
+#    By: cesarsld <cesarsld@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2019/11/27 17:04:56 by cjaimes          ###   ########.fr        #
+#    Updated: 2019/11/27 19:43:37 by cesarsld         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,7 +67,7 @@ ${NAME}:	${OBJ}
 	${MAKE} -C ${MLX_DIR}
 	${MAKE} -C ${LIB_DIR}
 	#export DYLD_LIBRARY_PATH=${MLX_DIR}
-	${CC} ${CFLAGS} -o ${NAME} ${OBJ} ${MLX_DIR}/${MLX_NAME} -L${LIB_DIR} -lft ${MLX_FLAGS}
+	${CC} ${CFLAGS} -o ${NAME} ${OBJ} -L${MLX_DIR} -lmlx -L${LIB_DIR} -lft ${MLX_FLAGS}
 
 run : all
 	./${NAME} scene.rt
