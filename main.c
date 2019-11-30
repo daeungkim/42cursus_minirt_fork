@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/11/29 16:44:48 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/11/30 18:12:14 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,17 @@
 #include "mini_rt.h"
 #include <unistd.h>
 #include <stdio.h>
+
+t_rt_param set_param(t_vector3 o, t_vector3 r, double i, void *ob)
+{
+	t_rt_param param;
+
+	param.origin = o;
+	param.ray = r;
+	param.intersection = i;
+	param.object = ob;
+	return (param);
+}
 
 /*
 ** Apply rotation along x, y and z axis of base vector
@@ -65,42 +76,10 @@ t_vector3 compute_ray(const t_data *data, t_camera *cam, const double x, const d
 	return (ray);
 }
 
-/*
-** ray can be expressed with R = O + Dt with O being camera coordinates
-** and D its normalised orientation vector
-*/
-int	raytrace_sphere(t_data *data, void *sphere, t_vector3 ray, double *intersection)
+int	raytrace(t_geo *geo, t_rt_param *param)
 {
-	t_vector3	abc;
-	t_sphere	*sp;
-	double		t0;
-	double		t1;
-
-	sp = (t_sphere *)sphere;
-	abc.x = dot_prod(ray, ray);
-	abc.y = 2 * dot_prod(ray, sub_vect(((t_camera *)(data->cameras->content))->pos, sp->centre));
-	abc.z = dot_prod(sub_vect(((t_camera *)(data->cameras->content))->pos, sp->centre),
-				sub_vect(((t_camera *)(data->cameras->content))->pos, sp->centre)) -
-				(sp->diametre * (sp->diametre / 4.0));
-	if (!solve_quadratic(create_vector(abc.x, abc.y, abc.z), &t0, &t1))
-		return (0);
-	*intersection = t0;
-	return (1);
-}
-
-t_vector3 normal_vector_sphere(t_vector3 point, void *sphere)
-{
-	t_vector3 normal;
-	t_sphere	*sp;
-
-	sp = (t_sphere *)sphere;
-	normal = direction_vector(sp->centre, point);
-	return (normal);
-}
-
-int	raytrace(t_data *data, t_geo *geo, t_vector3 ray, double *inter)
-{
-	if (geo->find_inter(data, geo->obj, ray, inter))
+	param->object = geo->obj;
+	if (geo->find_inter(param))
 		return (1);
 	return (0);
 }
@@ -113,17 +92,19 @@ t_vector3 get_normal_vector(t_vector3 point, t_geo *geo)
 t_geo *find_closest_intersection(t_data *data, t_vector3 ray, double *inter)
 {
 	t_geo	*inter_obj;
-	double	current;
 	t_list	*first;
+	t_rt_param param;
 	
 	inter_obj = 0;
 	first = data->objects;
 	while (first)
 	{
-		if (raytrace(data, first->content, ray, &current))
-			if ((current > 0 && *inter < 0) || (current > 0 && current < *inter))
+		param = set_param(data->current_cam->pos, ray, -1, 0);
+		if (raytrace(first->content, &param))
+			if ((param.intersection > 0 && *inter < 0) ||
+				(param.intersection > 0 && param.intersection < *inter))
 			{
-				*inter = current;
+				*inter = param.intersection;
 				inter_obj = first->content;
 			}
 		first = first->next;
@@ -144,6 +125,32 @@ double get_light_angle(t_data data, t_light *light, double t, t_geo *rt_obj)
 								direction_vector(inter_point, light->pos)));
 }
 
+int is_light_obstructed(t_data data, t_geo *rt_obj, double t, t_light *light)
+{	
+	t_vector3	start;
+	t_vector3	light_ray;
+	t_camera	*cam;
+	t_list		*first;
+	t_rt_param	param;
+
+	//return (0);
+	cam = data.current_cam;
+	start = get_point_from_ray(cam->pos, data.ray, t);
+	light_ray = normalise_vector(direction_vector(start, light->pos));
+	first = data.objects;
+	while (first)
+	{
+		if (first->content != rt_obj)
+		{
+			param = set_param(start, light_ray, -1, 0);
+			if (raytrace(first->content, &param))
+				return (1);
+		}
+		first = first->next;
+	}
+	return (0);
+}
+
 int calc_colour_from_light(t_data data, t_geo *rt_obj, double t)
 {
 	t_list *first;
@@ -157,11 +164,14 @@ int calc_colour_from_light(t_data data, t_geo *rt_obj, double t)
 	while (first)
 	{
 		light = first->content;
-		angle = get_light_angle(data, light, t, rt_obj);
-		if (angle < M_PI_2 && angle > -M_PI_2)
+		if (!is_light_obstructed(data, rt_obj, t, light))
 		{
-			current_light = apply_intensity_rgb(light->colour, sin(M_PI_2 - angle));
-			final_light = add_lights(final_light, current_light);
+			angle = get_light_angle(data, light, t, rt_obj);
+			if (angle < M_PI_2 && angle > -M_PI_2)
+			{
+				current_light = apply_intensity_rgb(light->colour, sin(M_PI_2 - angle));
+				final_light = add_lights(final_light, current_light);
+			}
 		}
 		first = first->next;
 	}

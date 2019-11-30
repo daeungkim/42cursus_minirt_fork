@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 17:07:36 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/11/29 16:57:17 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/11/30 17:45:30 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,10 @@ t_geo *plane_factory(t_vector3 centre, t_vector3 normal, int colour)
 	plane->centre.x = centre.x;
 	plane->centre.y = centre.y;
 	plane->centre.z = centre.z;
-	plane->normal.x = normal.x;
-	plane->normal.y = normal.y;
-	plane->normal.z = normal.z;
+	plane->normal = apply_orientation(create_vector(0, 1, 0), normal);
 	plane_obj->obj = plane;
+	plane_obj->find_inter = &raytrace_plane;
+	plane_obj->get_normal_vector = &normal_vector_plane;
 	return (plane_obj);
 }
 

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: cesarsld <cesarsld@student.42.fr>          +#+  +:+       +#+         #
+#    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2019/11/27 19:43:37 by cesarsld         ###   ########.fr        #
+#    Updated: 2019/11/30 17:44:47 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,10 @@ LIB_NAME	=	libft.a
 
 LIB_DIR		=	libft
 
+OBJ_DIR		=	obj/
+
+SRC_DIR		=	./
+
 SRCS		=	main.c \
 				math_functions.c \
 				parser.c \
@@ -27,11 +31,13 @@ SRCS		=	main.c \
 				vector_maths.c \
 				vector_maths2.c \
 				vector_maths3.c \
-				colour_functions.c
+				colour_functions.c \
+				geo_math/sphere.c \
+				geo_math/plane.c
 
-OBJ			=	${SRCS:.c=.o}
+OBJS		=	${patsubst %.c,${OBJ_DIR}%.o,${SRCS}}
 
-NAME	=	miniRT
+NAME		=	miniRT
 
 RM			=	rm -f
 
@@ -41,7 +47,7 @@ CFLAGS		=	-Wall -Wextra -Werror -g
 
 MLX_FLAGS	=	-lmlx -framework OpenGL -framework AppKit
 
-T		=	$(words ${OBJ})
+T		=	$(words ${OBJS})
 N		=	0
 C		=	$(words $N)${eval N := X $N}
 _CYAN	=	\033[36m
@@ -50,24 +56,16 @@ ECHO	=	"[`expr $C  '*' 100 / $T`%]"
 
 all:	${NAME}
 
-${MLX_DIR}${MLX_NAME}:
-	${MAKE} -C ${MLX_DIR}
-
-${LIB_DIR}${LIB_NAME}:
-	${MAKE} -C ${LIB_DIR}
-	
-.PHONY: dependencies
-dependencies : ${LIB_DIR}${LIB_NAME} ${MLX_DIR}${MLX_NAME}
-
-%.o :	%.c
-			@${CC} ${CFLAGS} -I ${MLX_DIR} -I ${LIB_DIR}/includes -c $< -o ${<:.c=.o}
+${OBJ_DIR}%.o :	${SRC_DIR}%.c
+			@mkdir -p ${OBJ_DIR}
+			@mkdir -p ${OBJ_DIR}geo_math
+			@${CC} ${CFLAGS} -I . -I ${MLX_DIR} -I ${LIB_DIR}/includes -c $< -o $@
 			@printf "%-60b\r" "${_CYAN}${ECHO}${_CYAN} Compiling $@"
 
-${NAME}:	${OBJ}
+${NAME}: ${OBJS}
 	${MAKE} -C ${MLX_DIR}
 	${MAKE} -C ${LIB_DIR}
-	#export DYLD_LIBRARY_PATH=${MLX_DIR}
-	${CC} ${CFLAGS} -o ${NAME} ${OBJ} -L${MLX_DIR} -lmlx -L${LIB_DIR} -lft ${MLX_FLAGS}
+	${CC} ${CFLAGS} -o ${NAME} ${OBJS} -L${MLX_DIR} -lmlx -L${LIB_DIR} -lft ${MLX_FLAGS}
 
 run : all
 	./${NAME} scene.rt
@@ -75,7 +73,7 @@ run : all
 bonus: all
 
 clean:
-	${RM} ${OBJ}
+	${RM} ${OBJS}
 	${MAKE} -C ${MLX_DIR} clean
 	${MAKE} -C ${LIB_DIR} clean
 

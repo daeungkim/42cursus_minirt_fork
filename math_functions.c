@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/20 17:25:46 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/11/27 14:06:50 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/11/30 15:17:41 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ int solve_quadratic(t_vector3 abc, double *t0, double *t1)
 		if (*t0 > *t1)
 			*t0 = *t1;
 		//add check to see if t is negative to prevent tracing objects behind camera
+		if (*t0 < 0)
+			return (0);
 	}
 	return (1);
 }

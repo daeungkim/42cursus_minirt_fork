@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/26 15:10:52 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/11/26 15:11:36 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/11/30 17:33:19 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@ t_vector3 add_vect(t_vector3 a, t_vector3 b)
 	return (a);
 }
 
+/*
+** Substract vector b to vector a
+*/
 t_vector3 sub_vect(t_vector3 a, t_vector3 b)
 {
 	a.x -= b.x;

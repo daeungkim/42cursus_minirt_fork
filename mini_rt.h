@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/11/29 16:41:09 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/11/30 17:38:07 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,10 +119,19 @@ typedef struct	s_data
 
 }					t_data;
 
+typedef struct		s_rt_param
+{
+	t_vector3		ray;
+	t_vector3		origin;
+	double			intersection;
+	void			*object;
+}					t_rt_param;
+
+
 typedef struct	s_geo_obj
 {
 	void *obj;
-	int (*find_inter)(t_data *data, void *obj, t_vector3 ray, double *intersection);
+	int (*find_inter)(t_rt_param *param);
 	t_vector3 (*get_normal_vector)(t_vector3 point, void *obj);
 	int			colour;
 	//leave room for reflection
@@ -147,13 +156,17 @@ double		angle_between_vectors(t_vector3 a, t_vector3 b);
 t_vector3	apply_orientation(t_vector3 base, t_vector3 orient);
 
 int			solve_quadratic(t_vector3 abc, double *t0, double *t1);
-double to_rad(double deg);
+double		to_rad(double deg);
 
 int			load_data(t_data *data, char *rt_file);
 
 //sphere
-int	raytrace_sphere(t_data *data, void *sphere, t_vector3 ray, double *intersection);
-t_vector3 normal_vector_sphere(t_vector3 point, void *sphere);
+int			raytrace_sphere(t_rt_param *param);
+t_vector3	normal_vector_sphere(t_vector3 point, void *sphere);
+
+//planes
+int			raytrace_plane(t_rt_param *param);
+t_vector3	normal_vector_plane(t_vector3 point, void *plane);
 
 //factories
 t_camera	*camera_factory(t_vector3 pos, t_vector3 vector, double fov);

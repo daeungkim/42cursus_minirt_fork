@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 12:05:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/11/27 17:49:41 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/11/30 17:49:47 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,7 +220,7 @@ int load_camera(t_data *data, char **line)
 		return (parse_error("Wrong orientation vector of a camera"));
 	if (vector.x > 1 || vector.y > 1 ||vector.z > 1 ||
 		vector.x < -1 || vector.y < -1 || vector.z < -1)
-		return (parse_error("Camera orienation values not between [0.0;1.0]"));
+		return (parse_error("Camera orienation values not between [-1.0;1.0]"));
 	skip_whitespace(line);
 	if ((fov = ft_atof_live(line)) <= 0)
 		return (parse_error("Error in camera fov"));
@@ -255,6 +255,33 @@ int load_sphere(t_data *data, char **line)
 	return (1);
 }
 
+int load_plane(t_data *data, char **line)
+{
+	t_vector3	centre;
+	t_vector3	orient;
+	int 		colour;
+	t_list		*pl;
+	
+	(*line)+= 2;
+	skip_whitespace(line);
+	if (!get_vector3(line, &centre))
+		return (parse_error("Wrong centre vector of a plane"));
+	skip_whitespace(line);
+	if (!get_vector3(line, &orient))
+		return (parse_error("Wrong orientation vector of a plane"));
+	if (orient.x > 1 || orient.y > 1 ||orient.z > 1 ||
+		orient.x < -1 || orient.y < -1 || orient.z < -1)
+		return (parse_error("Plane orienation values not between [-1.0;1.0]"));
+	skip_whitespace(line);
+	if (!get_rgb(line, &colour, 0))
+		return (parse_error("Wrong RGB values for plane"));
+	if (!(pl = ft_lstnew(plane_factory(centre, orient, colour))) && !((t_geo *)(pl->content)))
+		return (parse_error("Malloc for sphere failed"));
+	ft_lstadd_back(&(data->objects), pl);
+	extra_info("Plane loaded");
+	return (1);
+}
+
 int load_line(t_data *data, char *line)
 {
 	if (ft_strlen(line) < 2)
@@ -277,6 +304,11 @@ int load_line(t_data *data, char *line)
 	else if (*line == 's' && line[1] =='p')
 	{
 		if (!load_sphere(data, &line))
+			return (0);
+	}
+	else if (*line == 'p' && line[1] == 'l')
+	{
+		if (!load_plane(data, &line))
 			return (0);
 	}
 	else if (*line == 'l')
