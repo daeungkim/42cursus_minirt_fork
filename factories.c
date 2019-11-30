@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 17:07:36 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/11/30 17:45:30 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/11/30 19:09:11 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ t_geo *sphere_factory(t_vector3 centre, double diametre, int colour)
 	sp_obj->obj = sp;
 	sp_obj->find_inter = &raytrace_sphere;
 	sp_obj->get_normal_vector = &normal_vector_sphere;
+	sp_obj->obj_type = e_sphere;
 	return (sp_obj);
 }
 
@@ -82,6 +83,7 @@ t_geo *plane_factory(t_vector3 centre, t_vector3 normal, int colour)
 	plane_obj->obj = plane;
 	plane_obj->find_inter = &raytrace_plane;
 	plane_obj->get_normal_vector = &normal_vector_plane;
+	plane_obj->obj_type = e_plane;
 	return (plane_obj);
 }
 

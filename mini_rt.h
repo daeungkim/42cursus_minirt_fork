@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/11/30 17:38:07 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/11/30 20:39:38 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 #include <math.h>
 
 # define SCREEN_L 10
+
+enum	obj_type	{e_sphere = 0, e_plane = 1, e_sq = 2, e_tri = 3, e_cyl = 4};	
 
 typedef struct	s_resolution
 {
@@ -123,7 +125,7 @@ typedef struct		s_rt_param
 {
 	t_vector3		ray;
 	t_vector3		origin;
-	double			intersection;
+	double			i;
 	void			*object;
 }					t_rt_param;
 
@@ -134,6 +136,7 @@ typedef struct	s_geo_obj
 	int (*find_inter)(t_rt_param *param);
 	t_vector3 (*get_normal_vector)(t_vector3 point, void *obj);
 	int			colour;
+	int8_t		obj_type;
 	//leave room for reflection
 }				t_geo;
 
@@ -145,7 +148,7 @@ t_vector3	scalar_vect(t_vector3 a, double b);
 double		distance(t_vector3 a, t_vector3 b);
 double		magnitude(t_vector3 a);
 
-t_vector3	get_point_from_ray(t_vector3 origin, t_vector3 ray, double t);
+t_vector3	point_from_ray(t_vector3 origin, t_vector3 ray, double t);
 t_vector3	direction_vector(t_vector3 a, t_vector3 b);
 t_vector3	normalise_vector(t_vector3 v);
 double		dot_prod(t_vector3 a, t_vector3 b);

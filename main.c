@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/11/30 18:12:14 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/11/30 20:43:54 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_rt_param set_param(t_vector3 o, t_vector3 r, double i, void *ob)
 
 	param.origin = o;
 	param.ray = r;
-	param.intersection = i;
+	param.i = i;
 	param.object = ob;
 	return (param);
 }
@@ -101,12 +101,16 @@ t_geo *find_closest_intersection(t_data *data, t_vector3 ray, double *inter)
 	{
 		param = set_param(data->current_cam->pos, ray, -1, 0);
 		if (raytrace(first->content, &param))
-			if ((param.intersection > 0 && *inter < 0) ||
-				(param.intersection > 0 && param.intersection < *inter))
+		{
+			//printf("inter is %g\n", param.i);
+			if ((param.i > 0 && *inter < 0) ||
+				(param.i > 0 && param.i < *inter))
 			{
-				*inter = param.intersection;
+				//printf("mmh");
+				*inter = param.i;
 				inter_obj = first->content;
 			}
+		}
 		first = first->next;
 	}
 	return (inter_obj);
@@ -115,13 +119,18 @@ t_geo *find_closest_intersection(t_data *data, t_vector3 ray, double *inter)
 double get_light_angle(t_data data, t_light *light, double t, t_geo *rt_obj)
 {
 	t_vector3	inter_point;
-	t_vector3	normal_vect;
+	t_vector3	norm_vect;
 	t_camera	*cam;
 
+
 	cam = data.current_cam;
-	inter_point = get_point_from_ray(cam->pos, data.ray, t);
-	normal_vect = get_normal_vector(inter_point, rt_obj);
-	return (angle_between_vectors(normal_vect,
+	inter_point = point_from_ray(cam->pos, data.ray, t);
+	norm_vect = normalise_vector(get_normal_vector(inter_point, rt_obj));
+	if (rt_obj->obj_type == e_plane)
+		if (distance(light->pos, point_from_ray(inter_point, norm_vect, 1)) >
+			distance(light->pos, inter_point))
+			norm_vect = scalar_vect(norm_vect, -1.0);
+	return (angle_between_vectors(norm_vect,
 								direction_vector(inter_point, light->pos)));
 }
 
@@ -133,9 +142,8 @@ int is_light_obstructed(t_data data, t_geo *rt_obj, double t, t_light *light)
 	t_list		*first;
 	t_rt_param	param;
 
-	//return (0);
 	cam = data.current_cam;
-	start = get_point_from_ray(cam->pos, data.ray, t);
+	start = point_from_ray(cam->pos, data.ray, t);
 	light_ray = normalise_vector(direction_vector(start, light->pos));
 	first = data.objects;
 	while (first)
@@ -144,7 +152,9 @@ int is_light_obstructed(t_data data, t_geo *rt_obj, double t, t_light *light)
 		{
 			param = set_param(start, light_ray, -1, 0);
 			if (raytrace(first->content, &param))
-				return (1);
+				if (distance(start, light->pos) > 
+				distance(start, point_from_ray(start, light_ray, param.i)))
+					return (1);
 		}
 		first = first->next;
 	}
@@ -173,6 +183,11 @@ int calc_colour_from_light(t_data data, t_geo *rt_obj, double t)
 				final_light = add_lights(final_light, current_light);
 			}
 		}
+		else
+		{
+			//printf("mmh..");
+		}
+		
 		first = first->next;
 	}
 	final_light = add_lights(final_light, data.amb.colour);
@@ -205,6 +220,11 @@ int main(int ac, char **av)
 	data.current_cam = data.cameras->content;
 	int i = 0;
 	int j = 0;
+	t_geo * geo;
+	t_plane *pl;
+	geo = data.objects->content;
+	pl = geo->obj;
+	printf("normal vector is |%g|%g|%g|\n", pl->normal.x, pl->normal.y, pl->normal.z);
 	while (i < data.res.x)
 	{
 		j = 0;

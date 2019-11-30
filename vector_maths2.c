@@ -6,13 +6,13 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/26 15:12:25 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/11/26 15:12:32 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/11/30 19:26:22 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 
-t_vector3 get_point_from_ray(t_vector3 origin, t_vector3 ray, double t)
+t_vector3 point_from_ray(t_vector3 origin, t_vector3 ray, double t)
 {
 	origin.x += ray.x * t;
 	origin.y += ray.y * t;
