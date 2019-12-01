@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/11/30 20:43:54 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/01 15:35:00 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,21 +115,32 @@ t_geo *find_closest_intersection(t_data *data, t_vector3 ray, double *inter)
 	}
 	return (inter_obj);
 }
-
+/*
+** Will need a lot of refactoring
+*/
 double get_light_angle(t_data data, t_light *light, double t, t_geo *rt_obj)
 {
 	t_vector3	inter_point;
 	t_vector3	norm_vect;
 	t_camera	*cam;
-
+	t_rt_param param1;
+	t_rt_param param2;
 
 	cam = data.current_cam;
 	inter_point = point_from_ray(cam->pos, data.ray, t);
 	norm_vect = normalise_vector(get_normal_vector(inter_point, rt_obj));
 	if (rt_obj->obj_type == e_plane)
+	{
 		if (distance(light->pos, point_from_ray(inter_point, norm_vect, 1)) >
 			distance(light->pos, inter_point))
 			norm_vect = scalar_vect(norm_vect, -1.0);
+		param1 = set_param(light->pos, norm_vect, 0, rt_obj->obj);
+		param2 = set_param(point_from_ray(inter_point, data.ray, -t / 2), norm_vect, -1, rt_obj->obj);
+		rt_obj->find_inter(&param1);
+		rt_obj->find_inter(&param2);
+		if ((param1.i < 0 && param2.i > 0) || (param1.i > 0 && param2.i < 0))
+			norm_vect = scalar_vect(norm_vect, -1.0);
+	}
 	return (angle_between_vectors(norm_vect,
 								direction_vector(inter_point, light->pos)));
 }
@@ -183,11 +194,6 @@ int calc_colour_from_light(t_data data, t_geo *rt_obj, double t)
 				final_light = add_lights(final_light, current_light);
 			}
 		}
-		else
-		{
-			//printf("mmh..");
-		}
-		
 		first = first->next;
 	}
 	final_light = add_lights(final_light, data.amb.colour);

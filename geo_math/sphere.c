@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/30 15:35:22 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/11/30 17:44:22 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/01 15:35:15 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	raytrace_sphere(t_rt_param *param)
 				(sp->diametre * (sp->diametre / 4.0));
 	if (!solve_quadratic(create_vector(abc.x, abc.y, abc.z), &t0, &t1))
 		return (0);
-	param->intersection = t0;
+	param->i = t0;
 	return (1);
 }
 
