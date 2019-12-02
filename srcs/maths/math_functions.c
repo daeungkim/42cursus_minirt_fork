@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/20 17:25:46 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/02 14:41:55 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/02 15:24:14 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,20 +35,19 @@ int solve_quadratic(t_vector3 abc, double *t0, double *t1)
 		*t1 = abc.z / q;
 		if (*t0 > *t1)
 			*t0 = *t1;
-		//add check to see if t is negative to prevent tracing objects behind camera
 		if (*t0 < 0)
 			return (0);
 	}
 	return (1);
 }
 
-int solve_square_boundaries(t_rt_param *param, t_square *square, double t)
+int solve_square_boundaries(t_rt_param *param, t_square *square)
 {
 	t_vector3	point;
 	double		x_proj;
 	double		z_proj;
 
-	point = point_from_ray(param->origin, param->ray, t);
+	point = point_from_ray(param->origin, param->ray, param->i);
 	point = direction_vector(point, square->centre);
 	x_proj = dot_prod(point, square->x) / square->height;
 	z_proj = dot_prod(point, square->z) / square->height;
@@ -58,12 +57,12 @@ int solve_square_boundaries(t_rt_param *param, t_square *square, double t)
 	return (0);
 }
 
-int solve_disk_boundaries(t_rt_param *param, t_disk *disk, double t)
+int solve_disk_boundaries(t_rt_param *param, t_disk *disk)
 {
 	t_vector3	point;
 	double		dist;
 
-	point = point_from_ray(param->origin, param->ray, t);
+	point = point_from_ray(param->origin, param->ray, param->i);
 	dist = distance(point, disk->centre);
 	if (dist < disk->diametre / 2)
 		return (1);

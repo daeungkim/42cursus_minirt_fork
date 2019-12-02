@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 12:05:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/02 12:38:25 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/02 15:25:07 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -306,6 +306,35 @@ int load_square(t_data *data, char **line)
 	return (1);
 }
 
+int load_disk(t_data *data, char **line)
+{
+	t_vector3	centre;
+	t_vector3	orient;
+	double		diametre;
+	int 		colour;
+	t_list		*dk;
+	
+	(*line)+= 2;
+	if (!get_vector3(line, &centre))
+		return (parse_error("Wrong centre vector of a disk"));
+	if (!get_vector3(line, &orient))
+		return (parse_error("Wrong orientation vector of a disk"));
+	if (orient.x > 1 || orient.y > 1 ||orient.z > 1 ||
+		orient.x < -1 || orient.y < -1 || orient.z < -1)
+		return (parse_error("Disk orientation not between [-1.0;1.0]"));
+	skip_whitespace(line);
+	if ((diametre = ft_atof_live(line)) <= 0)
+		return (parse_error("Error in disk diametre"));
+	if (!get_rgb(line, &colour, 0))
+		return (parse_error("Wrong RGB values for disk"));
+	if (!(dk = ft_lstnew(disk_factory(centre, orient, diametre, colour))) &&
+		!((t_geo *)(dk->content)))
+		return (parse_error("Malloc for disk failed"));
+	ft_lstadd_back(&(data->objects), dk);
+	extra_info("Disk loaded");
+	return (1);
+}
+
 int load_line(t_data *data, char *line)
 {
 	if (ft_strlen(line) < 2)
@@ -338,6 +367,11 @@ int load_line(t_data *data, char *line)
 	else if (*line == 's' && line[1] == 'q')
 	{
 		if (!load_square(data, &line))
+			return (0);
+	}
+	else if (*line == 'd' && line[1] == 'k')
+	{
+		if (!load_disk(data, &line))
 			return (0);
 	}
 	else if (*line == 'l')

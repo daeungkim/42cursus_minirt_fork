@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/02 14:29:50 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/02 15:22:13 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 # define SCREEN_L 10
 
-enum	obj_type	{e_sphere = 0, e_plane = 1, e_sq = 2, e_tri = 3, e_cyl = 4};	
+enum	obj_type	{e_sphere = 0, e_plane = 1, e_sq = 2, e_tri = 3, e_cyl = 4, e_disk = 5};	
 
 typedef struct	s_resolution
 {
@@ -169,8 +169,8 @@ t_vector3	apply_orientation(t_vector3 base, t_vector3 orient);
 
 // maths
 int			solve_quadratic(t_vector3 abc, double *t0, double *t1);
-int			solve_square_boundaries(t_rt_param *param, t_square *square, double t);
-int			solve_disk_boundaries(t_rt_param *param, t_disk *disk, double t);
+int			solve_square_boundaries(t_rt_param *param, t_square *square);
+int			solve_disk_boundaries(t_rt_param *param, t_disk *disk);
 double		to_rad(double deg);
 
 int			load_data(t_data *data, char *rt_file);
@@ -187,12 +187,17 @@ t_vector3	normal_vector_plane(t_vector3 point, void *plane);
 int			raytrace_square(t_rt_param *param);
 t_vector3	normal_vector_square(t_vector3 point, void *square);
 
+//disk
+int			raytrace_disk(t_rt_param *param);
+t_vector3	normal_vector_disk(t_vector3 point, void *disk);
+
 //factories
 t_camera	*camera_factory(t_vector3 pos, t_vector3 vector, double fov);
 t_light		*light_factory(t_vector3 pos, double ratio, int colour);
 t_geo		*sphere_factory(t_vector3 centre, double diametre, int colour);
 t_geo		*plane_factory(t_vector3 centre, t_vector3 normal, int colour);
 t_geo 		*square_factory(t_vector3 centre, t_vector3 normal, double height, int colour);
+t_geo		*disk_factory(t_vector3 centre, t_vector3 orient, double diametre, int colour);
 
 //rgb functions
 int			get_blue(int colour);

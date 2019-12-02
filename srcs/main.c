@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/02 13:05:58 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/02 15:25:26 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,11 +103,9 @@ t_geo *find_closest_intersection(t_data *data, t_vector3 ray, double *inter)
 		param = set_param(data->current_cam->pos, ray, -1, 0);
 		if (raytrace(first->content, &param))
 		{
-			//printf("inter is %g\n", param.i);
 			if ((param.i > 0 && *inter < 0) ||
 				(param.i > 0 && param.i < *inter))
 			{
-				//printf("mmh");
 				*inter = param.i;
 				inter_obj = first->content;
 			}
@@ -130,7 +128,7 @@ double get_light_angle(t_data data, t_light *light, double t, t_geo *rt_obj)
 	cam = data.current_cam;
 	inter_point = point_from_ray(cam->pos, data.ray, t);
 	norm_vect = normalise_vector(get_normal_vector(inter_point, rt_obj));
-	if (rt_obj->obj_type == e_plane || rt_obj->obj_type == e_sq)
+	if (rt_obj->obj_type == e_plane || rt_obj->obj_type == e_sq || rt_obj->obj_type == e_disk)
 	{
 		if (distance(light->pos, point_from_ray(inter_point, norm_vect, 1)) >
 			distance(light->pos, inter_point))

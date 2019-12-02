@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 17:07:36 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/02 12:35:53 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/02 14:59:39 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,3 +111,22 @@ t_geo *square_factory(t_vector3 centre, t_vector3 orient, double height, int col
 	return (square_obj);
 }
 
+t_geo *disk_factory(t_vector3 centre, t_vector3 orient, double diametre, int colour)
+{
+	t_disk *disk;
+	t_geo	*disk_obj;
+
+	if (!(disk = malloc(sizeof(t_disk))))
+		return (NULL);
+	if (!(disk_obj = malloc(sizeof(t_geo))))
+		return (NULL);
+	disk_obj->colour = colour;
+	disk->centre = centre;
+	disk->normal = apply_orientation(create_vector(0, 1, 0), orient);
+	disk->diametre = diametre;
+	disk_obj->obj = disk;
+	disk_obj->find_inter = &raytrace_disk;
+	disk_obj->get_normal_vector = &normal_vector_disk;
+	disk_obj->obj_type = e_disk;
+	return (disk_obj);
+}
