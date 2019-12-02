@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/01 15:35:00 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/02 13:05:58 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "mini_rt.h"
 #include <unistd.h>
 #include <stdio.h>
+#include <time.h> 
 
 t_rt_param set_param(t_vector3 o, t_vector3 r, double i, void *ob)
 {
@@ -129,7 +130,7 @@ double get_light_angle(t_data data, t_light *light, double t, t_geo *rt_obj)
 	cam = data.current_cam;
 	inter_point = point_from_ray(cam->pos, data.ray, t);
 	norm_vect = normalise_vector(get_normal_vector(inter_point, rt_obj));
-	if (rt_obj->obj_type == e_plane)
+	if (rt_obj->obj_type == e_plane || rt_obj->obj_type == e_sq)
 	{
 		if (distance(light->pos, point_from_ray(inter_point, norm_vect, 1)) >
 			distance(light->pos, inter_point))
@@ -217,10 +218,15 @@ int main(int ac, char **av)
 	t_data data;
 	double inter;
 
+clock_t start, end;
+	time_t s;
 	if (ac != 2)
 		return (0);
+	s = time(NULL);
+	 start = clock();
 	set_data(&data);
-	load_data(&data, av[1]);
+	if (!load_data(&data, av[1]))
+		return (0);
 	mlx_ptr = mlx_init();
 	win_ptr = mlx_new_window(mlx_ptr, data.res.x, data.res.y, "Dat_window");
 	data.current_cam = data.cameras->content;
@@ -250,6 +256,9 @@ int main(int ac, char **av)
 		}
 		i++;
 	}
+	end = clock();
+	double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+	printf("Time taken is %f\n", cpu_time_used);
 	mlx_loop(mlx_ptr);
 	return (0);
 }

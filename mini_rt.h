@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/11/30 20:39:38 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/02 12:35:31 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,9 @@ typedef struct	s_plane
 typedef struct	s_quare
 {
 	t_vector3	centre;
-	t_vector3	orientation;
+	t_vector3	normal;
+	t_vector3	x;
+	t_vector3	z;
 	double		height;
 }				t_square;
 
@@ -171,11 +173,16 @@ t_vector3	normal_vector_sphere(t_vector3 point, void *sphere);
 int			raytrace_plane(t_rt_param *param);
 t_vector3	normal_vector_plane(t_vector3 point, void *plane);
 
+//square
+int			raytrace_square(t_rt_param *param);
+t_vector3	normal_vector_square(t_vector3 point, void *square);
+
 //factories
 t_camera	*camera_factory(t_vector3 pos, t_vector3 vector, double fov);
 t_light		*light_factory(t_vector3 pos, double ratio, int colour);
 t_geo		*sphere_factory(t_vector3 centre, double diametre, int colour);
 t_geo		*plane_factory(t_vector3 centre, t_vector3 normal, int colour);
+t_geo 		*square_factory(t_vector3 centre, t_vector3 normal, double height, int colour);
 
 //rgb functions
 int			get_blue(int colour);

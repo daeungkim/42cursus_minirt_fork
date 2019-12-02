@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2019/11/30 17:44:47 by cjaimes          ###   ########.fr        #
+#    Updated: 2019/12/02 13:13:10 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,8 @@ SRCS		=	main.c \
 				vector_maths3.c \
 				colour_functions.c \
 				geo_math/sphere.c \
-				geo_math/plane.c
+				geo_math/plane.c \
+				geo_math/square.c
 
 OBJS		=	${patsubst %.c,${OBJ_DIR}%.o,${SRCS}}
 
@@ -68,7 +69,7 @@ ${NAME}: ${OBJS}
 	${CC} ${CFLAGS} -o ${NAME} ${OBJS} -L${MLX_DIR} -lmlx -L${LIB_DIR} -lft ${MLX_FLAGS}
 
 run : all
-	./${NAME} scene.rt
+	./${NAME} scenes/scene.rt
 
 bonus: all
 

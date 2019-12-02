@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 12:05:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/11/30 17:49:47 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/02 12:38:25 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ double ft_atof_live(char **line)
 
 int get_rgb(char **line, int *colour, int value)
 {
+	skip_whitespace(line);
 	*colour = 0;
 	if (ft_isdigit(**line))
 		value = ft_atoi_live(line);
@@ -113,6 +114,7 @@ int get_rgb(char **line, int *colour, int value)
 
 int get_vector3(char **line, t_vector3  *vector)
 {
+	skip_whitespace(line);
 	if (ft_isdigit(**line) || **line == '-')
 		vector->x = ft_atof_live(line);
 	else
@@ -212,10 +214,8 @@ int load_camera(t_data *data, char **line)
 	t_list		*cam;
 
 	(*line)++;
-	skip_whitespace(line);
 	if (!get_vector3(line, &coor))
 		return (parse_error("Wrong coordinate vector of a camera"));
-	skip_whitespace(line);
 	if (!get_vector3(line, &vector))
 		return (parse_error("Wrong orientation vector of a camera"));
 	if (vector.x > 1 || vector.y > 1 ||vector.z > 1 ||
@@ -239,13 +239,11 @@ int load_sphere(t_data *data, char **line)
 	t_list		*sp;
 	
 	(*line)+= 2;
-	skip_whitespace(line);
 	if (!get_vector3(line, &centre))
 		return (parse_error("Wrong centre vector of a sphere"));
 	skip_whitespace(line);
 	if ((diametre = ft_atof_live(line)) <= 0)
 		return (parse_error("Error in sphere diametre"));
-	skip_whitespace(line);
 	if (!get_rgb(line, &colour, 0))
 		return (parse_error("Wrong RGB values for sphere"));
 	if (!(sp = ft_lstnew(sphere_factory(centre, diametre, colour))) && !((t_geo *)(sp->content)))
@@ -263,22 +261,48 @@ int load_plane(t_data *data, char **line)
 	t_list		*pl;
 	
 	(*line)+= 2;
-	skip_whitespace(line);
 	if (!get_vector3(line, &centre))
 		return (parse_error("Wrong centre vector of a plane"));
-	skip_whitespace(line);
 	if (!get_vector3(line, &orient))
 		return (parse_error("Wrong orientation vector of a plane"));
 	if (orient.x > 1 || orient.y > 1 ||orient.z > 1 ||
 		orient.x < -1 || orient.y < -1 || orient.z < -1)
 		return (parse_error("Plane orienation values not between [-1.0;1.0]"));
-	skip_whitespace(line);
 	if (!get_rgb(line, &colour, 0))
 		return (parse_error("Wrong RGB values for plane"));
 	if (!(pl = ft_lstnew(plane_factory(centre, orient, colour))) && !((t_geo *)(pl->content)))
-		return (parse_error("Malloc for sphere failed"));
+		return (parse_error("Malloc for plane failed"));
 	ft_lstadd_back(&(data->objects), pl);
 	extra_info("Plane loaded");
+	return (1);
+}
+
+int load_square(t_data *data, char **line)
+{
+	t_vector3	centre;
+	t_vector3	orient;
+	double		height;
+	int 		colour;
+	t_list		*sq;
+	
+	(*line)+= 2;
+	if (!get_vector3(line, &centre))
+		return (parse_error("Wrong centre vector of a square"));
+	if (!get_vector3(line, &orient))
+		return (parse_error("Wrong orientation vector of a square"));
+	if (orient.x > 1 || orient.y > 1 ||orient.z > 1 ||
+		orient.x < -1 || orient.y < -1 || orient.z < -1)
+		return (parse_error("Square orientation not between [-1.0;1.0]"));
+	skip_whitespace(line);
+	if ((height = ft_atof_live(line)) <= 0)
+		return (parse_error("Error in square height"));
+	if (!get_rgb(line, &colour, 0))
+		return (parse_error("Wrong RGB values for square"));
+	if (!(sq = ft_lstnew(square_factory(centre, orient, height, colour))) &&
+		!((t_geo *)(sq->content)))
+		return (parse_error("Malloc for square failed"));
+	ft_lstadd_back(&(data->objects), sq);
+	extra_info("Square loaded");
 	return (1);
 }
 
@@ -309,6 +333,11 @@ int load_line(t_data *data, char *line)
 	else if (*line == 'p' && line[1] == 'l')
 	{
 		if (!load_plane(data, &line))
+			return (0);
+	}
+	else if (*line == 's' && line[1] == 'q')
+	{
+		if (!load_square(data, &line))
 			return (0);
 	}
 	else if (*line == 'l')
@@ -344,7 +373,8 @@ int load_data(t_data *data, char *rt_file)
 		{
 			extra_info("Parsing stopped.");
 			free(line);
-			break ;
+			close(fd);
+			return  (0);
 		}
 		free(line);
 	}
