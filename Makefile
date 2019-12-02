@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2019/12/02 13:13:10 by cjaimes          ###   ########.fr        #
+#    Updated: 2019/12/02 14:43:25 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,21 +22,25 @@ LIB_DIR		=	libft
 
 OBJ_DIR		=	obj/
 
-SRC_DIR		=	./
+SRC_DIR		=	srcs/
 
-SRCS		=	main.c \
-				math_functions.c \
+INCLUDE		=	includes
+
+SRC			=	main.c \
 				parser.c \
 				factories.c \
-				vector_maths.c \
-				vector_maths2.c \
-				vector_maths3.c \
-				colour_functions.c \
-				geo_math/sphere.c \
-				geo_math/plane.c \
-				geo_math/square.c
+				maths/math_functions.c \
+				maths/vector_maths/vector_maths.c \
+				maths/vector_maths/vector_maths2.c \
+				maths/vector_maths/vector_maths3.c \
+				maths/colour_functions.c \
+				maths/geo_math/sphere.c \
+				maths/geo_math/plane.c \
+				maths/geo_math/square.c
 
-OBJS		=	${patsubst %.c,${OBJ_DIR}%.o,${SRCS}}
+SRCS		=	${addprefix ${SRC_DIR}, ${SRC}}
+
+OBJS		=	${patsubst ${SRC_DIR}%.c,${OBJ_DIR}%.o,${SRCS}}
 
 NAME		=	miniRT
 
@@ -59,8 +63,10 @@ all:	${NAME}
 
 ${OBJ_DIR}%.o :	${SRC_DIR}%.c
 			@mkdir -p ${OBJ_DIR}
-			@mkdir -p ${OBJ_DIR}geo_math
-			@${CC} ${CFLAGS} -I . -I ${MLX_DIR} -I ${LIB_DIR}/includes -c $< -o $@
+			@mkdir -p ${OBJ_DIR}maths
+			@mkdir -p ${OBJ_DIR}maths/geo_math
+			@mkdir -p ${OBJ_DIR}maths/vector_maths
+			@${CC} ${CFLAGS} -I ${INCLUDE} -I ${MLX_DIR} -I ${LIB_DIR}/includes -c $< -o $@
 			@printf "%-60b\r" "${_CYAN}${ECHO}${_CYAN} Compiling $@"
 
 ${NAME}: ${OBJS}

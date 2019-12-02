@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/02 12:35:31 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/02 14:29:50 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,13 @@ typedef struct	s_quare
 	double		height;
 }				t_square;
 
+typedef struct	s_disk
+{
+	t_vector3	centre;
+	t_vector3	normal;
+	double		diametre;
+}				t_disk;
+
 typedef struct	s_cylindre
 {
 	t_vector3	centre;
@@ -160,7 +167,10 @@ double		angle_between_vectors(t_vector3 a, t_vector3 b);
 
 t_vector3	apply_orientation(t_vector3 base, t_vector3 orient);
 
+// maths
 int			solve_quadratic(t_vector3 abc, double *t0, double *t1);
+int			solve_square_boundaries(t_rt_param *param, t_square *square, double t);
+int			solve_disk_boundaries(t_rt_param *param, t_disk *disk, double t);
 double		to_rad(double deg);
 
 int			load_data(t_data *data, char *rt_file);
