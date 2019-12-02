@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/02 15:25:26 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/02 19:35:04 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,8 +245,12 @@ clock_t start, end;
 			t_geo *rt_obj;
 			if ((rt_obj = find_closest_intersection(&data, data.ray, &inter)))
 			{
-				mlx_pixel_put(mlx_ptr, win_ptr, i, j,
-							calc_colour_from_light(data, rt_obj, inter));
+				if (rt_obj->obj_type == e_cyl)
+					mlx_pixel_put(mlx_ptr, win_ptr, i, j,
+								rt_obj->colour);
+				else
+					mlx_pixel_put(mlx_ptr, win_ptr, i, j,
+								calc_colour_from_light(data, rt_obj, inter));
 			}
 			else
 				mlx_pixel_put(mlx_ptr, win_ptr, i, j, encode_rgb(50,50,50));

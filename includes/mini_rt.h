@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/02 15:22:13 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/02 18:45:46 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,8 @@ typedef struct	s_disk
 typedef struct	s_cylindre
 {
 	t_vector3	centre;
-	t_vector3	orientation;
-	double		diameter;
+	t_vector3	orient;
+	double		diametre;
 	double		height;
 }				t_cylindre;
 
@@ -161,6 +161,7 @@ t_vector3	point_from_ray(t_vector3 origin, t_vector3 ray, double t);
 t_vector3	direction_vector(t_vector3 a, t_vector3 b);
 t_vector3	normalise_vector(t_vector3 v);
 double		dot_prod(t_vector3 a, t_vector3 b);
+double		dot_same(t_vector3 a);
 t_vector3	cross_prod(t_vector3 a, t_vector3 b);
 double		angle_between_vectors(t_vector3 a, t_vector3 b);
 
@@ -172,6 +173,7 @@ int			solve_quadratic(t_vector3 abc, double *t0, double *t1);
 int			solve_square_boundaries(t_rt_param *param, t_square *square);
 int			solve_disk_boundaries(t_rt_param *param, t_disk *disk);
 double		to_rad(double deg);
+double		solve_poly_2(double a, double b);
 
 int			load_data(t_data *data, char *rt_file);
 
@@ -191,6 +193,10 @@ t_vector3	normal_vector_square(t_vector3 point, void *square);
 int			raytrace_disk(t_rt_param *param);
 t_vector3	normal_vector_disk(t_vector3 point, void *disk);
 
+//cylinder
+int	raytrace_cyl(t_rt_param *param);
+t_vector3 normal_vector_cyl(t_vector3 point, void *disk);
+
 //factories
 t_camera	*camera_factory(t_vector3 pos, t_vector3 vector, double fov);
 t_light		*light_factory(t_vector3 pos, double ratio, int colour);
@@ -198,6 +204,7 @@ t_geo		*sphere_factory(t_vector3 centre, double diametre, int colour);
 t_geo		*plane_factory(t_vector3 centre, t_vector3 normal, int colour);
 t_geo 		*square_factory(t_vector3 centre, t_vector3 normal, double height, int colour);
 t_geo		*disk_factory(t_vector3 centre, t_vector3 orient, double diametre, int colour);
+t_geo		*cyl_factory(t_vector3 centre, t_vector3 orient, t_vector3 dia_height, int colour);
 
 //rgb functions
 int			get_blue(int colour);

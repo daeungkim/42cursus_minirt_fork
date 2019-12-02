@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 12:05:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/02 15:25:07 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/02 19:33:54 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ double ft_atof_live(char **line)
 	sign = 1;
 	value = 0;
 	fraction = 0.1;
+	skip_whitespace(line);
 	if (**line == '-')
 	{
 		sign = -1;
@@ -335,6 +336,36 @@ int load_disk(t_data *data, char **line)
 	return (1);
 }
 
+int load_cylinder(t_data *data, char **line)
+{
+	t_vector3	centre;
+	t_vector3	orient;
+	t_vector3	dia_height;
+	int 		colour;
+	t_list		*cyl;
+	
+	(*line)+= 2;
+	if (!get_vector3(line, &centre))
+		return (parse_error("Wrong centre vector of a cylinder"));
+	if (!get_vector3(line, &orient))
+		return (parse_error("Wrong orientation vector of a cylinder"));
+	if (orient.x > 1 || orient.y > 1 ||orient.z > 1 ||
+		orient.x < -1 || orient.y < -1 || orient.z < -1)
+		return (parse_error("Cylinder orientation not between [-1.0;1.0]"));
+	if ((dia_height.x = ft_atof_live(line)) <= 0)
+		return (parse_error("Error in cylinder diametre"));
+	if ((dia_height.y = ft_atof_live(line)) <= 0)
+		return (parse_error("Error in cylinder height"));
+	if (!get_rgb(line, &colour, 0))
+		return (parse_error("Wrong RGB values for cylinder"));
+	if (!(cyl = ft_lstnew(cyl_factory(centre, orient, dia_height, colour))) &&
+		!((t_geo *)(cyl->content)))
+		return (parse_error("Malloc for cylinder failed"));
+	ft_lstadd_back(&(data->objects), cyl);
+	extra_info("Cylinder loaded");
+	return (1);
+}
+
 int load_line(t_data *data, char *line)
 {
 	if (ft_strlen(line) < 2)
@@ -347,11 +378,6 @@ int load_line(t_data *data, char *line)
 	else if (*line == 'A')
 	{
 		if (!load_amb(data, &line))
-			return (0);
-	}
-	else if (*line == 'c')
-	{
-		if (!load_camera(data, &line))
 			return (0);
 	}
 	else if (*line == 's' && line[1] =='p')
@@ -374,9 +400,19 @@ int load_line(t_data *data, char *line)
 		if (!load_disk(data, &line))
 			return (0);
 	}
+	else if (*line == 'c' && line[1] == 'y')
+	{
+		if (!load_cylinder(data, &line))
+			return (0);
+	}
 	else if (*line == 'l')
 	{
 		if (!load_light(data, &line))
+			return (0);
+	}
+	else if (*line == 'c')
+	{
+		if (!load_camera(data, &line))
 			return (0);
 	}
 	else if (*line == '#')

@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 17:07:36 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/02 14:59:39 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/02 16:50:25 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,4 +129,25 @@ t_geo *disk_factory(t_vector3 centre, t_vector3 orient, double diametre, int col
 	disk_obj->get_normal_vector = &normal_vector_disk;
 	disk_obj->obj_type = e_disk;
 	return (disk_obj);
+}
+
+t_geo *cyl_factory(t_vector3 centre, t_vector3 orient, t_vector3 dia_height, int colour)
+{
+	t_cylindre	*cyl;
+	t_geo		*cyl_obj;
+
+	if (!(cyl = malloc(sizeof(t_cylindre))))
+		return (NULL);
+	if (!(cyl_obj = malloc(sizeof(t_geo))))
+		return (NULL);
+	cyl_obj->colour = colour;
+	cyl->centre = centre;
+	cyl->orient = apply_orientation(create_vector(0, 1, 0), orient);
+	cyl->diametre = dia_height.x;
+	cyl->height = dia_height.y;
+	cyl_obj->obj = cyl;
+	cyl_obj->find_inter = &raytrace_cyl;
+	cyl_obj->get_normal_vector = &normal_vector_cyl;
+	cyl_obj->obj_type = e_cyl;
+	return (cyl_obj);
 }

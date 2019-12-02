@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/20 17:25:46 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/02 15:24:14 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/02 18:45:18 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,12 @@ int solve_disk_boundaries(t_rt_param *param, t_disk *disk)
 		return (1);
 	return (0);
 }
+
+double solve_poly_2(double a, double b)
+{
+	return (a * a + b * b + 2 * (a * b));
+}
+
 
 double to_rad(double deg)
 {
