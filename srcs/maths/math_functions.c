@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/20 17:25:46 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/03 13:46:17 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/04 00:21:15 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ int solve_quadratic(t_vector3 abc, double *t0, double *t1)
 			*t0 = *t1;
 			*t1 = temp;
 		}
-		if (*t0 < 0)
-			return (0);
+		// if (*t0 < 0 )
+		// 	return (0);
 	}
 	return (1);
 }

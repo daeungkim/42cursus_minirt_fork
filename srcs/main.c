@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/03 19:40:26 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/04 00:19:21 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,17 +189,17 @@ int is_light_obstructed(t_data data, t_geo *rt_obj, double t, t_light *light)
 		{
 			if (((t_geo *)first->content)->obj_type == e_cyl)
 			{
-				param = set_param(point_from_ray(start, light_ray, -0.0001), light_ray, -1, 0);
+				//printf("sulsul");
+				param = set_param(start, light_ray, -1, 0);
 				if (raytrace(first->content, &param))
 					if (param.i_2 > 0  )
 							return (1);
+				//printf("1 = %g\n2 = %g\n", param.i, param.i_2);
 			}
 			param = set_param(start, light_ray, -1, 0);
 			int res;
 			if ((res = raytrace(first->content, &param)))
 			{
-				if (((t_geo *)first->content)->obj_type == e_cyl)
-					printf("1 = %g\n2 = %g\n", param.i, param.i_2);
 				if (distance(start, light->pos) > 
 				distance(start, point_from_ray(start, light_ray, param.i > 0 ? param.i : param.i_2)))
 					return (1);
@@ -207,14 +207,15 @@ int is_light_obstructed(t_data data, t_geo *rt_obj, double t, t_light *light)
 			if (((t_geo *)first->content)->obj_type == e_cyl)
 			{
 				// printf("res was %d\n", res);
-				// printf("1 = %g\n2 = %g\n", param.i, param.i_2);
+				//printf("1 = %g\n2 = %g\n", param.i, param.i_2);
+				
 			}
 		}
 		else if (rt_obj->obj_type == e_cyl)
 		{
-			param = set_param(point_from_ray(start, light_ray, -0.0001), light_ray, -1, 0);
+			param = set_param(point_from_ray(start, light_ray, 0.001), light_ray, -1, 0);
 			if (raytrace(first->content, &param))
-				if (param.i_2 > 0)
+				if (param.i_2 > 0 || param.i < 0)
 						return (1);
 		}
 		first = first->next;
