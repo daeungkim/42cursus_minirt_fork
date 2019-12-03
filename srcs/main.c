@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/02 19:35:04 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/03 14:42:51 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_rt_param set_param(t_vector3 o, t_vector3 r, double i, void *ob)
 	param.origin = o;
 	param.ray = r;
 	param.i = i;
+	param.i_2 = -1;
 	param.object = ob;
 	return (param);
 }
@@ -140,6 +141,13 @@ double get_light_angle(t_data data, t_light *light, double t, t_geo *rt_obj)
 		if ((param1.i < 0 && param2.i > 0) || (param1.i > 0 && param2.i < 0))
 			norm_vect = scalar_vect(norm_vect, -1.0);
 	}
+	else if (rt_obj->obj_type == e_cyl)
+	{
+		param1 = set_param(data.current_cam->pos, data.ray, 0, rt_obj->obj);
+		if (raytrace(rt_obj, &param1))
+			if (param1.i > param1.i_2)
+				norm_vect = scalar_vect(norm_vect, -1.0);
+	}
 	return (angle_between_vectors(norm_vect,
 								direction_vector(inter_point, light->pos)));
 }
@@ -158,7 +166,7 @@ int is_light_obstructed(t_data data, t_geo *rt_obj, double t, t_light *light)
 	first = data.objects;
 	while (first)
 	{
-		if (first->content != rt_obj)
+		if (first->content != rt_obj || rt_obj->obj_type == e_cyl)
 		{
 			param = set_param(start, light_ray, -1, 0);
 			if (raytrace(first->content, &param))
@@ -187,12 +195,18 @@ int calc_colour_from_light(t_data data, t_geo *rt_obj, double t)
 		if (!is_light_obstructed(data, rt_obj, t, light))
 		{
 			angle = get_light_angle(data, light, t, rt_obj);
+			//printf("angle is %g\n", angle * 180 / M_PI);
 			if (angle < M_PI_2 && angle > -M_PI_2)
 			{
 				current_light = apply_intensity_rgb(light->colour, sin(M_PI_2 - angle));
 				final_light = add_lights(final_light, current_light);
 			}
 		}
+		else
+		{
+			//printf("mmh");
+		}
+		
 		first = first->next;
 	}
 	final_light = add_lights(final_light, data.amb.colour);
@@ -216,7 +230,7 @@ int main(int ac, char **av)
 	t_data data;
 	double inter;
 
-clock_t start, end;
+	clock_t start, end;
 	time_t s;
 	if (ac != 2)
 		return (0);
@@ -245,12 +259,8 @@ clock_t start, end;
 			t_geo *rt_obj;
 			if ((rt_obj = find_closest_intersection(&data, data.ray, &inter)))
 			{
-				if (rt_obj->obj_type == e_cyl)
-					mlx_pixel_put(mlx_ptr, win_ptr, i, j,
-								rt_obj->colour);
-				else
-					mlx_pixel_put(mlx_ptr, win_ptr, i, j,
-								calc_colour_from_light(data, rt_obj, inter));
+				mlx_pixel_put(mlx_ptr, win_ptr, i, j,
+							calc_colour_from_light(data, rt_obj, inter));
 			}
 			else
 				mlx_pixel_put(mlx_ptr, win_ptr, i, j, encode_rgb(50,50,50));
