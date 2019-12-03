@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/04 00:19:21 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/04 00:37:15 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,45 +175,27 @@ int is_light_obstructed(t_data data, t_geo *rt_obj, double t, t_light *light)
 {	
 	t_vector3	start;
 	t_vector3	light_ray;
-	t_camera	*cam;
 	t_list		*first;
 	t_rt_param	param;
 
-	cam = data.current_cam;
-	start = point_from_ray(cam->pos, data.ray, t);
+	start = point_from_ray(data.current_cam->pos, data.ray, t);
 	light_ray = normalise_vector(direction_vector(start, light->pos));
 	first = data.objects;
 	while (first)
 	{
 		if (first->content != rt_obj)
 		{
-			if (((t_geo *)first->content)->obj_type == e_cyl)
-			{
-				//printf("sulsul");
-				param = set_param(start, light_ray, -1, 0);
-				if (raytrace(first->content, &param))
-					if (param.i_2 > 0  )
-							return (1);
-				//printf("1 = %g\n2 = %g\n", param.i, param.i_2);
-			}
 			param = set_param(start, light_ray, -1, 0);
-			int res;
-			if ((res = raytrace(first->content, &param)))
+			if (raytrace(first->content, &param))
 			{
 				if (distance(start, light->pos) > 
 				distance(start, point_from_ray(start, light_ray, param.i > 0 ? param.i : param.i_2)))
 					return (1);
 			}
-			if (((t_geo *)first->content)->obj_type == e_cyl)
-			{
-				// printf("res was %d\n", res);
-				//printf("1 = %g\n2 = %g\n", param.i, param.i_2);
-				
-			}
 		}
 		else if (rt_obj->obj_type == e_cyl)
 		{
-			param = set_param(point_from_ray(start, light_ray, 0.001), light_ray, -1, 0);
+			param = set_param(point_from_ray(start, light_ray, 0.0001), light_ray, -1, 0);
 			if (raytrace(first->content, &param))
 				if (param.i_2 > 0 || param.i < 0)
 						return (1);
