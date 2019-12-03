@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/03 14:42:51 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/03 19:40:26 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,11 @@ t_vector3 apply_orientation(t_vector3 base, t_vector3 orient)
 */
 t_vector3 compute_ray(const t_data *data, t_camera *cam, const double x, const double y)
 {
-	double sc_height;
-	double sc_width;
-	double pix_shift;
-	t_vector3 base_dir;
-	t_vector3 ray;
+	double		sc_height;
+	double		sc_width;
+	double		pix_shift;
+	t_vector3	base_dir;
+	t_vector3	ray;
 
 	base_dir = scalar_vect(cam->vector_x, (double)SCREEN_L);
 	sc_width = (double)SCREEN_L * tan(to_rad(cam->fov / 2)) * 2;
@@ -110,11 +110,43 @@ t_geo *find_closest_intersection(t_data *data, t_vector3 ray, double *inter)
 				*inter = param.i;
 				inter_obj = first->content;
 			}
+			else if (((t_geo *)(first->content))->obj_type == e_cyl && 
+					((param.i_2 > 0 && *inter < 0) ||
+					(param.i_2 > 0 && param.i_2 < *inter)))
+			{
+				*inter = param.i_2;
+				inter_obj = first->content;
+			}
 		}
 		first = first->next;
 	}
 	return (inter_obj);
 }
+
+t_vector3 angle_cases(t_data data, t_geo *rt_obj, t_vector3 inter_point,
+					t_light *light)
+{
+	t_rt_param	param1;
+	t_rt_param	param2;
+	t_vector3	norm_vect;
+
+	norm_vect = normalise_vector(get_normal_vector(inter_point, rt_obj));
+	if (rt_obj->obj_type == e_plane || rt_obj->obj_type == e_sq || rt_obj->obj_type == e_disk)
+	{
+		if (distance(light->pos, point_from_ray(inter_point, norm_vect, 1)) >
+			distance(light->pos, inter_point))
+			return (scalar_vect(norm_vect, -1.0));
+		param1 = set_param(light->pos, norm_vect, 0, rt_obj->obj);
+		param2 = set_param(point_from_ray(inter_point, data.ray, -data.t / 2),
+							norm_vect, -1, rt_obj->obj);
+		rt_obj->find_inter(&param1);
+		rt_obj->find_inter(&param2);
+		if ((param1.i < 0 && param2.i > 0) || (param1.i > 0 && param2.i < 0))
+			return (scalar_vect(norm_vect, -1.0));
+	}
+	return (norm_vect);
+}
+
 /*
 ** Will need a lot of refactoring
 */
@@ -123,29 +155,16 @@ double get_light_angle(t_data data, t_light *light, double t, t_geo *rt_obj)
 	t_vector3	inter_point;
 	t_vector3	norm_vect;
 	t_camera	*cam;
-	t_rt_param param1;
-	t_rt_param param2;
+	t_rt_param	param1;
 
 	cam = data.current_cam;
 	inter_point = point_from_ray(cam->pos, data.ray, t);
-	norm_vect = normalise_vector(get_normal_vector(inter_point, rt_obj));
-	if (rt_obj->obj_type == e_plane || rt_obj->obj_type == e_sq || rt_obj->obj_type == e_disk)
-	{
-		if (distance(light->pos, point_from_ray(inter_point, norm_vect, 1)) >
-			distance(light->pos, inter_point))
-			norm_vect = scalar_vect(norm_vect, -1.0);
-		param1 = set_param(light->pos, norm_vect, 0, rt_obj->obj);
-		param2 = set_param(point_from_ray(inter_point, data.ray, -t / 2), norm_vect, -1, rt_obj->obj);
-		rt_obj->find_inter(&param1);
-		rt_obj->find_inter(&param2);
-		if ((param1.i < 0 && param2.i > 0) || (param1.i > 0 && param2.i < 0))
-			norm_vect = scalar_vect(norm_vect, -1.0);
-	}
-	else if (rt_obj->obj_type == e_cyl)
+	norm_vect = angle_cases(data, rt_obj, inter_point, light);
+	if (rt_obj->obj_type == e_cyl)
 	{
 		param1 = set_param(data.current_cam->pos, data.ray, 0, rt_obj->obj);
 		if (raytrace(rt_obj, &param1))
-			if (param1.i > param1.i_2)
+			if (param1.i < 0 && param1.i_2 > 0)
 				norm_vect = scalar_vect(norm_vect, -1.0);
 	}
 	return (angle_between_vectors(norm_vect,
@@ -166,20 +185,44 @@ int is_light_obstructed(t_data data, t_geo *rt_obj, double t, t_light *light)
 	first = data.objects;
 	while (first)
 	{
-		if (first->content != rt_obj || rt_obj->obj_type == e_cyl)
+		if (first->content != rt_obj)
 		{
+			if (((t_geo *)first->content)->obj_type == e_cyl)
+			{
+				param = set_param(point_from_ray(start, light_ray, -0.0001), light_ray, -1, 0);
+				if (raytrace(first->content, &param))
+					if (param.i_2 > 0  )
+							return (1);
+			}
 			param = set_param(start, light_ray, -1, 0);
-			if (raytrace(first->content, &param))
+			int res;
+			if ((res = raytrace(first->content, &param)))
+			{
+				if (((t_geo *)first->content)->obj_type == e_cyl)
+					printf("1 = %g\n2 = %g\n", param.i, param.i_2);
 				if (distance(start, light->pos) > 
-				distance(start, point_from_ray(start, light_ray, param.i)))
+				distance(start, point_from_ray(start, light_ray, param.i > 0 ? param.i : param.i_2)))
 					return (1);
+			}
+			if (((t_geo *)first->content)->obj_type == e_cyl)
+			{
+				// printf("res was %d\n", res);
+				// printf("1 = %g\n2 = %g\n", param.i, param.i_2);
+			}
+		}
+		else if (rt_obj->obj_type == e_cyl)
+		{
+			param = set_param(point_from_ray(start, light_ray, -0.0001), light_ray, -1, 0);
+			if (raytrace(first->content, &param))
+				if (param.i_2 > 0)
+						return (1);
 		}
 		first = first->next;
 	}
 	return (0);
 }
 
-int calc_colour_from_light(t_data data, t_geo *rt_obj, double t)
+int calc_colour_from_light(t_data data, t_geo *rt_obj)
 {
 	t_list *first;
 	t_light *light;
@@ -192,21 +235,15 @@ int calc_colour_from_light(t_data data, t_geo *rt_obj, double t)
 	while (first)
 	{
 		light = first->content;
-		if (!is_light_obstructed(data, rt_obj, t, light))
+		if (!is_light_obstructed(data, rt_obj, data.t, light))
 		{
-			angle = get_light_angle(data, light, t, rt_obj);
-			//printf("angle is %g\n", angle * 180 / M_PI);
+			angle = get_light_angle(data, light, data.t, rt_obj);
 			if (angle < M_PI_2 && angle > -M_PI_2)
 			{
 				current_light = apply_intensity_rgb(light->colour, sin(M_PI_2 - angle));
 				final_light = add_lights(final_light, current_light);
 			}
 		}
-		else
-		{
-			//printf("mmh");
-		}
-		
 		first = first->next;
 	}
 	final_light = add_lights(final_light, data.amb.colour);
@@ -228,7 +265,6 @@ int main(int ac, char **av)
 	void *mlx_ptr;
 	void *win_ptr;
 	t_data data;
-	double inter;
 
 	clock_t start, end;
 	time_t s;
@@ -254,13 +290,13 @@ int main(int ac, char **av)
 		j = 0;
 		while (j < data.res.y)
 		{
-			inter = -1;
+			data.t = -1;
 			data.ray = compute_ray(&data, data.cameras->content, i, j);
 			t_geo *rt_obj;
-			if ((rt_obj = find_closest_intersection(&data, data.ray, &inter)))
+			if ((rt_obj = find_closest_intersection(&data, data.ray, &data.t)))
 			{
 				mlx_pixel_put(mlx_ptr, win_ptr, i, j,
-							calc_colour_from_light(data, rt_obj, inter));
+							calc_colour_from_light(data, rt_obj));
 			}
 			else
 				mlx_pixel_put(mlx_ptr, win_ptr, i, j, encode_rgb(50,50,50));

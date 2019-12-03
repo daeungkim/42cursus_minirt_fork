@@ -6,20 +6,18 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 16:41:07 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/03 13:50:20 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/03 18:52:41 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 #include <stdio.h>
-int	raytrace_cyl(t_rt_param *param)
-{
-	t_vector3	abc;
-	t_cylindre	*cyl;
-	t_vector3	d_x_t;
-	double		h;
 
-	cyl = param->object;
+static int check_cyl_solve(t_rt_param *param, t_cylindre *cyl)
+{
+	t_vector3	d_x_t;
+	t_vector3	abc;
+
 	d_x_t.x = dot(param->ray, cyl->orient);
 	d_x_t.y = dot(sub_vect(param->origin, cyl->centre), cyl->orient);
 	abc.x = dot_same(param->ray) - pow(d_x_t.x, 2);
@@ -27,18 +25,28 @@ int	raytrace_cyl(t_rt_param *param)
 			d_x_t.x * d_x_t.y);
 	abc.z = dot_same(sub_vect(param->origin, cyl->centre)) -
 			pow(d_x_t.y, 2) - pow(cyl->diametre / 2, 2);
-	if (!solve_quadratic(abc, &(param->i), &(param->i_2)))
+	return (solve_quadratic(abc, &(param->i), &(param->i_2)));
+}
+
+int	raytrace_cyl(t_rt_param *param)
+{
+	t_cylindre	*cyl;
+	double		h1;
+	double		h2;
+
+	cyl = param->object;
+	if (!check_cyl_solve(param, cyl))
 		return (0);
-	h = dot(sub_vect(param->origin, cyl->centre), cyl->orient) +
-		d_x_t.x * param->i;
-	if (h > 0 && h < cyl->height)
-		return (1);
-	d_swap(&(param->i), &(param->i_2));
-	h = dot(sub_vect(param->origin, cyl->centre), cyl->orient) +
-		d_x_t.x * param->i;
-	if (h > 0 && h < cyl->height)
-		return (1);
-	return (0);
+	h1 = dot(sub_vect(param->origin, cyl->centre), cyl->orient) +
+		dot(param->ray, cyl->orient) * param->i;
+	if (h1 < 0 || h1 > cyl->height)
+		param->i = -1;
+	h2 = dot(sub_vect(param->origin, cyl->centre), cyl->orient) +
+		dot(param->ray, cyl->orient) * param->i_2;
+	if (h2 < 0 || h2 > cyl->height)
+		param->i_2 = -1;
+	return ((param->i > 0 && h1 < cyl->height) ||
+			(param->i_2 > 0 && h2 < cyl->height));
 }
 
 t_vector3 normal_vector_cyl(t_vector3 point, void *cyl)

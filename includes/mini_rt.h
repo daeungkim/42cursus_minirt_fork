@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/03 13:48:07 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/03 17:17:27 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ typedef struct	s_data
 	t_list			*cameras;
 	t_list			*objects;
 	t_vector3		ray;
+	double			t;
 	t_camera		*current_cam;
 	int				pixsize;
 	int				pixsizeline;
