@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 14:21:06 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/02 15:22:50 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/03 13:31:16 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ int	raytrace_disk(t_rt_param *param)
 	double	denom;
 
 	disk = param->object;
-	t = dot_prod(sub_vect(disk->centre, param->origin), disk->normal);
-	denom = dot_prod(param->ray, disk->normal);
+	t = dot(sub_vect(disk->centre, param->origin), disk->normal);
+	denom = dot(param->ray, disk->normal);
 	if (denom < 1e-8 && denom > -1 * (1e-8))
 		return (0);
 	param->i = t / denom;

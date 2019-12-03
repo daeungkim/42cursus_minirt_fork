@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/26 15:12:25 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/11/30 19:26:22 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/03 13:30:05 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ t_vector3 normalise_vector(t_vector3 v)
 /*
 ** This gives ||a|| * cos(theta), theta being the angle between a and b
 */
-double dot_prod(t_vector3 a, t_vector3 b)
+double dot(t_vector3 a, t_vector3 b)
 {
 	return (a.x * b.x + a.y * b.y + a.z * b.z);
 }

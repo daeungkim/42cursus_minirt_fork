@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 12:06:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/02 15:24:28 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/03 13:31:36 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ int	raytrace_square(t_rt_param *param)
 	double		denom;
 
 	square = param->object;
-	t = dot_prod(sub_vect(square->centre, param->origin), square->normal);
-	denom = dot_prod(param->ray, square->normal);
+	t = dot(sub_vect(square->centre, param->origin), square->normal);
+	denom = dot(param->ray, square->normal);
 	if (denom < 1e-8 && denom > -1 * (1e-8))
 		return (0);
 	param->i = t / denom;

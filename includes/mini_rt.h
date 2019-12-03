@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/02 18:45:46 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/03 13:48:07 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ typedef struct		s_rt_param
 	t_vector3		ray;
 	t_vector3		origin;
 	double			i;
+	double			i_2;
 	void			*object;
 }					t_rt_param;
 
@@ -160,7 +161,7 @@ double		magnitude(t_vector3 a);
 t_vector3	point_from_ray(t_vector3 origin, t_vector3 ray, double t);
 t_vector3	direction_vector(t_vector3 a, t_vector3 b);
 t_vector3	normalise_vector(t_vector3 v);
-double		dot_prod(t_vector3 a, t_vector3 b);
+double		dot(t_vector3 a, t_vector3 b);
 double		dot_same(t_vector3 a);
 t_vector3	cross_prod(t_vector3 a, t_vector3 b);
 double		angle_between_vectors(t_vector3 a, t_vector3 b);
@@ -174,6 +175,7 @@ int			solve_square_boundaries(t_rt_param *param, t_square *square);
 int			solve_disk_boundaries(t_rt_param *param, t_disk *disk);
 double		to_rad(double deg);
 double		solve_poly_2(double a, double b);
+void		d_swap(double *a, double *b);
 
 int			load_data(t_data *data, char *rt_file);
 

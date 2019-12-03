@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/30 16:35:00 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/01 15:35:17 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/03 13:31:23 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ int	raytrace_plane(t_rt_param *param)
 	double	denom;
 
 	plane = param->object;
-	t = dot_prod(sub_vect(plane->centre, param->origin), plane->normal);
-	denom = dot_prod(param->ray, plane->normal);
+	t = dot(sub_vect(plane->centre, param->origin), plane->normal);
+	denom = dot(param->ray, plane->normal);
 	if (denom < 1e-8 && denom > -1 * (1e-8))
 		return (0);
 	t /= denom;

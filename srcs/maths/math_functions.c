@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/20 17:25:46 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/02 18:45:18 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/03 13:46:17 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int solve_quadratic(t_vector3 abc, double *t0, double *t1)
 {
 	double disc;
 	double q;
+	double temp;
 
 	*t1 = -1.0;
 	disc = abc.y * abc.y - 4 * abc.x * abc.z;
@@ -33,8 +34,12 @@ int solve_quadratic(t_vector3 abc, double *t0, double *t1)
 		q = -0.5 * (abc.y + ((abc.y > 0) ? sqrt(disc) : - sqrt(disc)));
 		*t0 = q / abc.x;
 		*t1 = abc.z / q;
+		temp = *t0;
 		if (*t0 > *t1)
+		{
 			*t0 = *t1;
+			*t1 = temp;
+		}
 		if (*t0 < 0)
 			return (0);
 	}
@@ -49,8 +54,8 @@ int solve_square_boundaries(t_rt_param *param, t_square *square)
 
 	point = point_from_ray(param->origin, param->ray, param->i);
 	point = direction_vector(point, square->centre);
-	x_proj = dot_prod(point, square->x) / square->height;
-	z_proj = dot_prod(point, square->z) / square->height;
+	x_proj = dot(point, square->x) / square->height;
+	z_proj = dot(point, square->z) / square->height;
 	if ((x_proj < square->height && x_proj > 0) &&
 		(z_proj < square->height && z_proj > 0))
 		return (1);
@@ -73,7 +78,6 @@ double solve_poly_2(double a, double b)
 {
 	return (a * a + b * b + 2 * (a * b));
 }
-
 
 double to_rad(double deg)
 {

@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2019/12/02 16:53:46 by cjaimes          ###   ########.fr        #
+#    Updated: 2019/12/03 13:48:20 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,7 @@ SRC			=	main.c \
 				parser.c \
 				factories.c \
 				maths/math_functions.c \
+				maths/math_functions_2.c \
 				maths/vector_maths/vector_maths.c \
 				maths/vector_maths/vector_maths2.c \
 				maths/vector_maths/vector_maths3.c \
