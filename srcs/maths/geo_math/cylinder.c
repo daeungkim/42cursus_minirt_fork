@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 16:41:07 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/03 18:52:41 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/04 14:21:29 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static int check_cyl_solve(t_rt_param *param, t_cylindre *cyl)
 {
 	t_vector3	d_x_t;
 	t_vector3	abc;
+	int 		sol;
 
 	d_x_t.x = dot(param->ray, cyl->orient);
 	d_x_t.y = dot(sub_vect(param->origin, cyl->centre), cyl->orient);
@@ -25,7 +26,12 @@ static int check_cyl_solve(t_rt_param *param, t_cylindre *cyl)
 			d_x_t.x * d_x_t.y);
 	abc.z = dot_same(sub_vect(param->origin, cyl->centre)) -
 			pow(d_x_t.y, 2) - pow(cyl->diametre / 2, 2);
-	return (solve_quadratic(abc, &(param->i), &(param->i_2)));
+	sol = solve_quadratic(abc, &(param->i), &(param->i_2));
+	if (sol >= 1)
+		param->v = 1;
+	if (sol == 2)
+		param->v_2 = 1;
+	return (sol);
 }
 
 int	raytrace_cyl(t_rt_param *param)
@@ -40,13 +46,13 @@ int	raytrace_cyl(t_rt_param *param)
 	h1 = dot(sub_vect(param->origin, cyl->centre), cyl->orient) +
 		dot(param->ray, cyl->orient) * param->i;
 	if (h1 < 0 || h1 > cyl->height)
-		param->i = -1;
+		param->v = 0;
 	h2 = dot(sub_vect(param->origin, cyl->centre), cyl->orient) +
 		dot(param->ray, cyl->orient) * param->i_2;
 	if (h2 < 0 || h2 > cyl->height)
-		param->i_2 = -1;
-	return ((param->i > 0 && h1 < cyl->height) ||
-			(param->i_2 > 0 && h2 < cyl->height));
+		param->v_2 = 0;
+	return ((param->v && h1 < cyl->height) ||
+			(param->v_2 && h2 < cyl->height));
 }
 
 t_vector3 normal_vector_cyl(t_vector3 point, void *cyl)

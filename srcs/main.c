@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/04 00:37:15 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/04 17:06:17 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@ t_rt_param set_param(t_vector3 o, t_vector3 r, double i, void *ob)
 	param.origin = o;
 	param.ray = r;
 	param.i = i;
+	param.v = 0;
 	param.i_2 = -1;
+	param.v_2 = 0;
 	param.object = ob;
 	return (param);
 }
@@ -164,7 +166,7 @@ double get_light_angle(t_data data, t_light *light, double t, t_geo *rt_obj)
 	{
 		param1 = set_param(data.current_cam->pos, data.ray, 0, rt_obj->obj);
 		if (raytrace(rt_obj, &param1))
-			if (param1.i < 0 && param1.i_2 > 0)
+			if (!param1.v && param1.v_2 && param1.i_2 > 0)
 				norm_vect = scalar_vect(norm_vect, -1.0);
 	}
 	return (angle_between_vectors(norm_vect,
@@ -197,8 +199,12 @@ int is_light_obstructed(t_data data, t_geo *rt_obj, double t, t_light *light)
 		{
 			param = set_param(point_from_ray(start, light_ray, 0.0001), light_ray, -1, 0);
 			if (raytrace(first->content, &param))
-				if (param.i_2 > 0 || param.i < 0)
-						return (1);
+				// if (distance(start, light->pos) <
+				// 	distance(start, point_from_ray(start, light_ray,
+				// 			fabs(param.i) * param.v > fabs(param.i_2) * param.v_2 ? param.i : param.i_2)))
+				// 	return (0);
+				if (param.v_2 && param.i_2 > 0)
+					return (1);
 		}
 		first = first->next;
 	}
@@ -227,6 +233,11 @@ int calc_colour_from_light(t_data data, t_geo *rt_obj)
 				final_light = add_lights(final_light, current_light);
 			}
 		}
+		else
+		{
+			//printf("ah");
+		}
+		
 		first = first->next;
 	}
 	final_light = add_lights(final_light, data.amb.colour);
@@ -247,6 +258,9 @@ int main(int ac, char **av)
 
 	void *mlx_ptr;
 	void *win_ptr;
+	void *img_ptr;
+	unsigned char *data_adr;
+	unsigned char *copy;
 	t_data data;
 
 	clock_t start, end;
@@ -259,6 +273,11 @@ int main(int ac, char **av)
 	if (!load_data(&data, av[1]))
 		return (0);
 	mlx_ptr = mlx_init();
+	if (!(img_ptr = mlx_new_image(mlx_ptr, data.res.x, data.res.y)))
+		return (0);
+	data_adr = (unsigned char *)mlx_get_data_addr(img_ptr, &(data.pixsize), &(data.pixsizeline), &(data.endian));
+	copy = data_adr;
+	printf("bits per pixel = %d\nline size = %d\nendian = %d\n", (data.pixsize), (data.pixsizeline), (data.endian));
 	win_ptr = mlx_new_window(mlx_ptr, data.res.x, data.res.y, "Dat_window");
 	data.current_cam = data.cameras->content;
 	int i = 0;
@@ -267,9 +286,10 @@ int main(int ac, char **av)
 	t_plane *pl;
 	geo = data.objects->content;
 	pl = geo->obj;
-	printf("normal vector is |%g|%g|%g|\n", pl->normal.x, pl->normal.y, pl->normal.z);
 	while (i < data.res.x)
 	{
+		if (i)
+			data_adr += data.pixsizeline;
 		j = 0;
 		while (j < data.res.y)
 		{
@@ -278,15 +298,30 @@ int main(int ac, char **av)
 			t_geo *rt_obj;
 			if ((rt_obj = find_closest_intersection(&data, data.ray, &data.t)))
 			{
-				mlx_pixel_put(mlx_ptr, win_ptr, i, j,
-							calc_colour_from_light(data, rt_obj));
+				int colour = calc_colour_from_light(data, rt_obj);
+				//mlx_pixel_put(mlx_ptr, win_ptr, i, j,
+				//			colour);
+				// data_adr[j * 4] = 50;
+				// data_adr[j * 4 + 1] = 50;
+				// data_adr[j * 4 + 2] = 50;
+				//data_adr[j] = colour;
+				data_adr[j * 4] = get_blue(colour);
+				data_adr[j * 4 + 1] = get_green(colour);
+				data_adr[j * 4 + 2] = get_red(colour);
 			}
 			else
-				mlx_pixel_put(mlx_ptr, win_ptr, i, j, encode_rgb(50,50,50));
+			{
+				//mlx_pixel_put(mlx_ptr, win_ptr, i, j, encode_rgb(50,50,50));
+				//data_adr[j] = encode_rgb(50, 50, 50);
+				data_adr[j * 4] = 50;
+				data_adr[j * 4 + 1] = 50;
+				data_adr[j * 4 + 2] = 50;
+			}
 			j++;
 		}
 		i++;
 	}
+	mlx_put_image_to_window(mlx_ptr, win_ptr, img_ptr, 0, 0);
 	end = clock();
 	double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 	printf("Time taken is %f\n", cpu_time_used);

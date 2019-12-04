@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/03 17:17:27 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/04 14:14:08 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ typedef struct	s_triangle
 	t_vector3	p1;
 	t_vector3	p2;
 	t_vector3	p3;
+	t_vector3	normal;
 }				t_triangle;
 
 typedef struct	s_data
@@ -136,7 +137,9 @@ typedef struct		s_rt_param
 	t_vector3		ray;
 	t_vector3		origin;
 	double			i;
+	int				v;
 	double			i_2;
+	int				v_2;
 	void			*object;
 }					t_rt_param;
 

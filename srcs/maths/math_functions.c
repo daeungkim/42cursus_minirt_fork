@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/20 17:25:46 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/04 00:21:15 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/04 14:17:58 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,22 +28,20 @@ int solve_quadratic(t_vector3 abc, double *t0, double *t1)
 	if (disc < 0)
 		return (0);
 	if (disc == 0)
-		*t0 = -abc.y / (2 * abc.x);
-	else
 	{
-		q = -0.5 * (abc.y + ((abc.y > 0) ? sqrt(disc) : - sqrt(disc)));
-		*t0 = q / abc.x;
-		*t1 = abc.z / q;
-		temp = *t0;
-		if (*t0 > *t1)
-		{
-			*t0 = *t1;
-			*t1 = temp;
-		}
-		// if (*t0 < 0 )
-		// 	return (0);
+		*t0 = -abc.y / (2 * abc.x);
+		return (1);
 	}
-	return (1);
+	q = -0.5 * (abc.y + ((abc.y > 0) ? sqrt(disc) : - sqrt(disc)));
+	*t0 = q / abc.x;
+	*t1 = abc.z / q;
+	temp = *t0;
+	if (*t0 > *t1)
+	{
+		*t0 = *t1;
+		*t1 = temp;
+	}
+	return (2);
 }
 
 int solve_square_boundaries(t_rt_param *param, t_square *square)
