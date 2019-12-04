@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/04 19:24:23 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/05 00:26:39 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,8 +214,12 @@ int is_light_obstructed(t_data data, t_geo *rt_obj, double t, t_light *light)
 			if (raytrace(first->content, &param))
 				if (param.v_2 && param.i_2 > 0 && distance(start, light->pos) >
 					distance(light->pos,
+					point_from_ray(start, light_ray, param.i_2)) &&
+					distance(start, light->pos) > distance(start,
 					point_from_ray(start, light_ray, param.i_2)))
-					return (1);
+					{
+						return (1);
+					}
 		}
 		first = first->next;
 	}
