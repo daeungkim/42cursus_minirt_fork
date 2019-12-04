@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 12:06:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/03 13:31:36 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/04 18:34:33 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	raytrace_square(t_rt_param *param)
 	param->i = t / denom;
 	if (param->i > 0)
 		if (solve_square_boundaries(param, square))
-			return (1);
+			return ((param->v = 1));
 	return (0);
 }
 

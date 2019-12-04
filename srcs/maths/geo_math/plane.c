@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/30 16:35:00 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/03 13:31:23 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/04 18:34:11 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	raytrace_plane(t_rt_param *param)
 	t /= denom;
 	param->i = t;
 	if (t > 0)
-		return (1);
+		return ((param->v = 1));
 	return (0);
 }
 

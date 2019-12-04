@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/30 15:35:22 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/04 00:31:43 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/04 18:31:09 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	raytrace_sphere(t_rt_param *param)
 	if (t0 < 0)
 		return (0);
 	param->i = t0;
+	param->v = 1;
 	return (1);
 }
 

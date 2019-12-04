@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/04 18:20:47 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/04 18:34:47 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,14 +106,14 @@ t_geo *find_closest_intersection(t_data *data, t_vector3 ray, double *inter)
 		param = set_param(data->current_cam->pos, ray, -1, 0);
 		if (raytrace(first->content, &param))
 		{
-			if ((param.i > 0 && *inter < 0) ||
-				(param.i > 0 && param.i < *inter))
+			if (param.v && (((param.i > 0 && *inter < 0) ||
+				(param.i > 0 && param.i < *inter))))
 			{
 				*inter = param.i;
 				inter_obj = first->content;
 			}
-			else if (((t_geo *)(first->content))->obj_type == e_cyl && 
-					((param.i_2 > 0 && *inter < 0) ||
+			if (((t_geo *)(first->content))->obj_type == e_cyl && 
+					param.v_2 && ((param.i_2 > 0 && *inter < 0) ||
 					(param.i_2 > 0 && param.i_2 < *inter)))
 			{
 				*inter = param.i_2;

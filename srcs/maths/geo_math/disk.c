@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 14:21:06 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/03 13:31:16 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/04 18:34:27 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	raytrace_disk(t_rt_param *param)
 	param->i = t / denom;
 	if (param->i > 0)
 		if (solve_disk_boundaries(param, disk))
-			return (1);
+			return ((param->v = 1));
 	return (0);
 }
 
