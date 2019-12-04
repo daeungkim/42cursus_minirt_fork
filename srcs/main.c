@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/04 17:06:17 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/04 18:20:47 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,11 +199,9 @@ int is_light_obstructed(t_data data, t_geo *rt_obj, double t, t_light *light)
 		{
 			param = set_param(point_from_ray(start, light_ray, 0.0001), light_ray, -1, 0);
 			if (raytrace(first->content, &param))
-				// if (distance(start, light->pos) <
-				// 	distance(start, point_from_ray(start, light_ray,
-				// 			fabs(param.i) * param.v > fabs(param.i_2) * param.v_2 ? param.i : param.i_2)))
-				// 	return (0);
-				if (param.v_2 && param.i_2 > 0)
+				if (param.v_2 && param.i_2 > 0 && distance(start, light->pos) >
+					distance(start,
+					point_from_ray(start, light_ray, param.i_2)))
 					return (1);
 		}
 		first = first->next;
@@ -235,7 +233,7 @@ int calc_colour_from_light(t_data data, t_geo *rt_obj)
 		}
 		else
 		{
-			//printf("ah");
+			//printf("a");
 		}
 		
 		first = first->next;
@@ -259,8 +257,7 @@ int main(int ac, char **av)
 	void *mlx_ptr;
 	void *win_ptr;
 	void *img_ptr;
-	unsigned char *data_adr;
-	unsigned char *copy;
+	int *data_adr;
 	t_data data;
 
 	clock_t start, end;
@@ -275,8 +272,7 @@ int main(int ac, char **av)
 	mlx_ptr = mlx_init();
 	if (!(img_ptr = mlx_new_image(mlx_ptr, data.res.x, data.res.y)))
 		return (0);
-	data_adr = (unsigned char *)mlx_get_data_addr(img_ptr, &(data.pixsize), &(data.pixsizeline), &(data.endian));
-	copy = data_adr;
+	data_adr = (int *)mlx_get_data_addr(img_ptr, &(data.pixsize), &(data.pixsizeline), &(data.endian));
 	printf("bits per pixel = %d\nline size = %d\nendian = %d\n", (data.pixsize), (data.pixsizeline), (data.endian));
 	win_ptr = mlx_new_window(mlx_ptr, data.res.x, data.res.y, "Dat_window");
 	data.current_cam = data.cameras->content;
@@ -286,36 +282,23 @@ int main(int ac, char **av)
 	t_plane *pl;
 	geo = data.objects->content;
 	pl = geo->obj;
-	while (i < data.res.x)
+	while (i < data.res.y)
 	{
 		if (i)
-			data_adr += data.pixsizeline;
+			data_adr += data.pixsizeline / 4;
 		j = 0;
-		while (j < data.res.y)
+		while (j < data.res.x)
 		{
 			data.t = -1;
-			data.ray = compute_ray(&data, data.cameras->content, i, j);
+			data.ray = compute_ray(&data, data.cameras->content, j, i);
 			t_geo *rt_obj;
 			if ((rt_obj = find_closest_intersection(&data, data.ray, &data.t)))
 			{
-				int colour = calc_colour_from_light(data, rt_obj);
-				//mlx_pixel_put(mlx_ptr, win_ptr, i, j,
-				//			colour);
-				// data_adr[j * 4] = 50;
-				// data_adr[j * 4 + 1] = 50;
-				// data_adr[j * 4 + 2] = 50;
-				//data_adr[j] = colour;
-				data_adr[j * 4] = get_blue(colour);
-				data_adr[j * 4 + 1] = get_green(colour);
-				data_adr[j * 4 + 2] = get_red(colour);
+				data_adr[j] = calc_colour_from_light(data, rt_obj);
 			}
 			else
 			{
-				//mlx_pixel_put(mlx_ptr, win_ptr, i, j, encode_rgb(50,50,50));
-				//data_adr[j] = encode_rgb(50, 50, 50);
-				data_adr[j * 4] = 50;
-				data_adr[j * 4 + 1] = 50;
-				data_adr[j * 4 + 2] = 50;
+				data_adr[j] = encode_rgb(50, 50, 50);
 			}
 			j++;
 		}
