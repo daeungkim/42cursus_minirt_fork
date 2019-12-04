@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/04 18:34:47 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/04 19:24:23 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ t_geo *find_closest_intersection(t_data *data, t_vector3 ray, double *inter)
 				*inter = param.i;
 				inter_obj = first->content;
 			}
-			if (((t_geo *)(first->content))->obj_type == e_cyl && 
+			else if (((t_geo *)(first->content))->obj_type == e_cyl && 
 					param.v_2 && ((param.i_2 > 0 && *inter < 0) ||
 					(param.i_2 > 0 && param.i_2 < *inter)))
 			{
@@ -188,10 +188,23 @@ int is_light_obstructed(t_data data, t_geo *rt_obj, double t, t_light *light)
 		if (first->content != rt_obj)
 		{
 			param = set_param(start, light_ray, -1, 0);
-			if (raytrace(first->content, &param))
+			if (((t_geo *)first->content)->obj_type == e_cyl)
+			{
+				if (raytrace(first->content, &param))
+				{
+					//maybe all the can be one if... if paramv2 is set to 0 for all others
+					if (distance(start, light->pos) >
+					distance(light->pos, point_from_ray(start, light_ray, param.v_2 ? param.i_2 : param.i)))
+					{
+						//printf("Dist start->light %g\nDist closest inter to light %g\n", distance(start, light->pos), distance(start, point_from_ray(start, light_ray, param.v_2 ? param.i_2 : param.i)));
+						return (1);
+					}
+				}
+			}
+			else if (raytrace(first->content, &param))
 			{
 				if (distance(start, light->pos) > 
-				distance(start, point_from_ray(start, light_ray, param.i > 0 ? param.i : param.i_2)))
+				distance(light->pos, point_from_ray(start, light_ray, param.i > 0 ? param.i : param.i_2)))
 					return (1);
 			}
 		}
@@ -200,7 +213,7 @@ int is_light_obstructed(t_data data, t_geo *rt_obj, double t, t_light *light)
 			param = set_param(point_from_ray(start, light_ray, 0.0001), light_ray, -1, 0);
 			if (raytrace(first->content, &param))
 				if (param.v_2 && param.i_2 > 0 && distance(start, light->pos) >
-					distance(start,
+					distance(light->pos,
 					point_from_ray(start, light_ray, param.i_2)))
 					return (1);
 		}
