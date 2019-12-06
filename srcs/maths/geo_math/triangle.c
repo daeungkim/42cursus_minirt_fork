@@ -6,12 +6,12 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 17:33:32 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/06 12:48:11 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/06 19:48:57 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
-#include <stdio.h>
+
 t_vector3 define_tri_plane(t_vector3 p1, t_vector3 p2, t_vector3 p3)
 {
     t_vector3 ab;

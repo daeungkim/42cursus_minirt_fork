@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2019/12/05 18:31:09 by cjaimes          ###   ########.fr        #
+#    Updated: 2019/12/06 20:15:07 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,8 @@ SRC			=	main.c \
 				maths/geo_math/square.c \
 				maths/geo_math/disk.c\
 				maths/geo_math/cylinder.c \
-				maths/geo_math/triangle.c\
+				maths/geo_math/triangle.c \
+				extra.c
 
 SRCS		=	${addprefix ${SRC_DIR}, ${SRC}}
 

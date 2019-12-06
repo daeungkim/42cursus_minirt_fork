@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/05 18:30:01 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/06 22:57:47 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,6 +218,11 @@ t_geo 		*square_factory(t_vector3 centre, t_vector3 normal, double height, int c
 t_geo		*disk_factory(t_vector3 centre, t_vector3 orient, double diametre, int colour);
 t_geo		*cyl_factory(t_vector3 centre, t_vector3 orient, t_vector3 dia_height, int colour);
 t_geo		*tri_factory(t_vector3 p1, t_vector3 p2, t_vector3 p3, int colour);
+
+void		make_dodecahedron(t_vector3 centre, double r, t_vector3 *vertices, t_vector3 orient);
+void		compute_dode_planes(t_vector3 *vert, t_vector3 *norm, double r, t_vector3 origin);
+void		compute_peaks(t_vector3 *planes, t_vector3 *peaks, double r, t_vector3 origin);
+void		generate_triangles(t_vector3 *vert, t_vector3 *peaks, t_data *data, int colour);
 
 //rgb functions
 int			get_blue(int colour);

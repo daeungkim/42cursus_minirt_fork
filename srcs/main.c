@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/06 13:26:39 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/07 00:24:56 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -285,6 +285,16 @@ int main(int ac, char **av)
 	data.current_cam = data.cameras->content;
 	int i = 0;
 	int j = 0;
+
+	t_vector3 l[20];
+	t_vector3 n[12];
+	t_vector3 p[12];
+
+	make_dodecahedron(create_vector(0,0,0), 1, l, create_vector(0, 0.25, 0));
+	compute_dode_planes(l, n, 1, create_vector(0, 0, 0));
+	compute_peaks(n, p, 1, create_vector(0,0,0));
+	generate_triangles(l, p, &data, encode_rgb(240, 0, 0));
+
 	while (i < data.res.y)
 	{
 		if (i)
