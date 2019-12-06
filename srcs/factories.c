@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 17:07:36 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/02 16:50:25 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/05 18:27:30 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,27 @@ t_geo *square_factory(t_vector3 centre, t_vector3 orient, double height, int col
 	square_obj->get_normal_vector = &normal_vector_square;
 	square_obj->obj_type = e_sq;
 	return (square_obj);
+}
+
+t_geo *tri_factory(t_vector3 p1, t_vector3 p2, t_vector3 p3, int colour)
+{
+	t_triangle *triangle;
+	t_geo	*tri_obj;
+
+	if (!(triangle = malloc(sizeof(t_square))))
+		return (NULL);
+	if (!(tri_obj = malloc(sizeof(t_geo))))
+		return (NULL);
+	tri_obj->colour = colour;
+	triangle->p1 = p1;
+	triangle->p2 = p2;
+	triangle->p3 = p3;
+	triangle->normal = define_tri_plane(p1, p2, p3);
+	tri_obj->obj = triangle;
+	tri_obj->find_inter = &raytrace_triangle;
+	tri_obj->get_normal_vector = &normal_vector_triangle;
+	tri_obj->obj_type = e_tri;
+	return (tri_obj);
 }
 
 t_geo *disk_factory(t_vector3 centre, t_vector3 orient, double diametre, int colour)

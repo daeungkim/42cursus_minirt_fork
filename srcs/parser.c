@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 12:05:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/02 19:33:54 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/05 19:21:24 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -366,6 +366,42 @@ int load_cylinder(t_data *data, char **line)
 	return (1);
 }
 
+int check_points_unique(t_vector3 p1, t_vector3 p2, t_vector3 p3)
+{
+	if ((p1.x == p2.x && p1.y == p2.y && p1.z == p2.z) ||
+		(p1.x == p3.x && p1.y == p3.y && p1.z == p3.z) ||
+		(p2.x == p3.x && p2.y == p3.y && p2.z == p3.z))
+		return (0);
+	return (1);
+}
+
+int load_triangle(t_data *data, char **line)
+{
+	t_vector3	p1;
+	t_vector3	p2;
+	t_vector3	p3;
+	int 		colour;
+	t_list		*tri;
+	
+	(*line)+= 2;
+	if (!get_vector3(line, &p1))
+		return (parse_error("Wrong p1 of a triangle"));
+	if (!get_vector3(line, &p2))
+		return (parse_error("Wrong p2 of a triangle"));
+		if (!get_vector3(line, &p3))
+		return (parse_error("Wrong p3 of a triangle"));
+	if (!get_rgb(line, &colour, 0))
+		return (parse_error("Wrong RGB values for triangle"));
+	if (!check_points_unique(p1, p2, p3))
+		return (parse_error("2 or more points are not unique in triangle"));
+	if (!(tri = ft_lstnew(tri_factory(p1, p2, p3, colour))) &&
+		!((t_geo *)(tri->content)))
+		return (parse_error("Malloc for triangle failed"));
+	ft_lstadd_back(&(data->objects), tri);
+	extra_info("Triangle loaded");
+	return (1);
+}
+
 int load_line(t_data *data, char *line)
 {
 	if (ft_strlen(line) < 2)
@@ -403,6 +439,11 @@ int load_line(t_data *data, char *line)
 	else if (*line == 'c' && line[1] == 'y')
 	{
 		if (!load_cylinder(data, &line))
+			return (0);
+	}
+	else if (*line == 't' && line[1] == 'r')
+	{
+		if (!load_triangle(data, &line))
 			return (0);
 	}
 	else if (*line == 'l')

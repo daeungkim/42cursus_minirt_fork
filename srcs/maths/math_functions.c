@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/20 17:25:46 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/04 14:17:58 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/05 18:26:48 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,24 @@ int solve_disk_boundaries(t_rt_param *param, t_disk *disk)
 	return (0);
 }
 
-double solve_poly_2(double a, double b)
+int solve_triangle_boundaries(t_rt_param *param, t_triangle *tri)
 {
-	return (a * a + b * b + 2 * (a * b));
-}
+    t_vector3 inter;
+    t_vector3 edge;
+    t_vector3 vertice_inter;
 
-double to_rad(double deg)
-{
-	return (deg * M_PI / 180.0);
+    inter = point_from_ray(param->origin, param->ray, param->i);
+    edge = direction_vector(tri->p1, tri->p2);
+    vertice_inter = direction_vector(tri->p1, inter);
+    if (dot(tri->normal, cross_prod(edge, vertice_inter)) < 0)
+        return (0);
+    edge = direction_vector(tri->p2, tri->p3);
+    vertice_inter = direction_vector(tri->p2, inter);
+    if (dot(tri->normal, cross_prod(edge, vertice_inter)) < 0)
+        return (0);
+    edge = direction_vector(tri->p3, tri->p1);
+    vertice_inter = direction_vector(tri->p3, inter);
+    if (dot(tri->normal, cross_prod(edge, vertice_inter)) < 0)
+        return (0);
+    return (1);
 }

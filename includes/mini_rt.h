@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/04 14:14:08 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/05 18:30:01 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,6 +177,7 @@ t_vector3	apply_orientation(t_vector3 base, t_vector3 orient);
 int			solve_quadratic(t_vector3 abc, double *t0, double *t1);
 int			solve_square_boundaries(t_rt_param *param, t_square *square);
 int			solve_disk_boundaries(t_rt_param *param, t_disk *disk);
+int			solve_triangle_boundaries(t_rt_param *param, t_triangle *tri);
 double		to_rad(double deg);
 double		solve_poly_2(double a, double b);
 void		d_swap(double *a, double *b);
@@ -203,6 +204,11 @@ t_vector3	normal_vector_disk(t_vector3 point, void *disk);
 int	raytrace_cyl(t_rt_param *param);
 t_vector3 normal_vector_cyl(t_vector3 point, void *disk);
 
+//triangle
+t_vector3	define_tri_plane(t_vector3 p1, t_vector3 p2, t_vector3 p3);
+int			raytrace_triangle(t_rt_param *param);
+t_vector3	normal_vector_triangle(t_vector3 point, void *triangle);
+
 //factories
 t_camera	*camera_factory(t_vector3 pos, t_vector3 vector, double fov);
 t_light		*light_factory(t_vector3 pos, double ratio, int colour);
@@ -211,6 +217,7 @@ t_geo		*plane_factory(t_vector3 centre, t_vector3 normal, int colour);
 t_geo 		*square_factory(t_vector3 centre, t_vector3 normal, double height, int colour);
 t_geo		*disk_factory(t_vector3 centre, t_vector3 orient, double diametre, int colour);
 t_geo		*cyl_factory(t_vector3 centre, t_vector3 orient, t_vector3 dia_height, int colour);
+t_geo		*tri_factory(t_vector3 p1, t_vector3 p2, t_vector3 p3, int colour);
 
 //rgb functions
 int			get_blue(int colour);

@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/05 00:26:39 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/05 19:44:45 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,8 @@ t_vector3 angle_cases(t_data data, t_geo *rt_obj, t_vector3 inter_point,
 	t_vector3	norm_vect;
 
 	norm_vect = normalise_vector(get_normal_vector(inter_point, rt_obj));
-	if (rt_obj->obj_type == e_plane || rt_obj->obj_type == e_sq || rt_obj->obj_type == e_disk)
+	if (rt_obj->obj_type == e_plane || rt_obj->obj_type == e_sq ||
+		rt_obj->obj_type == e_disk || rt_obj->obj_type == e_tri)
 	{
 		if (distance(light->pos, point_from_ray(inter_point, norm_vect, 1)) >
 			distance(light->pos, inter_point))
@@ -290,15 +291,10 @@ int main(int ac, char **av)
 	if (!(img_ptr = mlx_new_image(mlx_ptr, data.res.x, data.res.y)))
 		return (0);
 	data_adr = (int *)mlx_get_data_addr(img_ptr, &(data.pixsize), &(data.pixsizeline), &(data.endian));
-	printf("bits per pixel = %d\nline size = %d\nendian = %d\n", (data.pixsize), (data.pixsizeline), (data.endian));
 	win_ptr = mlx_new_window(mlx_ptr, data.res.x, data.res.y, "Dat_window");
 	data.current_cam = data.cameras->content;
 	int i = 0;
 	int j = 0;
-	t_geo * geo;
-	t_plane *pl;
-	geo = data.objects->content;
-	pl = geo->obj;
 	while (i < data.res.y)
 	{
 		if (i)
