@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/20 17:25:46 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/05 18:26:48 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/06 12:47:20 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,15 +81,15 @@ int solve_triangle_boundaries(t_rt_param *param, t_triangle *tri)
     inter = point_from_ray(param->origin, param->ray, param->i);
     edge = direction_vector(tri->p1, tri->p2);
     vertice_inter = direction_vector(tri->p1, inter);
-    if (dot(tri->normal, cross_prod(edge, vertice_inter)) < 0)
+    if (dot(tri->normal, cross_prod(edge, vertice_inter)) > 0)
         return (0);
     edge = direction_vector(tri->p2, tri->p3);
     vertice_inter = direction_vector(tri->p2, inter);
-    if (dot(tri->normal, cross_prod(edge, vertice_inter)) < 0)
+    if (dot(tri->normal, cross_prod(edge, vertice_inter)) > 0)
         return (0);
     edge = direction_vector(tri->p3, tri->p1);
     vertice_inter = direction_vector(tri->p3, inter);
-    if (dot(tri->normal, cross_prod(edge, vertice_inter)) < 0)
+    if (dot(tri->normal, cross_prod(edge, vertice_inter)) > 0)
         return (0);
     return (1);
 }

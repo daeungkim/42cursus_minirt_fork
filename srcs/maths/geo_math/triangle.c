@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 17:33:32 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/05 19:35:55 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/06 12:48:11 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_vector3 define_tri_plane(t_vector3 p1, t_vector3 p2, t_vector3 p3)
 
     ab = direction_vector(p1, p2);
     ac = direction_vector(p1, p3);
-    return (normalise_vector(cross_prod(ab, ac)));
+    return (normalise_vector(cross_prod(ac, ab)));
 }
 
 int	raytrace_triangle(t_rt_param *param)

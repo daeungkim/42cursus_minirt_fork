@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/05 19:44:45 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/06 13:26:39 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,15 +173,17 @@ double get_light_angle(t_data data, t_light *light, double t, t_geo *rt_obj)
 	return (angle_between_vectors(norm_vect,
 								direction_vector(inter_point, light->pos)));
 }
-
-int is_light_obstructed(t_data data, t_geo *rt_obj, double t, t_light *light)
+/*
+** Shit's too long. REFACTOR YOU NOOB
+*/
+int is_light_obstructed(t_data data, t_geo *rt_obj, t_light *light)
 {	
 	t_vector3	start;
 	t_vector3	light_ray;
 	t_list		*first;
 	t_rt_param	param;
 
-	start = point_from_ray(data.current_cam->pos, data.ray, t);
+	start = point_from_ray(data.current_cam->pos, data.ray, data.t);
 	light_ray = normalise_vector(direction_vector(start, light->pos));
 	first = data.objects;
 	while (first)
@@ -192,20 +194,15 @@ int is_light_obstructed(t_data data, t_geo *rt_obj, double t, t_light *light)
 			if (((t_geo *)first->content)->obj_type == e_cyl)
 			{
 				if (raytrace(first->content, &param))
-				{
-					//maybe all the can be one if... if paramv2 is set to 0 for all others
 					if (distance(start, light->pos) >
 					distance(light->pos, point_from_ray(start, light_ray, param.v_2 ? param.i_2 : param.i)))
-					{
-						//printf("Dist start->light %g\nDist closest inter to light %g\n", distance(start, light->pos), distance(start, point_from_ray(start, light_ray, param.v_2 ? param.i_2 : param.i)));
 						return (1);
-					}
-				}
 			}
 			else if (raytrace(first->content, &param))
 			{
 				if (distance(start, light->pos) > 
-				distance(light->pos, point_from_ray(start, light_ray, param.i > 0 ? param.i : param.i_2)))
+				distance(light->pos, point_from_ray(start, light_ray, param.i > 0 ? param.i : param.i_2)) &&
+				distance(start, light->pos) > distance (start, point_from_ray(start, light_ray, param.i > 0 ? param.i : param.i_2)))
 					return (1);
 			}
 		}
@@ -218,9 +215,7 @@ int is_light_obstructed(t_data data, t_geo *rt_obj, double t, t_light *light)
 					point_from_ray(start, light_ray, param.i_2)) &&
 					distance(start, light->pos) > distance(start,
 					point_from_ray(start, light_ray, param.i_2)))
-					{
 						return (1);
-					}
 		}
 		first = first->next;
 	}
@@ -240,7 +235,7 @@ int calc_colour_from_light(t_data data, t_geo *rt_obj)
 	while (first)
 	{
 		light = first->content;
-		if (!is_light_obstructed(data, rt_obj, data.t, light))
+		if (!is_light_obstructed(data, rt_obj, light))
 		{
 			angle = get_light_angle(data, light, data.t, rt_obj);
 			if (angle < M_PI_2 && angle > -M_PI_2)
@@ -249,11 +244,6 @@ int calc_colour_from_light(t_data data, t_geo *rt_obj)
 				final_light = add_lights(final_light, current_light);
 			}
 		}
-		else
-		{
-			//printf("a");
-		}
-		
 		first = first->next;
 	}
 	final_light = add_lights(final_light, data.amb.colour);
