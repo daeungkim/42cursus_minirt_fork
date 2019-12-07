@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 12:05:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/05 19:21:24 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/07 21:08:23 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ int get_vector3(char **line, t_vector3  *vector)
 
 int	load_res(t_data *data, char **line)
 {
+	//printf("res load is %d\n", data->res.loaded);
 	if(data->res.loaded)
 		return (parse_error("Resolution already loaded"));
 	data->res.x = 0;

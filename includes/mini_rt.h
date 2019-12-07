@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/06 22:57:47 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/07 21:25:58 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,9 +113,12 @@ typedef struct	s_triangle
 
 typedef struct	s_data
 {
-	void			*ptr;
-	void 			*win;
-	void			*img;
+	void			*mlx_ptr;
+	void 			*mlx_win;
+	void			*mlx_img;
+	int				*data_add;
+
+	int				render_mode;
 
 	t_resolution	res;
 	t_ambiant_light	amb;

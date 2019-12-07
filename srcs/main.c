@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/07 00:24:56 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/07 21:24:00 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,13 +259,23 @@ void set_data(t_data *data)
 	data->lights = 0;
 }
 
+int proper_exit(t_data *data)
+{
+	mlx_destroy_window(data->mlx_ptr, data->mlx_win);
+	exit(EXIT_SUCCESS);
+	return (0);
+}
+
+int key_press(int key, t_data *data)
+{
+	printf("key pressed %d!\n", key);
+	if (key == 53)
+		proper_exit(data);
+	return (0);
+}
+
 int main(int ac, char **av)
 {
-
-	void *mlx_ptr;
-	void *win_ptr;
-	void *img_ptr;
-	int *data_adr;
 	t_data data;
 
 	clock_t start, end;
@@ -277,28 +287,28 @@ int main(int ac, char **av)
 	set_data(&data);
 	if (!load_data(&data, av[1]))
 		return (0);
-	mlx_ptr = mlx_init();
-	if (!(img_ptr = mlx_new_image(mlx_ptr, data.res.x, data.res.y)))
+	data.mlx_ptr = mlx_init();
+	if (!(data.mlx_img = mlx_new_image(data.mlx_ptr, data.res.x, data.res.y)))
 		return (0);
-	data_adr = (int *)mlx_get_data_addr(img_ptr, &(data.pixsize), &(data.pixsizeline), &(data.endian));
-	win_ptr = mlx_new_window(mlx_ptr, data.res.x, data.res.y, "Dat_window");
+	data.data_add= (int *)mlx_get_data_addr(data.mlx_img, &(data.pixsize), &(data.pixsizeline), &(data.endian));
+	data.mlx_win = mlx_new_window(data.mlx_ptr, data.res.x, data.res.y, "Dat_window");
 	data.current_cam = data.cameras->content;
 	int i = 0;
 	int j = 0;
 
-	t_vector3 l[20];
-	t_vector3 n[12];
-	t_vector3 p[12];
+	// t_vector3 l[20];
+	// t_vector3 n[12];
+	// t_vector3 p[12];
 
-	make_dodecahedron(create_vector(0,0,0), 1, l, create_vector(0, 0.25, 0));
-	compute_dode_planes(l, n, 1, create_vector(0, 0, 0));
-	compute_peaks(n, p, 1, create_vector(0,0,0));
-	generate_triangles(l, p, &data, encode_rgb(240, 0, 0));
+	// make_dodecahedron(create_vector(0,0,0), 1, l, create_vector(0, 0.25, 0));
+	// compute_dode_planes(l, n, 1, create_vector(0, 0, 0));
+	// compute_peaks(n, p, 1, create_vector(0,0,0));
+	// generate_triangles(l, p, &data, encode_rgb(240, 0, 0));
 
 	while (i < data.res.y)
 	{
 		if (i)
-			data_adr += data.pixsizeline / 4;
+			data.data_add += data.pixsizeline / 4;
 		j = 0;
 		while (j < data.res.x)
 		{
@@ -307,20 +317,24 @@ int main(int ac, char **av)
 			t_geo *rt_obj;
 			if ((rt_obj = find_closest_intersection(&data, data.ray, &data.t)))
 			{
-				data_adr[j] = calc_colour_from_light(data, rt_obj);
+				data.data_add[j] = calc_colour_from_light(data, rt_obj);
 			}
 			else
 			{
-				data_adr[j] = encode_rgb(50, 50, 50);
+				data.data_add[j] = encode_rgb(50, 50, 50);
 			}
 			j++;
 		}
 		i++;
 	}
-	mlx_put_image_to_window(mlx_ptr, win_ptr, img_ptr, 0, 0);
+	mlx_put_image_to_window(data.mlx_ptr, data.mlx_win, data.mlx_img, 0, 0);
+	mlx_hook(data.mlx_win, 3, (1L << 0), key_press, &data);
+	mlx_hook(data.mlx_win, 17, (1L << 17), proper_exit, &data);
 	end = clock();
 	double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 	printf("Time taken is %f\n", cpu_time_used);
-	mlx_loop(mlx_ptr);
+	mlx_loop(data.mlx_ptr);
+	mlx_destroy_window(data.mlx_ptr, data.mlx_win);
 	return (0);
+
 }
