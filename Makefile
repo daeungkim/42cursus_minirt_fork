@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2019/12/06 20:15:07 by cjaimes          ###   ########.fr        #
+#    Updated: 2019/12/08 15:33:45 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ INCLUDE		=	includes
 SRC			=	main.c \
 				parser.c \
 				factories.c \
+				inputs/camera.c \
 				maths/math_functions.c \
 				maths/math_functions_2.c \
 				maths/vector_maths/vector_maths.c \
@@ -69,6 +70,7 @@ all:	${NAME}
 ${OBJ_DIR}%.o :	${SRC_DIR}%.c
 			@mkdir -p ${OBJ_DIR}
 			@mkdir -p ${OBJ_DIR}maths
+			@mkdir -p ${OBJ_DIR}inputs
 			@mkdir -p ${OBJ_DIR}maths/geo_math
 			@mkdir -p ${OBJ_DIR}maths/vector_maths
 			@${CC} ${CFLAGS} -I ${INCLUDE} -I ${MLX_DIR} -I ${LIB_DIR}/includes -c $< -o $@

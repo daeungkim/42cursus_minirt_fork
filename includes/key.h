@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 21:16:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/07 21:23:23 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/08 16:15:53 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,17 @@
 #define KEY_Q 12
 #define KEY_E 14
 
+#define KEY_I 34
+#define KEY_K 40
+#define KEY_J 38
+#define KEY_L 37
+#define KEY_U 32
 #define KEY_O 31
+
+#define KEY_B 11
+#define KEY_N 45
+#define KEY_M 46
+
 #define KEY_P 35
 
 #define KEY_UP 126

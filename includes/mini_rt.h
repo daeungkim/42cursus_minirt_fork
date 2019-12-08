@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/07 21:25:58 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/08 16:27:24 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,11 @@ typedef struct	s_data
 	void 			*mlx_win;
 	void			*mlx_img;
 	int				*data_add;
+	int				*workable;
 
 	int				render_mode;
+	int				cam_num;
+	int				max_cam;
 
 	t_resolution	res;
 	t_ambiant_light	amb;
@@ -128,11 +131,13 @@ typedef struct	s_data
 	t_vector3		ray;
 	double			t;
 	t_camera		*current_cam;
+	
+	int				bckgd_colour;
+	int				no_render_amb;
+
 	int				pixsize;
 	int				pixsizeline;
 	int				endian;
-	char 			*pixtab;
-
 }					t_data;
 
 typedef struct		s_rt_param
@@ -226,6 +231,14 @@ void		make_dodecahedron(t_vector3 centre, double r, t_vector3 *vertices, t_vecto
 void		compute_dode_planes(t_vector3 *vert, t_vector3 *norm, double r, t_vector3 origin);
 void		compute_peaks(t_vector3 *planes, t_vector3 *peaks, double r, t_vector3 origin);
 void		generate_triangles(t_vector3 *vert, t_vector3 *peaks, t_data *data, int colour);
+
+//render
+void		compute_render(t_data *data);
+
+//camera
+int			handle_camera_movement(t_data *data, int key);
+int			handle_camera_rotation(t_data *data, int key);
+int			change_camera(t_data *data, int key);
 
 //rgb functions
 int			get_blue(int colour);

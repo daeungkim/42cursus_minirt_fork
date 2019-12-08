@@ -6,12 +6,13 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/07 21:24:00 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/08 16:43:27 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mlx.h"
 #include "mini_rt.h"
+#include "key.h"
 #include <unistd.h>
 #include <stdio.h>
 #include <time.h> 
@@ -93,7 +94,7 @@ t_vector3 get_normal_vector(t_vector3 point, t_geo *geo)
 	return (geo->get_normal_vector(point, geo->obj));
 }
 
-t_geo *find_closest_intersection(t_data *data, t_vector3 ray, double *inter)
+t_geo *find_closest_hit(t_data *data, t_vector3 ray, double *inter)
 {
 	t_geo	*inter_obj;
 	t_list	*first;
@@ -226,27 +227,28 @@ int calc_colour_from_light(t_data data, t_geo *rt_obj)
 {
 	t_list *first;
 	t_light *light;
-	double angle;
+	double ang;
 	int final_light;
-	int current_light;
+	int l_val;
 
 	final_light = 0;
 	first = data.lights;
-	while (first)
+	while (first && data.render_mode)
 	{
 		light = first->content;
 		if (!is_light_obstructed(data, rt_obj, light))
 		{
-			angle = get_light_angle(data, light, data.t, rt_obj);
-			if (angle < M_PI_2 && angle > -M_PI_2)
+			ang = get_light_angle(data, light, data.t, rt_obj);
+			if (ang < M_PI_2 && ang > -M_PI_2)
 			{
-				current_light = apply_intensity_rgb(light->colour, sin(M_PI_2 - angle));
-				final_light = add_lights(final_light, current_light);
+				l_val = apply_intensity_rgb(light->colour, sin(M_PI_2 - ang));
+				final_light = add_lights(final_light, l_val);
 			}
 		}
 		first = first->next;
 	}
-	final_light = add_lights(final_light, data.amb.colour);
+	final_light = add_lights(final_light,
+					!data.render_mode ? data.no_render_amb : data.amb.colour);
 	return (filter_colours_rgb(final_light, rt_obj->colour));
 }
 
@@ -257,6 +259,38 @@ void set_data(t_data *data)
 	data->cameras = 0;
 	data->objects = 0;
 	data->lights = 0;
+	data->no_render_amb = encode_rgb(200, 200, 200);
+	data->bckgd_colour = encode_rgb(50, 50, 50);
+	data->render_mode = 1;
+	data->cam_num = 0;
+}
+
+void compute_render(t_data *data)
+{
+	int i;
+	int j;
+
+	i = -1;
+	data->workable = data->data_add;
+	while (++i < data->res.y)
+	{
+		if (i)
+			data->workable += data->pixsizeline / 4;
+		j = -1;
+		while (++j < data->res.x)
+		{
+			data->t = -1;
+			data->ray = compute_ray(data, data->current_cam, j, i);
+			t_geo *rt_obj;
+			if ((rt_obj = find_closest_hit(data, data->ray, &(data->t))))
+			{
+				data->workable[j] = calc_colour_from_light(*data, rt_obj);
+			}
+			else
+				data->workable[j] = encode_rgb(50, 50, 50);
+		}
+	}
+	mlx_put_image_to_window(data->mlx_ptr, data->mlx_win, data->mlx_img, 0, 0);
 }
 
 int proper_exit(t_data *data)
@@ -266,11 +300,23 @@ int proper_exit(t_data *data)
 	return (0);
 }
 
-int key_press(int key, t_data *data)
+int key_release(int key, t_data *data)
 {
-	printf("key pressed %d!\n", key);
-	if (key == 53)
+	printf("key %d\n", key);
+	if (key == KEY_ESC)
 		proper_exit(data);
+	else if (key == KEY_SPACE)
+	{
+		data->render_mode = data->render_mode ? 0 : 1;
+		ft_putstr(data->render_mode ? "Render on\n" : "Render off\n");
+		compute_render(data);
+	}
+	else if (key == KEY_N || key == KEY_B)
+		change_camera(data, key);
+	else if (handle_camera_movement(data, key))
+		;
+	else if (handle_camera_rotation(data, key))
+		;
 	return (0);
 }
 
@@ -293,9 +339,7 @@ int main(int ac, char **av)
 	data.data_add= (int *)mlx_get_data_addr(data.mlx_img, &(data.pixsize), &(data.pixsizeline), &(data.endian));
 	data.mlx_win = mlx_new_window(data.mlx_ptr, data.res.x, data.res.y, "Dat_window");
 	data.current_cam = data.cameras->content;
-	int i = 0;
-	int j = 0;
-
+	data.max_cam = ft_lstsize(data.cameras); 
 	// t_vector3 l[20];
 	// t_vector3 n[12];
 	// t_vector3 p[12];
@@ -305,30 +349,8 @@ int main(int ac, char **av)
 	// compute_peaks(n, p, 1, create_vector(0,0,0));
 	// generate_triangles(l, p, &data, encode_rgb(240, 0, 0));
 
-	while (i < data.res.y)
-	{
-		if (i)
-			data.data_add += data.pixsizeline / 4;
-		j = 0;
-		while (j < data.res.x)
-		{
-			data.t = -1;
-			data.ray = compute_ray(&data, data.cameras->content, j, i);
-			t_geo *rt_obj;
-			if ((rt_obj = find_closest_intersection(&data, data.ray, &data.t)))
-			{
-				data.data_add[j] = calc_colour_from_light(data, rt_obj);
-			}
-			else
-			{
-				data.data_add[j] = encode_rgb(50, 50, 50);
-			}
-			j++;
-		}
-		i++;
-	}
-	mlx_put_image_to_window(data.mlx_ptr, data.mlx_win, data.mlx_img, 0, 0);
-	mlx_hook(data.mlx_win, 3, (1L << 0), key_press, &data);
+	compute_render(&data);
+	mlx_hook(data.mlx_win, 2, (1L << 0), key_release, &data);
 	mlx_hook(data.mlx_win, 17, (1L << 17), proper_exit, &data);
 	end = clock();
 	double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
