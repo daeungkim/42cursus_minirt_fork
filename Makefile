@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2019/12/08 15:33:45 by cjaimes          ###   ########.fr        #
+#    Updated: 2019/12/09 00:28:04 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ INCLUDE		=	includes
 SRC			=	main.c \
 				parser.c \
 				factories.c \
+				bmp.c \
 				inputs/camera.c \
 				maths/math_functions.c \
 				maths/math_functions_2.c \

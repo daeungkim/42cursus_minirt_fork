@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/08 16:43:27 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/09 11:56:13 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,6 +254,7 @@ int calc_colour_from_light(t_data data, t_geo *rt_obj)
 
 void set_data(t_data *data)
 {
+	data->save = 0;
 	data->res.loaded = 0;
 	data->amb.loaded = 0;
 	data->cameras = 0;
@@ -287,10 +288,11 @@ void compute_render(t_data *data)
 				data->workable[j] = calc_colour_from_light(*data, rt_obj);
 			}
 			else
-				data->workable[j] = encode_rgb(50, 50, 50);
+				data->workable[j] = encode_rgb(0, 0, 0);
 		}
 	}
-	mlx_put_image_to_window(data->mlx_ptr, data->mlx_win, data->mlx_img, 0, 0);
+	if (!data->save)
+		mlx_put_image_to_window(data->mlx_ptr, data->mlx_win, data->mlx_img, 0, 0);
 }
 
 int proper_exit(t_data *data)
@@ -326,11 +328,18 @@ int main(int ac, char **av)
 
 	clock_t start, end;
 	time_t s;
-	if (ac != 2)
+
+	set_data(&data);
+	if (ac == 3)
+		if (!ft_strcmp(av[2], "-save"))
+		{
+			printf("save mode\n");
+			data.save = 1;
+		}
+	if (ac == 1 || ac > 3)
 		return (0);
 	s = time(NULL);
-	 start = clock();
-	set_data(&data);
+	start = clock();
 	if (!load_data(&data, av[1]))
 		return (0);
 	data.mlx_ptr = mlx_init();
@@ -350,6 +359,8 @@ int main(int ac, char **av)
 	// generate_triangles(l, p, &data, encode_rgb(240, 0, 0));
 
 	compute_render(&data);
+	if (data.save)
+		return (save_image(&data));
 	mlx_hook(data.mlx_win, 2, (1L << 0), key_release, &data);
 	mlx_hook(data.mlx_win, 17, (1L << 17), proper_exit, &data);
 	end = clock();

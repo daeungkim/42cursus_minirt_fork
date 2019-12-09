@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/08 16:27:24 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/09 11:55:54 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,8 @@ typedef struct	s_data
 	int				bckgd_colour;
 	int				no_render_amb;
 
+	int				save;
+
 	int				pixsize;
 	int				pixsizeline;
 	int				endian;
@@ -152,15 +154,36 @@ typedef struct		s_rt_param
 }					t_rt_param;
 
 
-typedef struct	s_geo_obj
+typedef struct		s_geo_obj
 {
-	void *obj;
-	int (*find_inter)(t_rt_param *param);
-	t_vector3 (*get_normal_vector)(t_vector3 point, void *obj);
-	int			colour;
-	int8_t		obj_type;
+	void			*obj;
+	int				(*find_inter)(t_rt_param *param);
+	t_vector3		(*get_normal_vector)(t_vector3 point, void *obj);
+	int				colour;
+	int8_t			obj_type;
 	//leave room for reflection
-}				t_geo;
+}					t_geo;
+
+typedef struct 		s_bmp
+{
+	char			type[2];
+	int				size;
+	int				reserve;
+	int				offset;
+
+	int				dib_size;
+	int				width;
+	int				height;
+	short			plane;
+	short			bpp;
+	int				copmression;
+	int				array_size;
+	int				x_res;
+	int				y_res;
+	int				colour;
+	int				imp_colour;
+}					t_bmp;
+
 
 //vector functions
 t_vector3	create_vector(const double x, const double y, const double z);
@@ -250,4 +273,5 @@ int			apply_intensity_rgb(int colour, double intensity);
 int			filter_colours_rgb(int source, int surface);
 int			add_lights(int a, int b);
 
+int			save_image(t_data *data);
 #endif
