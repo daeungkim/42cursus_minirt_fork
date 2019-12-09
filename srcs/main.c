@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/09 11:56:13 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/09 21:55:22 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <time.h> 
+
 
 t_rt_param set_param(t_vector3 o, t_vector3 r, double i, void *ob)
 {
@@ -57,6 +58,41 @@ t_vector3 apply_orientation(t_vector3 base, t_vector3 orient)
 	return (ret);
 }
 
+t_vector3 rotate_x(t_vector3 base, t_vector3 orient)
+{
+	t_vector3	ret;
+	double		angle;
+
+	angle = orient.x * M_PI;
+	ret.x = base.x;
+	ret.y = base.y * cos(angle) - base.z * sin(angle);
+	ret.z = base.y * sin(angle) + base.z * cos(angle);
+	return (ret);
+}
+
+t_vector3 rotate_y(t_vector3 base, t_vector3 orient)
+{
+	t_vector3	ret;
+	double		angle;
+
+	angle = orient.y * M_PI;
+	ret.y = base.y;
+	ret.x = base.x * cos(angle) + base.z * sin(angle);
+	ret.z = -base.x * sin(angle) + base.z * cos(angle);
+	return (ret);
+}
+
+t_vector3 rotate_z(t_vector3 base, t_vector3 orient)
+{
+	t_vector3	ret;
+	double		angle;
+
+	angle = orient.z * M_PI;
+	ret.z = base.z;
+	ret.x = base.x * cos(angle) - base.y * sin(angle);
+	ret.y = base.x * sin(angle) + base.y * cos(angle);
+	return (ret);
+}
 
 /*
 ** We will rotate around each axis depending on orientation vector given
@@ -295,6 +331,54 @@ void compute_render(t_data *data)
 		mlx_put_image_to_window(data->mlx_ptr, data->mlx_win, data->mlx_img, 0, 0);
 }
 
+void *compute_render_t(void *d)
+{
+	int i;
+	int j;
+	t_data *data;
+
+	data = d;
+	i = data->start - 1;
+	data->workable = data->data_add + (data->pixsizeline / 4) * data->start;
+	while (++i < data->end)
+	{
+		if (i != data->start)
+			data->workable += data->pixsizeline / 4;
+		j = -1;
+		while (++j < data->res.x)
+		{
+			data->t = -1;
+			data->ray = compute_ray(data, data->current_cam, j, i);
+			t_geo *rt_obj;
+			if ((rt_obj = find_closest_hit(data, data->ray, &(data->t))))
+				data->workable[j] = calc_colour_from_light(*data, rt_obj);
+			else
+				data->workable[j] = encode_rgb(50, 50, 50);
+		}
+	}
+	return (NULL);
+}
+
+void multithread_render(t_data *data)
+{
+	pthread_t	th[CORES];
+	t_data		dups[CORES];
+	int i;
+	
+	i = -1;
+	while (++i < CORES)
+	{
+		ft_memcpy((void *)&dups[i], (void *)data, sizeof(t_data));
+		dups[i].start = data->res.y / CORES * i;
+		dups[i].end = data->res.y / CORES * (i + 1);
+		dups[i].end = i == CORES - 1 ? data->res.y : dups[i].end;
+		pthread_create(&th[i], NULL, compute_render_t, &dups[i]);
+	}
+	while (i-- > 0)
+		pthread_join(th[i], NULL);
+	mlx_put_image_to_window(data->mlx_ptr, data->mlx_win, data->mlx_img, 0, 0);
+}
+
 int proper_exit(t_data *data)
 {
 	mlx_destroy_window(data->mlx_ptr, data->mlx_win);
@@ -304,14 +388,14 @@ int proper_exit(t_data *data)
 
 int key_release(int key, t_data *data)
 {
-	printf("key %d\n", key);
+	//printf("key %d\n", key);
 	if (key == KEY_ESC)
 		proper_exit(data);
 	else if (key == KEY_SPACE)
 	{
 		data->render_mode = data->render_mode ? 0 : 1;
 		ft_putstr(data->render_mode ? "Render on\n" : "Render off\n");
-		compute_render(data);
+		multithread_render(data);
 	}
 	else if (key == KEY_N || key == KEY_B)
 		change_camera(data, key);
@@ -329,6 +413,8 @@ int main(int ac, char **av)
 	clock_t start, end;
 	time_t s;
 
+	long number_of_processors = sysconf(_SC_NPROCESSORS_ONLN);
+	printf("Processor count is %ld\n", number_of_processors);
 	set_data(&data);
 	if (ac == 3)
 		if (!ft_strcmp(av[2], "-save"))
@@ -358,7 +444,7 @@ int main(int ac, char **av)
 	// compute_peaks(n, p, 1, create_vector(0,0,0));
 	// generate_triangles(l, p, &data, encode_rgb(240, 0, 0));
 
-	compute_render(&data);
+	multithread_render(&data);
 	if (data.save)
 		return (save_image(&data));
 	mlx_hook(data.mlx_win, 2, (1L << 0), key_release, &data);

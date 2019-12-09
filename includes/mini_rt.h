@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/09 11:55:54 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/09 21:49:27 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@
 #include "stdlib.h"
 #include "libft.h"
 #include <math.h>
+#include <pthread.h>
 
 # define SCREEN_L 10
+# define CORES 4
 
 enum	obj_type	{e_sphere = 0, e_plane = 1, e_sq = 2, e_tri = 3, e_cyl = 4, e_disk = 5};	
 
@@ -137,6 +139,9 @@ typedef struct	s_data
 
 	int				save;
 
+	int				start;
+	int				end;
+
 	int				pixsize;
 	int				pixsizeline;
 	int				endian;
@@ -203,6 +208,9 @@ double		angle_between_vectors(t_vector3 a, t_vector3 b);
 
 
 t_vector3	apply_orientation(t_vector3 base, t_vector3 orient);
+t_vector3	rotate_x(t_vector3 base, t_vector3 orient);
+t_vector3	rotate_y(t_vector3 base, t_vector3 orient);
+t_vector3	rotate_z(t_vector3 base, t_vector3 orient);
 
 // maths
 int			solve_quadratic(t_vector3 abc, double *t0, double *t1);
@@ -257,6 +265,7 @@ void		generate_triangles(t_vector3 *vert, t_vector3 *peaks, t_data *data, int co
 
 //render
 void		compute_render(t_data *data);
+void		multithread_render(t_data *data);
 
 //camera
 int			handle_camera_movement(t_data *data, int key);
