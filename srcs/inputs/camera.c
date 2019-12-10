@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 15:24:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/09 22:59:50 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/10 13:02:33 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,30 +16,20 @@
 
 void apply_rotation(t_camera *cam)
 {
-	//t_vector3 temp;
-	// cam->vector_x = apply_orientation(create_vector(1, 0, 0), cam->orient);
-	// cam->vector_y = apply_orientation(create_vector(0, 1, 0), cam->orient);
-	// cam->vector_z = apply_orientation(create_vector(0, 0, 1), cam->orient);
-	// cam->vector_x = apply_orientation(cam->vector_x, cam->orient);
-	// cam->vector_y = apply_orientation(cam->vector_y, cam->orient);
-	// cam->vector_z = apply_orientation(cam->vector_z, cam->orient);
 	if (cam->orient.x != 0)
 	{
-		cam->vector_y = apply_orientation(cam->vector_y, cam->orient);
-		cam->vector_z = apply_orientation(cam->vector_z, cam->orient);
-		//cam->vector_y = temp;
+		cam->vector_y = rot_axis(cam->vector_x, cam->vector_y, cam->orient.x);
+		cam->vector_z = rot_axis(cam->vector_x, cam->vector_z, cam->orient.x);
 	}
 	else if (cam->orient.y != 0)
 	{
-		cam->vector_x = apply_orientation(cam->vector_x, cam->orient);
-		cam->vector_z = apply_orientation(cam->vector_z, cam->orient);
-		//cam->vector_x = temp;
+		cam->vector_x = rot_axis(cam->vector_y, cam->vector_x, cam->orient.y);
+		cam->vector_z = rot_axis(cam->vector_y, cam->vector_z, cam->orient.y);
 	}
 	else if (cam->orient.z != 0)
 	{
-		cam->vector_x = apply_orientation(cam->vector_x, cam->orient);
-		cam->vector_y = apply_orientation(cam->vector_y, cam->orient);
-		//cam->vector_x = temp;
+		cam->vector_x = rot_axis(cam->vector_z, cam->vector_x, cam->orient.z);
+		cam->vector_y = rot_axis(cam->vector_z, cam->vector_y, cam->orient.z);
 	}
 }
 
@@ -107,9 +97,6 @@ int handle_camera_rotation(t_data *data, int key)
 	data->current_cam->orient.x = 0;
 	data->current_cam->orient.y = 0;
 	data->current_cam->orient.z = 0;
-	// printf("vector x = |%g|%g|%g|\n", data->current_cam->vector_x.x, data->current_cam->vector_x.y, data->current_cam->vector_x.z);
-	// printf("vector y = |%g|%g|%g|\n", data->current_cam->vector_y.x, data->current_cam->vector_y.y, data->current_cam->vector_y.z);
-	// printf("vector z = |%g|%g|%g|\n", data->current_cam->vector_z.x, data->current_cam->vector_z.y, data->current_cam->vector_z.z);
 
 	if (data->render_mode)
 		return (0);
@@ -128,14 +115,6 @@ int handle_camera_rotation(t_data *data, int key)
 	else
 		return (0);
 	apply_rotation(data->current_cam);
-	// printf("\nvector x = |%g|%g|%g|\n", data->current_cam->vector_x.x, data->current_cam->vector_x.y, data->current_cam->vector_x.z);
-	// printf("vector y = |%g|%g|%g|\n", data->current_cam->vector_y.x, data->current_cam->vector_y.y, data->current_cam->vector_y.z);
-	// printf("vector z = |%g|%g|%g|\n", data->current_cam->vector_z.x, data->current_cam->vector_z.y, data->current_cam->vector_z.z);
-	printf("Angle XY = %g\n", angle_between_vectors(data->current_cam->vector_x, data->current_cam->vector_y) * 180 / M_PI);
-	printf("Angle YZ = %g\n", angle_between_vectors(data->current_cam->vector_y, data->current_cam->vector_z) * 180 / M_PI);
-	printf("Angle ZX = %g\n", angle_between_vectors(data->current_cam->vector_z, data->current_cam->vector_x) * 180 / M_PI);
-
-	
 	ft_putstr("Camera rotated\n");
 	multithread_render(data);
 	return (1);

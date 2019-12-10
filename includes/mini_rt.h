@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/09 21:49:27 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/10 13:03:02 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,9 +208,7 @@ double		angle_between_vectors(t_vector3 a, t_vector3 b);
 
 
 t_vector3	apply_orientation(t_vector3 base, t_vector3 orient);
-t_vector3	rotate_x(t_vector3 base, t_vector3 orient);
-t_vector3	rotate_y(t_vector3 base, t_vector3 orient);
-t_vector3	rotate_z(t_vector3 base, t_vector3 orient);
+t_vector3	rot_axis(t_vector3 axis, t_vector3 vec, double angle);
 
 // maths
 int			solve_quadratic(t_vector3 abc, double *t0, double *t1);

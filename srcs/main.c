@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/09 21:55:22 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/10 13:02:56 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,40 +58,14 @@ t_vector3 apply_orientation(t_vector3 base, t_vector3 orient)
 	return (ret);
 }
 
-t_vector3 rotate_x(t_vector3 base, t_vector3 orient)
+t_vector3 rot_axis(t_vector3 axis, t_vector3 vec, double angle)
 {
-	t_vector3	ret;
-	double		angle;
+	t_vector3 rot;
 
-	angle = orient.x * M_PI;
-	ret.x = base.x;
-	ret.y = base.y * cos(angle) - base.z * sin(angle);
-	ret.z = base.y * sin(angle) + base.z * cos(angle);
-	return (ret);
-}
-
-t_vector3 rotate_y(t_vector3 base, t_vector3 orient)
-{
-	t_vector3	ret;
-	double		angle;
-
-	angle = orient.y * M_PI;
-	ret.y = base.y;
-	ret.x = base.x * cos(angle) + base.z * sin(angle);
-	ret.z = -base.x * sin(angle) + base.z * cos(angle);
-	return (ret);
-}
-
-t_vector3 rotate_z(t_vector3 base, t_vector3 orient)
-{
-	t_vector3	ret;
-	double		angle;
-
-	angle = orient.z * M_PI;
-	ret.z = base.z;
-	ret.x = base.x * cos(angle) - base.y * sin(angle);
-	ret.y = base.x * sin(angle) + base.y * cos(angle);
-	return (ret);
+	angle *= M_PI;
+	rot = scalar_vect(vec, cos(angle));
+	rot = add_vect(rot, scalar_vect(cross_prod(axis, vec), sin(angle)));
+	return rot;
 }
 
 /*
