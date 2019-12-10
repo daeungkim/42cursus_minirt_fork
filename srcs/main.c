@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/10 13:02:56 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/10 16:01:38 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,6 +274,7 @@ void set_data(t_data *data)
 	data->bckgd_colour = encode_rgb(50, 50, 50);
 	data->render_mode = 1;
 	data->cam_num = 0;
+	data->obj_selected = 0;
 }
 
 void compute_render(t_data *data)
@@ -305,31 +306,31 @@ void compute_render(t_data *data)
 		mlx_put_image_to_window(data->mlx_ptr, data->mlx_win, data->mlx_img, 0, 0);
 }
 
-void *compute_render_t(void *d)
+void *compute_render_t(void *data)
 {
 	int i;
 	int j;
-	t_data *data;
+	t_data *d;
 
-	data = d;
-	i = data->start - 1;
-	data->workable = data->data_add + (data->pixsizeline / 4) * data->start;
-	while (++i < data->end)
+	d = data;
+	i = d->start - 1;
+	d->workable = d->data_add + (d->pixsizeline / 4) * d->start;
+	while (++i < d->end)
 	{
-		if (i != data->start)
-			data->workable += data->pixsizeline / 4;
+		if (i != d->start)
+			d->workable += d->pixsizeline / 4;
 		j = -1;
-		while (++j < data->res.x)
+		while (++j < d->res.x)
 		{
-			data->t = -1;
-			data->ray = compute_ray(data, data->current_cam, j, i);
-			t_geo *rt_obj;
-			if ((rt_obj = find_closest_hit(data, data->ray, &(data->t))))
-				data->workable[j] = calc_colour_from_light(*data, rt_obj);
+			d->t = -1;
+			d->ray = compute_ray(d, d->current_cam, j, i);
+			if ((d->cur_obj = find_closest_hit(d, d->ray, &(d->t))))
+				d->workable[j] = calc_colour_from_light(*d, d->cur_obj);
 			else
-				data->workable[j] = encode_rgb(50, 50, 50);
+				d->workable[j] = encode_rgb(50, 50, 50);
 		}
 	}
+	d->cur_obj = 0;
 	return (NULL);
 }
 
@@ -362,7 +363,6 @@ int proper_exit(t_data *data)
 
 int key_release(int key, t_data *data)
 {
-	//printf("key %d\n", key);
 	if (key == KEY_ESC)
 		proper_exit(data);
 	else if (key == KEY_SPACE)
@@ -371,12 +371,38 @@ int key_release(int key, t_data *data)
 		ft_putstr(data->render_mode ? "Render on\n" : "Render off\n");
 		multithread_render(data);
 	}
+	else if (data->obj_selected && handle_object_movement(data, key))
+		;
 	else if (key == KEY_N || key == KEY_B)
 		change_camera(data, key);
 	else if (handle_camera_movement(data, key))
 		;
 	else if (handle_camera_rotation(data, key))
 		;
+	return (0);
+}
+
+int handle_click(int button, int x, int y, t_data *data)
+{
+	if (button == LFT_MOUSE)
+	{
+		multithread_render(data);
+		data->t = -1;
+		data->ray = compute_ray(data, data->current_cam, x, y);
+		if ((data->cur_obj = find_closest_hit(data, data->ray, &(data->t))))
+		{
+			data->obj_selected = 1;
+			mlx_string_put(data->mlx_ptr, data->mlx_win, 50, 50,
+				encode_rgb(255, 0, 0), "Object selected!");
+		}
+	}
+	else if (button == RGT_MOUSE)
+	{
+		multithread_render(data);
+		mlx_string_put(data->mlx_ptr, data->mlx_win, 50, 50,
+				encode_rgb(255, 0, 0), "Object deselected!");
+		data->obj_selected = 0;
+	}
 	return (0);
 }
 
@@ -423,6 +449,7 @@ int main(int ac, char **av)
 		return (save_image(&data));
 	mlx_hook(data.mlx_win, 2, (1L << 0), key_release, &data);
 	mlx_hook(data.mlx_win, 17, (1L << 17), proper_exit, &data);
+	mlx_hook(data.mlx_win, 5, (1L << 0), handle_click, &data);
 	end = clock();
 	double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 	printf("Time taken is %f\n", cpu_time_used);

@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/10 13:03:02 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/10 15:56:53 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,40 +113,6 @@ typedef struct	s_triangle
 	t_vector3	normal;
 }				t_triangle;
 
-typedef struct	s_data
-{
-	void			*mlx_ptr;
-	void 			*mlx_win;
-	void			*mlx_img;
-	int				*data_add;
-	int				*workable;
-
-	int				render_mode;
-	int				cam_num;
-	int				max_cam;
-
-	t_resolution	res;
-	t_ambiant_light	amb;
-	t_list			*lights;
-	t_list			*cameras;
-	t_list			*objects;
-	t_vector3		ray;
-	double			t;
-	t_camera		*current_cam;
-	
-	int				bckgd_colour;
-	int				no_render_amb;
-
-	int				save;
-
-	int				start;
-	int				end;
-
-	int				pixsize;
-	int				pixsizeline;
-	int				endian;
-}					t_data;
-
 typedef struct		s_rt_param
 {
 	t_vector3		ray;
@@ -168,6 +134,42 @@ typedef struct		s_geo_obj
 	int8_t			obj_type;
 	//leave room for reflection
 }					t_geo;
+
+typedef struct	s_data
+{
+	void			*mlx_ptr;
+	void 			*mlx_win;
+	void			*mlx_img;
+	int				*data_add;
+	int				*workable;
+
+	int				render_mode;
+	int				obj_selected;
+	int				cam_num;
+	int				max_cam;
+
+	t_resolution	res;
+	t_ambiant_light	amb;
+	t_list			*lights;
+	t_list			*cameras;
+	t_list			*objects;
+	t_vector3		ray;
+	double			t;
+	t_camera		*current_cam;
+	t_geo			*cur_obj;
+	
+	int				bckgd_colour;
+	int				no_render_amb;
+
+	int				save;
+
+	int				start;
+	int				end;
+
+	int				pixsize;
+	int				pixsizeline;
+	int				endian;
+}					t_data;
 
 typedef struct 		s_bmp
 {
@@ -269,6 +271,7 @@ void		multithread_render(t_data *data);
 int			handle_camera_movement(t_data *data, int key);
 int			handle_camera_rotation(t_data *data, int key);
 int			change_camera(t_data *data, int key);
+int			handle_object_movement(t_data *data, int key);
 
 //rgb functions
 int			get_blue(int colour);
