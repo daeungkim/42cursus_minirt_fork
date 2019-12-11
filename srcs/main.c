@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/11 12:14:42 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/11 16:04:38 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,6 +193,7 @@ int is_light_obstructed(t_data data, t_geo *rt_obj, t_light *light)
 	t_vector3	light_ray;
 	t_list		*first;
 	t_rt_param	param;
+	t_rt_param	param2;
 
 	start = point_from_ray(data.current_cam->pos, data.ray, data.t);
 	light_ray = normalise_vector(direction_vector(start, light->pos));
@@ -227,6 +228,15 @@ int is_light_obstructed(t_data data, t_geo *rt_obj, t_light *light)
 					distance(start, light->pos) > distance(start,
 					point_from_ray(start, light_ray, param.i_2)))
 						return (1);
+		}
+		else if (rt_obj->obj_type == e_sq || rt_obj->obj_type == e_plane)
+		{
+			param = set_param(light->pos, get_normal_vector(start, rt_obj), -1, rt_obj->obj);
+			param2 = set_param(data.current_cam->pos, get_normal_vector(start, rt_obj), -1, rt_obj->obj);
+			rt_obj->find_inter(&param);
+			rt_obj->find_inter(&param2);
+			if ((param.i < 0 && param2.i > 0) || (param.i > 0 && param2.i < 0))
+				return (1);
 		}
 		first = first->next;
 	}
@@ -397,6 +407,8 @@ int handle_click(int button, int x, int y, t_data *data)
 			mlx_string_put(data->mlx_ptr, data->mlx_win, 50, 50,
 				encode_rgb(255, 0, 0), "Object selected!");
 		}
+		else
+			data->obj_selected = 0;
 	}
 	else if (button == RGT_MOUSE)
 	{
