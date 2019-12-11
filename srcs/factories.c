@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 17:07:36 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/05 18:27:30 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/11 12:57:47 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ t_geo *square_factory(t_vector3 centre, t_vector3 orient, double height, int col
 		return (NULL);
 	square_obj->colour = colour;
 	square->centre = centre;
+	square->orient = orient;
 	square->normal = apply_orientation(create_vector(0, 1, 0), orient);
 	square->x = apply_orientation(create_vector(1, 0, 0), orient);
 	square->x = scalar_vect(square->x, height);
@@ -143,6 +144,7 @@ t_geo *disk_factory(t_vector3 centre, t_vector3 orient, double diametre, int col
 		return (NULL);
 	disk_obj->colour = colour;
 	disk->centre = centre;
+	disk->orient = orient;
 	disk->normal = apply_orientation(create_vector(0, 1, 0), orient);
 	disk->diametre = diametre;
 	disk_obj->obj = disk;
@@ -163,6 +165,7 @@ t_geo *cyl_factory(t_vector3 centre, t_vector3 orient, t_vector3 dia_height, int
 		return (NULL);
 	cyl_obj->colour = colour;
 	cyl->centre = centre;
+	cyl->real_ori = orient;
 	cyl->orient = apply_orientation(create_vector(0, 1, 0), orient);
 	cyl->diametre = dia_height.x;
 	cyl->height = dia_height.y;

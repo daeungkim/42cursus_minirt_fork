@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/10 16:01:38 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/11 12:14:42 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -373,6 +373,8 @@ int key_release(int key, t_data *data)
 	}
 	else if (data->obj_selected && handle_object_movement(data, key))
 		;
+	else if (data->obj_selected && handle_object_rotation(data, key))
+		;
 	else if (key == KEY_N || key == KEY_B)
 		change_camera(data, key);
 	else if (handle_camera_movement(data, key))
@@ -443,7 +445,7 @@ int main(int ac, char **av)
 	// compute_dode_planes(l, n, 1, create_vector(0, 0, 0));
 	// compute_peaks(n, p, 1, create_vector(0,0,0));
 	// generate_triangles(l, p, &data, encode_rgb(240, 0, 0));
-
+	
 	multithread_render(&data);
 	if (data.save)
 		return (save_image(&data));

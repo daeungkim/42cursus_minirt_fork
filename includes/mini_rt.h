@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/10 15:56:53 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/11 12:57:42 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,12 +78,14 @@ typedef struct	s_phere
 typedef struct	s_plane
 {
 	t_vector3	centre;
+	t_vector3	orient;
 	t_vector3	normal;
 }				t_plane;
 
 typedef struct	s_quare
 {
 	t_vector3	centre;
+	t_vector3	orient;
 	t_vector3	normal;
 	t_vector3	x;
 	t_vector3	z;
@@ -93,6 +95,7 @@ typedef struct	s_quare
 typedef struct	s_disk
 {
 	t_vector3	centre;
+	t_vector3	orient;
 	t_vector3	normal;
 	double		diametre;
 }				t_disk;
@@ -100,6 +103,7 @@ typedef struct	s_disk
 typedef struct	s_cylindre
 {
 	t_vector3	centre;
+	t_vector3	real_ori;
 	t_vector3	orient;
 	double		diametre;
 	double		height;
@@ -272,6 +276,7 @@ int			handle_camera_movement(t_data *data, int key);
 int			handle_camera_rotation(t_data *data, int key);
 int			change_camera(t_data *data, int key);
 int			handle_object_movement(t_data *data, int key);
+int			handle_object_rotation(t_data *data, int key);
 
 //rgb functions
 int			get_blue(int colour);
