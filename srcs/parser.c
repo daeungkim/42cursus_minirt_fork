@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 12:05:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/07 21:08:23 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/11 20:27:17 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,8 @@ int load_light(t_data *data, char **line)
 	if (!get_rgb(line, &colour, 0))
 		return (parse_error("Wrong RGB values for light"));
 	colour = apply_intensity_rgb(colour, intensity);
-	if (!(light = ft_lstnew(light_factory(coor, intensity, colour))) && !((t_light *)(light->content)))
+	if (!(light = ft_lstnew(light_factory(coor, intensity, colour))) ||
+			!((t_light *)(light->content)))
 		return (parse_error("Malloc failed for light"));
 	ft_lstadd_back(&(data->lights), light);
 	extra_info("Light loaded");
@@ -226,7 +227,8 @@ int load_camera(t_data *data, char **line)
 	skip_whitespace(line);
 	if ((fov = ft_atof_live(line)) <= 0)
 		return (parse_error("Error in camera fov"));
-	if (!(cam = ft_lstnew(camera_factory(coor, vector, fov))) && !((t_camera *)(cam->content)))
+	if (!(cam = ft_lstnew(camera_factory(coor, vector, fov))) ||
+			!((t_camera *)(cam->content)))
 		return (0);
 	ft_lstadd_back(&(data->cameras), cam);
 	extra_info("Camera loaded");
@@ -248,7 +250,8 @@ int load_sphere(t_data *data, char **line)
 		return (parse_error("Error in sphere diametre"));
 	if (!get_rgb(line, &colour, 0))
 		return (parse_error("Wrong RGB values for sphere"));
-	if (!(sp = ft_lstnew(sphere_factory(centre, diametre, colour))) && !((t_geo *)(sp->content)))
+	if (!(sp = ft_lstnew(sphere_factory(centre, diametre, colour))) ||
+			!((t_geo *)(sp->content)))
 		return (parse_error("Malloc for sphere failed"));
 	ft_lstadd_back(&(data->objects), sp);
 	extra_info("Sphere loaded");
@@ -272,7 +275,8 @@ int load_plane(t_data *data, char **line)
 		return (parse_error("Plane orienation values not between [-1.0;1.0]"));
 	if (!get_rgb(line, &colour, 0))
 		return (parse_error("Wrong RGB values for plane"));
-	if (!(pl = ft_lstnew(plane_factory(centre, orient, colour))) && !((t_geo *)(pl->content)))
+	if (!(pl = ft_lstnew(plane_factory(centre, orient, colour))) ||
+		!((t_geo *)(pl->content)))
 		return (parse_error("Malloc for plane failed"));
 	ft_lstadd_back(&(data->objects), pl);
 	extra_info("Plane loaded");
@@ -300,7 +304,7 @@ int load_square(t_data *data, char **line)
 		return (parse_error("Error in square height"));
 	if (!get_rgb(line, &colour, 0))
 		return (parse_error("Wrong RGB values for square"));
-	if (!(sq = ft_lstnew(square_factory(centre, orient, height, colour))) &&
+	if (!(sq = ft_lstnew(square_factory(centre, orient, height, colour))) ||
 		!((t_geo *)(sq->content)))
 		return (parse_error("Malloc for square failed"));
 	ft_lstadd_back(&(data->objects), sq);
@@ -329,7 +333,7 @@ int load_disk(t_data *data, char **line)
 		return (parse_error("Error in disk diametre"));
 	if (!get_rgb(line, &colour, 0))
 		return (parse_error("Wrong RGB values for disk"));
-	if (!(dk = ft_lstnew(disk_factory(centre, orient, diametre, colour))) &&
+	if (!(dk = ft_lstnew(disk_factory(centre, orient, diametre, colour))) ||
 		!((t_geo *)(dk->content)))
 		return (parse_error("Malloc for disk failed"));
 	ft_lstadd_back(&(data->objects), dk);
@@ -359,11 +363,38 @@ int load_cylinder(t_data *data, char **line)
 		return (parse_error("Error in cylinder height"));
 	if (!get_rgb(line, &colour, 0))
 		return (parse_error("Wrong RGB values for cylinder"));
-	if (!(cyl = ft_lstnew(cyl_factory(centre, orient, dia_height, colour))) &&
+	if (!(cyl = ft_lstnew(cyl_factory(centre, orient, dia_height, colour))) ||
 		!((t_geo *)(cyl->content)))
 		return (parse_error("Malloc for cylinder failed"));
 	ft_lstadd_back(&(data->objects), cyl);
 	extra_info("Cylinder loaded");
+	return (1);
+}
+
+int load_dodecahedron(t_data *data, char **line)
+{
+	t_vector3	centre;
+	t_vector3	orient;
+	double		diametre;
+	int 		colour;
+	t_list		*tris;
+	
+	(*line)+= 2;
+	if (!get_vector3(line, &centre))
+		return (parse_error("Wrong centre vector of a dodecahedron"));
+	if (!get_vector3(line, &orient))
+		return (parse_error("Wrong orientation vector of a dodecahedron"));
+	if (orient.x > 1 || orient.y > 1 ||orient.z > 1 ||
+		orient.x < -1 || orient.y < -1 || orient.z < -1)
+		return (parse_error("Dode orientation not between [-1.0;1.0]"));
+	if ((diametre = ft_atof_live(line)) <= 0)
+		return (parse_error("Error in cylinder diametre"));
+	if (!get_rgb(line, &colour, 0))
+		return (parse_error("Wrong RGB values for cylinder"));
+	if (!(tris = create_dodecahedron(diametre / 2, orient, centre, colour)))
+		return (parse_error("Malloc for dodecahedron failed"));
+	ft_lstadd_back(&(data->objects), tris);
+	extra_info("Dodecahedron loaded");
 	return (1);
 }
 
@@ -435,6 +466,11 @@ int load_line(t_data *data, char *line)
 	else if (*line == 'd' && line[1] == 'k')
 	{
 		if (!load_disk(data, &line))
+			return (0);
+	}
+	else if (*line == 'd' && line[1] == 'o')
+	{
+		if (!load_dodecahedron(data, &line))
 			return (0);
 	}
 	else if (*line == 'c' && line[1] == 'y')

@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/11 16:04:38 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/11 20:48:55 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,7 +229,7 @@ int is_light_obstructed(t_data data, t_geo *rt_obj, t_light *light)
 					point_from_ray(start, light_ray, param.i_2)))
 						return (1);
 		}
-		else if (rt_obj->obj_type == e_sq || rt_obj->obj_type == e_plane)
+		else if (rt_obj->obj_type == e_sq || rt_obj->obj_type == e_plane || rt_obj->obj_type == e_tri)
 		{
 			param = set_param(light->pos, get_normal_vector(start, rt_obj), -1, rt_obj->obj);
 			param2 = set_param(data.current_cam->pos, get_normal_vector(start, rt_obj), -1, rt_obj->obj);
@@ -449,15 +449,6 @@ int main(int ac, char **av)
 	data.mlx_win = mlx_new_window(data.mlx_ptr, data.res.x, data.res.y, "Dat_window");
 	data.current_cam = data.cameras->content;
 	data.max_cam = ft_lstsize(data.cameras); 
-	// t_vector3 l[20];
-	// t_vector3 n[12];
-	// t_vector3 p[12];
-
-	// make_dodecahedron(create_vector(0,0,0), 1, l, create_vector(0, 0.25, 0));
-	// compute_dode_planes(l, n, 1, create_vector(0, 0, 0));
-	// compute_peaks(n, p, 1, create_vector(0,0,0));
-	// generate_triangles(l, p, &data, encode_rgb(240, 0, 0));
-	
 	multithread_render(&data);
 	if (data.save)
 		return (save_image(&data));

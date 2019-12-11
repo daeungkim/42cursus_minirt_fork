@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/11 12:57:42 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/11 20:36:36 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,10 +262,28 @@ t_geo		*disk_factory(t_vector3 centre, t_vector3 orient, double diametre, int co
 t_geo		*cyl_factory(t_vector3 centre, t_vector3 orient, t_vector3 dia_height, int colour);
 t_geo		*tri_factory(t_vector3 p1, t_vector3 p2, t_vector3 p3, int colour);
 
-void		make_dodecahedron(t_vector3 centre, double r, t_vector3 *vertices, t_vector3 orient);
+//dode
+void		make_dode_verts(double r, t_vector3 *vertices);
+void		make_dode_verts_2(t_vector3 centre, double r, t_vector3 *vertices, t_vector3 orient);
 void		compute_dode_planes(t_vector3 *vert, t_vector3 *norm, double r, t_vector3 origin);
+void		compute_dode_planes_2(t_vector3 *vert, t_vector3 *norm, double r, t_vector3 origin);
 void		compute_peaks(t_vector3 *planes, t_vector3 *peaks, double r, t_vector3 origin);
-void		generate_triangles(t_vector3 *vert, t_vector3 *peaks, t_data *data, int colour);
+t_list		*generate_triangles_peak_1(t_vector3 *v, t_vector3 *p, int colour);
+t_list		*generate_triangles_peak_2(t_vector3 *v, t_vector3 *p, int colour);
+t_list		*generate_triangles_peak_3(t_vector3 *v, t_vector3 *p, int colour);
+t_list		*generate_triangles_peak_4(t_vector3 *v, t_vector3 *p, int colour);
+t_list		*generate_triangles_peak_5(t_vector3 *v, t_vector3 *p, int colour);
+t_list		*generate_triangles_peak_6(t_vector3 *v, t_vector3 *p, int colour);
+t_list		*generate_triangles_peak_7(t_vector3 *v, t_vector3 *p, int colour);
+t_list		*generate_triangles_peak_8(t_vector3 *v, t_vector3 *p, int colour);
+t_list		*generate_triangles_peak_9(t_vector3 *v, t_vector3 *p, int colour);
+t_list		*generate_triangles_peak_10(t_vector3 *v, t_vector3 *p, int colour);
+t_list		*generate_triangles_peak_11(t_vector3 *v, t_vector3 *p, int colour);
+t_list		*generate_triangles_peak_12(t_vector3 *v, t_vector3 *p, int colour);
+t_list		*generate_tri_1_5(t_vector3 *v, t_vector3 *p, int colour);
+t_list		*generate_tri_6_10(t_vector3 *v, t_vector3 *p, int colour);
+t_list		*generate_tri_11_12(t_vector3 *v, t_vector3 *p, int colour);
+t_list		*create_dodecahedron(double radius, t_vector3 orient, t_vector3 centre, int colour);
 
 //render
 void		compute_render(t_data *data);
