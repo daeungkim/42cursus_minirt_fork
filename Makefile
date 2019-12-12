@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2019/12/12 15:12:22 by cjaimes          ###   ########.fr        #
+#    Updated: 2019/12/12 23:57:25 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,7 +49,8 @@ SRC			=	main.c \
 				complex_shapes/dodecahedron/dode_peak_6_10.c \
 				complex_shapes/dodecahedron/dode_peak_11_12.c \
 				complex_shapes/dodecahedron/dode_pl_pk.c \
-				complex_shapes/pyramid/pyramid.c
+				complex_shapes/pyramid/pyramid.c \
+				complex_shapes/cube/cube.c
 
 SRCS		=	${addprefix ${SRC_DIR}, ${SRC}}
 
@@ -61,7 +62,7 @@ RM			=	rm -f
 
 CC			=	gcc
 
-CFLAGS		=	-Wall -Wextra -Werror -g
+CFLAGS		=	-Wall -Wextra -Werror -g -O3
 
 MLX_FLAGS	=	-lmlx -framework OpenGL -framework AppKit
 
@@ -81,6 +82,7 @@ ${OBJ_DIR}%.o :	${SRC_DIR}%.c
 			@mkdir -p ${OBJ_DIR}complex_shapes
 			@mkdir -p ${OBJ_DIR}complex_shapes/dodecahedron
 			@mkdir -p ${OBJ_DIR}complex_shapes/pyramid
+			@mkdir -p ${OBJ_DIR}complex_shapes/cube
 			@mkdir -p ${OBJ_DIR}maths/geo_math
 			@mkdir -p ${OBJ_DIR}maths/vector_maths
 			@${CC} ${CFLAGS} -I ${INCLUDE} -I ${MLX_DIR} -I ${LIB_DIR}/includes -c $< -o $@

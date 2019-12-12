@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/12 15:05:16 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/12 17:50:33 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -288,6 +288,10 @@ t_list		*create_dodecahedron(double radius, t_vector3 orient, t_vector3 centre, 
 //pyramid
 int create_roof(t_data *data, t_square *sq, double height, int colour);
 int create_roof_2(t_data *data, t_square *sq, double height, int colour);
+
+//cube
+int			create_cube(t_data *data, t_square *sq, int colour);
+int			create_cube_2(t_data *data, t_square *sq, int colour);
 
 //render
 void		compute_render(t_data *data);
