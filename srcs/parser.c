@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 12:05:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/11 20:27:17 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/12 15:41:58 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -398,6 +398,29 @@ int load_dodecahedron(t_data *data, char **line)
 	return (1);
 }
 
+int load_pyramid(t_data *data, char **line)
+{
+	double		height;
+	t_list		*sq;
+	t_geo		*obj;
+
+	if (!load_square(data, line))
+		return (parse_error("Base of pyramid failed to load"));
+	sq = data->objects;
+	sq = ft_lstlast(sq);
+	obj = sq->content;
+	extra_info("base loaded");
+	skip_whitespace(line);
+	if ((height = ft_atof_live(line)) <= 0)
+		return (parse_error("Error in pyramid height"));
+	if (!create_roof(data, obj->obj, height, obj->colour))
+		return (parse_error("Roof of pyramid failed to load"));
+	if (!create_roof_2(data, obj->obj, height, obj->colour))
+		return (parse_error("Roof of pyramid failed to load"));
+	extra_info("Pyramid loaded");
+	return (1);
+}
+
 int check_points_unique(t_vector3 p1, t_vector3 p2, t_vector3 p3)
 {
 	if ((p1.x == p2.x && p1.y == p2.y && p1.z == p2.z) ||
@@ -426,7 +449,7 @@ int load_triangle(t_data *data, char **line)
 		return (parse_error("Wrong RGB values for triangle"));
 	if (!check_points_unique(p1, p2, p3))
 		return (parse_error("2 or more points are not unique in triangle"));
-	if (!(tri = ft_lstnew(tri_factory(p1, p2, p3, colour))) &&
+	if (!(tri = ft_lstnew(tri_factory(p1, p2, p3, colour))) ||
 		!((t_geo *)(tri->content)))
 		return (parse_error("Malloc for triangle failed"));
 	ft_lstadd_back(&(data->objects), tri);
@@ -471,6 +494,11 @@ int load_line(t_data *data, char *line)
 	else if (*line == 'd' && line[1] == 'o')
 	{
 		if (!load_dodecahedron(data, &line))
+			return (0);
+	}
+	else if (*line == 'p' && line[1] == 'y')
+	{
+		if (!load_pyramid(data, &line))
 			return (0);
 	}
 	else if (*line == 'c' && line[1] == 'y')

@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/11 20:36:36 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/12 15:05:16 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -285,6 +285,10 @@ t_list		*generate_tri_6_10(t_vector3 *v, t_vector3 *p, int colour);
 t_list		*generate_tri_11_12(t_vector3 *v, t_vector3 *p, int colour);
 t_list		*create_dodecahedron(double radius, t_vector3 orient, t_vector3 centre, int colour);
 
+//pyramid
+int create_roof(t_data *data, t_square *sq, double height, int colour);
+int create_roof_2(t_data *data, t_square *sq, double height, int colour);
+
 //render
 void		compute_render(t_data *data);
 void		multithread_render(t_data *data);
@@ -305,6 +309,8 @@ void		decode_rgb(int colour, int *red, int *green, int *blue);
 int			apply_intensity_rgb(int colour, double intensity);
 int			filter_colours_rgb(int source, int surface);
 int			add_lights(int a, int b);
+
+int			parse_error(char *err);
 
 int			save_image(t_data *data);
 #endif
