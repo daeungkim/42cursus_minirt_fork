@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/11 20:48:55 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/13 20:07:21 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -456,7 +456,7 @@ int main(int ac, char **av)
 	mlx_hook(data.mlx_win, 17, (1L << 17), proper_exit, &data);
 	mlx_hook(data.mlx_win, 5, (1L << 0), handle_click, &data);
 	end = clock();
-	double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+	double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC / CORES;
 	printf("Time taken is %f\n", cpu_time_used);
 	mlx_loop(data.mlx_ptr);
 	mlx_destroy_window(data.mlx_ptr, data.mlx_win);
