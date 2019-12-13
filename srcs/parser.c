@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 12:05:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/12 23:38:12 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/13 18:55:18 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -425,13 +425,15 @@ int load_cube(t_data *data, char **line)
 {
 	t_list		*sq;
 	t_geo		*obj;
+	t_square	*squ;
 
 	if (!load_square(data, line))
 		return (parse_error("Base of pyramid failed to load"));
 	sq = data->objects;
 	sq = ft_lstlast(sq);
 	obj = sq->content;
-	if (!create_cube(data, obj->obj, obj->colour))
+	squ = obj->obj;
+	if (!create_cube(data, obj->obj, obj->colour, squ->orient))
 		return (parse_error("Roof of pyramid failed to load"));
 	sq = ft_lstlast(sq);
 	obj = sq->content;
