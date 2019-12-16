@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 17:07:36 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/11 12:57:47 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/16 16:22:19 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,4 +174,26 @@ t_geo *cyl_factory(t_vector3 centre, t_vector3 orient, t_vector3 dia_height, int
 	cyl_obj->get_normal_vector = &normal_vector_cyl;
 	cyl_obj->obj_type = e_cyl;
 	return (cyl_obj);
+}
+
+t_geo *cone_factory(t_vector3 centre, t_vector3 orient, t_vector3 dia_height, int colour)
+{
+	t_cone	*cone;
+	t_geo	*cone_obj;
+
+	if (!(cone = malloc(sizeof(t_cone))))
+		return (NULL);
+	if (!(cone_obj = malloc(sizeof(t_geo))))
+		return (NULL);
+	cone_obj->colour = colour;
+	cone->centre = centre;
+	cone->orient = orient;
+	cone->normal = apply_orientation(create_vector(0, 1, 0), orient);
+	cone->diametre = dia_height.x;
+	cone->height = dia_height.y;
+	cone_obj->obj = cone;
+	cone_obj->find_inter = &raytrace_cone;
+	cone_obj->get_normal_vector = &normal_vector_cone;
+	cone_obj->obj_type = e_cone;
+	return (cone_obj);
 }

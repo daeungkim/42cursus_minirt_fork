@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/13 20:07:21 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/16 16:30:54 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -335,7 +335,9 @@ void *compute_render_t(void *data)
 			d->t = -1;
 			d->ray = compute_ray(d, d->current_cam, j, i);
 			if ((d->cur_obj = find_closest_hit(d, d->ray, &(d->t))))
+			{
 				d->workable[j] = calc_colour_from_light(*d, d->cur_obj);
+			}
 			else
 				d->workable[j] = encode_rgb(50, 50, 50);
 		}

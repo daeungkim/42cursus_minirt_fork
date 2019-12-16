@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/13 18:53:48 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/16 16:26:21 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@
 # define SCREEN_L 10
 # define CORES 4
 
-enum	obj_type	{e_sphere = 0, e_plane = 1, e_sq = 2, e_tri = 3, e_cyl = 4, e_disk = 5};	
+enum	obj_type	{e_sphere = 0, e_plane = 1, e_sq = 2, e_tri = 3, e_cyl = 4,
+					e_disk = 5, e_cone = 6};	
 
 typedef struct	s_resolution
 {
@@ -108,6 +109,15 @@ typedef struct	s_cylindre
 	double		diametre;
 	double		height;
 }				t_cylindre;
+
+typedef struct	s_cone
+{
+	t_vector3	centre;
+	t_vector3	normal;
+	t_vector3	orient;
+	double		diametre;
+	double		height;
+}				t_cone;
 
 typedef struct	s_triangle
 {
@@ -247,6 +257,10 @@ t_vector3	normal_vector_disk(t_vector3 point, void *disk);
 int	raytrace_cyl(t_rt_param *param);
 t_vector3 normal_vector_cyl(t_vector3 point, void *disk);
 
+//cone
+int			raytrace_cone(t_rt_param *param);
+t_vector3	normal_vector_cone(t_vector3 point, void *con);
+
 //triangle
 t_vector3	define_tri_plane(t_vector3 p1, t_vector3 p2, t_vector3 p3);
 int			raytrace_triangle(t_rt_param *param);
@@ -261,6 +275,7 @@ t_geo 		*square_factory(t_vector3 centre, t_vector3 normal, double height, int c
 t_geo		*disk_factory(t_vector3 centre, t_vector3 orient, double diametre, int colour);
 t_geo		*cyl_factory(t_vector3 centre, t_vector3 orient, t_vector3 dia_height, int colour);
 t_geo		*tri_factory(t_vector3 p1, t_vector3 p2, t_vector3 p3, int colour);
+t_geo		*cone_factory(t_vector3 centre, t_vector3 orient, t_vector3 dia_height, int colour);
 
 //dode
 void		make_dode_verts(double r, t_vector3 *vertices);
