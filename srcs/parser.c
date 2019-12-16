@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 12:05:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/13 18:55:18 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/16 18:01:21 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int extra_info(char *err)
 {
 	ft_putstr(err);
 	ft_putstr("\n");
-	return (0);
+	return (1);
 }
 
 static int is_white_space(char c)
@@ -367,8 +367,36 @@ int load_cylinder(t_data *data, char **line)
 		!((t_geo *)(cyl->content)))
 		return (parse_error("Malloc for cylinder failed"));
 	ft_lstadd_back(&(data->objects), cyl);
-	extra_info("Cylinder loaded");
-	return (1);
+	return (extra_info("Cylinder loaded"));
+}
+
+int load_cone(t_data *data, char **line)
+{
+	t_vector3	centre;
+	t_vector3	orient;
+	t_vector3	dia_height;
+	int 		colour;
+	t_list		*con;
+	
+	(*line)+= 2;
+	if (!get_vector3(line, &centre))
+		return (parse_error("Wrong centre vector of a cone"));
+	if (!get_vector3(line, &orient))
+		return (parse_error("Wrong orientation vector of a cone"));
+	if (orient.x > 1 || orient.y > 1 ||orient.z > 1 ||
+		orient.x < -1 || orient.y < -1 || orient.z < -1)
+		return (parse_error("Cone orientation not between [-1.0;1.0]"));
+	if ((dia_height.x = ft_atof_live(line)) <= 0)
+		return (parse_error("Error in cone diametre"));
+	if ((dia_height.y = ft_atof_live(line)) <= 0)
+		return (parse_error("Error in cone height"));
+	if (!get_rgb(line, &colour, 0))
+		return (parse_error("Wrong RGB values for cone"));
+	if (!(con = ft_lstnew(cone_factory(centre, orient, dia_height, colour))) ||
+		!((t_geo *)(con->content)))
+		return (parse_error("Malloc for cone failed"));
+	ft_lstadd_back(&(data->objects), con);
+	return (extra_info("Cone loaded"));
 }
 
 int load_dodecahedron(t_data *data, char **line)
@@ -388,9 +416,9 @@ int load_dodecahedron(t_data *data, char **line)
 		orient.x < -1 || orient.y < -1 || orient.z < -1)
 		return (parse_error("Dode orientation not between [-1.0;1.0]"));
 	if ((diametre = ft_atof_live(line)) <= 0)
-		return (parse_error("Error in cylinder diametre"));
+		return (parse_error("Error in dodecahedron diametre"));
 	if (!get_rgb(line, &colour, 0))
-		return (parse_error("Wrong RGB values for cylinder"));
+		return (parse_error("Wrong RGB values for dodecahedron"));
 	if (!(tris = create_dodecahedron(diametre / 2, orient, centre, colour)))
 		return (parse_error("Malloc for dodecahedron failed"));
 	ft_lstadd_back(&(data->objects), tris);
@@ -531,6 +559,11 @@ int load_line(t_data *data, char *line)
 	else if (*line == 'c' && line[1] == 'y')
 	{
 		if (!load_cylinder(data, &line))
+			return (0);
+	}
+	else if (*line == 'c' && line[1] == 'o')
+	{
+		if (!load_cone(data, &line))
 			return (0);
 	}
 	else if (*line == 't' && line[1] == 'r')

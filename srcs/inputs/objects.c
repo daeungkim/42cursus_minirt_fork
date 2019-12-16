@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/10 15:41:41 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/11 12:59:21 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/16 17:13:02 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void change_centre_y(void *obj, short id, double dist)
 		((t_disk *)obj)->centre.y += dist;
 	if (id == e_cyl)
 		((t_cylindre *)obj)->centre.y += dist;
+	if (id == e_cone)
+		((t_cone *)obj)->centre.y += dist;
 	if (id == e_tri)
 	{
 		((t_triangle *)obj)->p1.y += dist;
@@ -46,6 +48,8 @@ void change_centre_z(void *obj, short id, double dist)
 		((t_disk *)obj)->centre.z += dist;
 	if (id == e_cyl)
 		((t_cylindre *)obj)->centre.z += dist;
+	if (id == e_cone)
+		((t_cone *)obj)->centre.z += dist;
 	if (id == e_tri)
 	{
 		((t_triangle *)obj)->p1.z += dist;
@@ -66,6 +70,8 @@ void change_centre_x(void *obj, short id, double dist)
 		((t_disk *)obj)->centre.x += dist;
 	if (id == e_cyl)
 		((t_cylindre *)obj)->centre.x += dist;
+	if (id == e_cone)
+		((t_cone *)obj)->centre.x += dist;
 	if (id == e_tri)
 	{
 		((t_triangle *)obj)->p1.x += dist;
@@ -79,7 +85,7 @@ int handle_object_movement(t_data *data, int key)
 	t_vector3 pos;
 
 	pos = data->current_cam->pos;
-	if (data->render_mode)
+	if (!data->render_mode)
 		return (0);
 	if (key == KEY_Q)
 		change_centre_y(data->cur_obj->obj, data->cur_obj->obj_type, 0.3);
@@ -143,6 +149,11 @@ void recalc_cy_norm(t_cylindre *cy)
 	cy->orient = apply_orientation(create_vector(0, 1, 0), cy->real_ori);
 }
 
+void recalc_cone_norm(t_cone *co)
+{
+	co->normal = apply_orientation(create_vector(0, 1, 0), co->orient);
+}
+
 void change_obj_normal_x(void *obj, short id, double val)
 {
 	if (id == e_plane)
@@ -164,6 +175,11 @@ void change_obj_normal_x(void *obj, short id, double val)
 	{
 		((t_cylindre *)obj)->real_ori.x += val;
 		recalc_cy_norm(obj);
+	}
+	if (id == e_cone)
+	{
+		((t_cone *)obj)->orient.x += val;
+		recalc_cone_norm(obj);
 	}
 }
 
@@ -189,6 +205,11 @@ void change_obj_normal_y(void *obj, short id, double val)
 		((t_cylindre *)obj)->real_ori.y += val;
 		recalc_cy_norm(obj);
 	}
+	if (id == e_cone)
+	{
+		((t_cone *)obj)->orient.y += val;
+		recalc_cone_norm(obj);
+	}
 }
 
 void change_obj_normal_z(void *obj, short id, double val)
@@ -212,6 +233,11 @@ void change_obj_normal_z(void *obj, short id, double val)
 	{
 		((t_cylindre *)obj)->real_ori.z += val;
 		recalc_cy_norm(obj);
+	}
+	if (id == e_cone)
+	{
+		((t_cone *)obj)->orient.z += val;
+		recalc_cone_norm(obj);
 	}
 }
 
