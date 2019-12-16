@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/16 16:30:54 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/16 17:42:08 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,26 +191,26 @@ int is_light_obstructed(t_data data, t_geo *rt_obj, t_light *light)
 {	
 	t_vector3	start;
 	t_vector3	light_ray;
-	t_list		*first;
+	t_list		*ele;
 	t_rt_param	param;
 	t_rt_param	param2;
 
 	start = point_from_ray(data.current_cam->pos, data.ray, data.t);
 	light_ray = normalise_vector(direction_vector(start, light->pos));
-	first = data.objects;
-	while (first)
+	ele = data.objects;
+	while (ele)
 	{
-		if (first->content != rt_obj)
+		if (ele->content != rt_obj)
 		{
 			param = set_param(start, light_ray, -1, 0);
-			if (((t_geo *)first->content)->obj_type == e_cyl)
+			if (((t_geo *)ele->content)->obj_type == e_cyl || ((t_geo *)ele->content)->obj_type == e_cone)
 			{
-				if (raytrace(first->content, &param))
+				if (raytrace(ele->content, &param))
 					if (distance(start, light->pos) >
 					distance(light->pos, point_from_ray(start, light_ray, param.v_2 ? param.i_2 : param.i)))
 						return (1);
 			}
-			else if (raytrace(first->content, &param))
+			else if (raytrace(ele->content, &param))
 			{
 				if (distance(start, light->pos) > 
 				distance(light->pos, point_from_ray(start, light_ray, param.i > 0 ? param.i : param.i_2)) &&
@@ -221,7 +221,7 @@ int is_light_obstructed(t_data data, t_geo *rt_obj, t_light *light)
 		else if (rt_obj->obj_type == e_cyl)
 		{
 			param = set_param(point_from_ray(start, light_ray, 0.0001), light_ray, -1, 0);
-			if (raytrace(first->content, &param))
+			if (raytrace(ele->content, &param))
 				if (param.v_2 && param.i_2 > 0 && distance(start, light->pos) >
 					distance(light->pos,
 					point_from_ray(start, light_ray, param.i_2)) &&
@@ -238,7 +238,7 @@ int is_light_obstructed(t_data data, t_geo *rt_obj, t_light *light)
 			if ((param.i < 0 && param2.i > 0) || (param.i > 0 && param2.i < 0))
 				return (1);
 		}
-		first = first->next;
+		ele = ele->next;
 	}
 	return (0);
 }
@@ -335,9 +335,7 @@ void *compute_render_t(void *data)
 			d->t = -1;
 			d->ray = compute_ray(d, d->current_cam, j, i);
 			if ((d->cur_obj = find_closest_hit(d, d->ray, &(d->t))))
-			{
 				d->workable[j] = calc_colour_from_light(*d, d->cur_obj);
-			}
 			else
 				d->workable[j] = encode_rgb(50, 50, 50);
 		}
