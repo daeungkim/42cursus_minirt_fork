@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/18 11:23:02 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/18 18:14:08 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,35 +287,6 @@ void set_data(t_data *data)
 	data->obj_selected = 0;
 }
 
-void compute_render(t_data *data)
-{
-	int i;
-	int j;
-
-	i = -1;
-	data->workable = data->data_add;
-	while (++i < data->res.y)
-	{
-		if (i)
-			data->workable += data->pixsizeline / 4;
-		j = -1;
-		while (++j < data->res.x)
-		{
-			data->t = -1;
-			data->ray = compute_ray(data, data->current_cam, j, i);
-			t_geo *rt_obj;
-			if ((rt_obj = find_closest_hit(data, data->ray, &(data->t))))
-			{
-				data->workable[j] = calc_colour_from_light(*data, rt_obj);
-			}
-			else
-				data->workable[j] = encode_rgb(0, 0, 0);
-		}
-	}
-	if (!data->save)
-		mlx_put_image_to_window(data->mlx_ptr, data->mlx_win, data->mlx_img, 0, 0);
-}
-
 void *compute_render_t(void *data)
 {
 	int i;
@@ -423,22 +394,17 @@ int handle_click(int button, int x, int y, t_data *data)
 int main(int ac, char **av)
 {
 	t_data data;
-
 	clock_t start, end;
-	time_t s;
 
 	long number_of_processors = sysconf(_SC_NPROCESSORS_ONLN);
 	printf("Processor count is %ld\n", number_of_processors);
 	set_data(&data);
 	if (ac == 3)
 		if (!ft_strcmp(av[2], "-save"))
-		{
-			printf("save mode\n");
 			data.save = 1;
-		}
 	if (ac == 1 || ac > 3)
 		return (0);
-	s = time(NULL);
+	time(NULL);
 	start = clock();
 	if (!load_data(&data, av[1]))
 		return (0);
@@ -449,7 +415,6 @@ int main(int ac, char **av)
 	data.mlx_win = mlx_new_window(data.mlx_ptr, data.res.x, data.res.y, "Dat_window");
 	data.current_cam = data.cameras->content;
 	data.max_cam = ft_lstsize(data.cameras);
-	printf("a\n");
 	multithread_render(&data);
 	if (data.save)
 		return (save_image(&data));

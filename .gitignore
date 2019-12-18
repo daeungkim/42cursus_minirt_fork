@@ -7,3 +7,4 @@ miniRT
 *.out
 minilibx_mms
 *.bmp
+test.c

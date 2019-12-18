@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/18 11:19:26 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/18 18:01:19 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,6 +234,31 @@ typedef struct 		s_bmp
 	int				imp_colour;
 }					t_bmp;
 
+//parsing
+int			parse_error(char *err);
+int			extra_info(char *err);
+int			is_white_space(char c);
+void		skip_whitespace(char **line);
+int			ft_atoi_live(char **line);
+double		ft_atof_live(char **line);
+int			get_rgb(char **line, int *colour, int value);
+int			get_vector3(char **line, t_vector3  *vector);
+int			check_points_unique(t_vector3 p1, t_vector3 p2, t_vector3 p3);
+int			load_res(t_data *data, char **line);
+int			load_amb(t_data *data, char **line);
+int			load_light(t_data *data, char **line);
+int			load_camera(t_data *data, char **line);
+int			load_sphere(t_data *data, char **line);
+int			load_plane(t_data *data, char **line);
+int			load_square(t_data *data, char **line);
+int			load_disk(t_data *data, char **line);
+int			load_triangle(t_data *data, char **line);
+int			load_cylinder(t_data *data, char **line);
+int			load_cone(t_data *data, char **line);
+int			load_torus(t_data *data, char **line);
+int			load_dodecahedron(t_data *data, char **line);
+int			load_cube(t_data *data, char **line);
+int			load_pyramid(t_data *data, char **line);
 
 //vector functions
 t_vector3	create_vector(const double x, const double y, const double z);

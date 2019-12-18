@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2019/12/18 11:17:19 by cjaimes          ###   ########.fr        #
+#    Updated: 2019/12/18 18:08:22 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,11 +27,19 @@ SRC_DIR		=	srcs/
 INCLUDE		=	includes
 
 SRC			=	main.c \
-				parser.c \
-				factories.c \
 				bmp.c \
 				inputs/camera.c \
 				inputs/objects.c \
+				parser/parser.c \
+				parser/helper.c \
+				parser/helper_2.c \
+				parser/load_base.c \
+				parser/load_basic_shapes.c \
+				parser/load_complex_shapes.c \
+				parser/load_composed_shapes.c \
+				factories/base_factories.c \
+				factories/simple_factories.c \
+				factories/complex_factories.c \
 				maths/math_functions.c \
 				maths/math_functions_2.c \
 				maths/vector_maths/vector_maths.c \
@@ -46,13 +54,13 @@ SRC			=	main.c \
 				maths/geo_math/cone.c \
 				maths/geo_math/triangle.c \
 				maths/geo_math/torus.c \
-				complex_shapes/dodecahedron/dodecahedron.c \
-				complex_shapes/dodecahedron/dode_peak_1_5.c \
-				complex_shapes/dodecahedron/dode_peak_6_10.c \
-				complex_shapes/dodecahedron/dode_peak_11_12.c \
-				complex_shapes/dodecahedron/dode_pl_pk.c \
-				complex_shapes/pyramid/pyramid.c \
-				complex_shapes/cube/cube.c
+				composed_shapes/dodecahedron/dodecahedron.c \
+				composed_shapes/dodecahedron/dode_peak_1_5.c \
+				composed_shapes/dodecahedron/dode_peak_6_10.c \
+				composed_shapes/dodecahedron/dode_peak_11_12.c \
+				composed_shapes/dodecahedron/dode_pl_pk.c \
+				composed_shapes/pyramid/pyramid.c \
+				composed_shapes/cube/cube.c
 
 SRCS		=	${addprefix ${SRC_DIR}, ${SRC}}
 
@@ -79,12 +87,14 @@ all:	${NAME}
 
 ${OBJ_DIR}%.o :	${SRC_DIR}%.c
 			@mkdir -p ${OBJ_DIR}
+			@mkdir -p ${OBJ_DIR}parser
 			@mkdir -p ${OBJ_DIR}maths
 			@mkdir -p ${OBJ_DIR}inputs
-			@mkdir -p ${OBJ_DIR}complex_shapes
-			@mkdir -p ${OBJ_DIR}complex_shapes/dodecahedron
-			@mkdir -p ${OBJ_DIR}complex_shapes/pyramid
-			@mkdir -p ${OBJ_DIR}complex_shapes/cube
+			@mkdir -p ${OBJ_DIR}factories
+			@mkdir -p ${OBJ_DIR}composed_shapes
+			@mkdir -p ${OBJ_DIR}composed_shapes/dodecahedron
+			@mkdir -p ${OBJ_DIR}composed_shapes/pyramid
+			@mkdir -p ${OBJ_DIR}composed_shapes/cube
 			@mkdir -p ${OBJ_DIR}maths/geo_math
 			@mkdir -p ${OBJ_DIR}maths/vector_maths
 			@${CC} ${CFLAGS} -I ${INCLUDE} -I ${MLX_DIR} -I ${LIB_DIR}/includes -c $< -o $@

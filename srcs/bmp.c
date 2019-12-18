@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/09 00:05:32 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/09 11:55:24 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/18 18:13:40 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int save_image(t_data *data)
     int y;
     char *add;
 
+    ft_putstr("Saving...\n");
     add = (char *)data->data_add;
     set_bmp(&bmp, data);
     fd = open("screenshot.bmp", O_CREAT | O_WRONLY | O_TRUNC, 0666);
