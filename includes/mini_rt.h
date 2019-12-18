@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/16 18:01:56 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/18 11:19:26 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,13 @@ typedef struct	s_light
 	double		ratio;
 	int			colour;
 }				t_light;
+
+typedef struct	s_para_light
+{
+	t_vector3	direct;
+	double		ratio;
+	int			colour;
+}				t_para_light;
 
 typedef struct	s_camera
 {
@@ -119,6 +126,15 @@ typedef struct	s_cone
 	double		height;
 }				t_cone;
 
+typedef struct	s_torus
+{
+	t_vector3	centre;
+	t_vector3	normal;
+	t_vector3	orient;
+	double		i_dia;
+	double		o_dia;
+}				t_orus;
+
 typedef struct	s_triangle
 {
 	t_vector3	p1;
@@ -135,8 +151,21 @@ typedef struct		s_rt_param
 	int				v;
 	double			i_2;
 	int				v_2;
+	double			i_3;
+	int				v_3;
+	double			i_4;
+	int				v_4;
 	void			*object;
 }					t_rt_param;
+
+typedef	struct		s_quartic_param
+{
+	double			a;
+	double			b;
+	double			c;
+	double			d;
+	double			e;
+}					t_quartic;
 
 
 typedef struct		s_geo_obj
@@ -234,6 +263,7 @@ int			solve_triangle_boundaries(t_rt_param *param, t_triangle *tri);
 double		to_rad(double deg);
 double		solve_poly_2(double a, double b);
 void		d_swap(double *a, double *b);
+int			solve_quartic(t_quartic q, t_rt_param *p);
 
 int			load_data(t_data *data, char *rt_file);
 
@@ -261,6 +291,10 @@ t_vector3 normal_vector_cyl(t_vector3 point, void *disk);
 int			raytrace_cone(t_rt_param *param);
 t_vector3	normal_vector_cone(t_vector3 point, void *con);
 
+//torus
+int			raytrace_torus(t_rt_param *par);
+t_vector3	normal_vector_torus(t_vector3 point, void *tor);
+
 //triangle
 t_vector3	define_tri_plane(t_vector3 p1, t_vector3 p2, t_vector3 p3);
 int			raytrace_triangle(t_rt_param *param);
@@ -276,6 +310,7 @@ t_geo		*disk_factory(t_vector3 centre, t_vector3 orient, double diametre, int co
 t_geo		*cyl_factory(t_vector3 centre, t_vector3 orient, t_vector3 dia_height, int colour);
 t_geo		*tri_factory(t_vector3 p1, t_vector3 p2, t_vector3 p3, int colour);
 t_geo		*cone_factory(t_vector3 centre, t_vector3 orient, t_vector3 dia_height, int colour);
+t_geo		*torus_factory(t_vector3 centre, t_vector3 orient, t_vector3 i_o, int colour);
 
 //dode
 void		make_dode_verts(double r, t_vector3 *vertices);

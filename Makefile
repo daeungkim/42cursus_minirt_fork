@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2019/12/16 18:01:48 by cjaimes          ###   ########.fr        #
+#    Updated: 2019/12/18 11:17:19 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,6 +45,7 @@ SRC			=	main.c \
 				maths/geo_math/cylinder.c \
 				maths/geo_math/cone.c \
 				maths/geo_math/triangle.c \
+				maths/geo_math/torus.c \
 				complex_shapes/dodecahedron/dodecahedron.c \
 				complex_shapes/dodecahedron/dode_peak_1_5.c \
 				complex_shapes/dodecahedron/dode_peak_6_10.c \

@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 12:05:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/16 18:01:21 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/18 11:22:21 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -399,6 +399,35 @@ int load_cone(t_data *data, char **line)
 	return (extra_info("Cone loaded"));
 }
 
+int load_torus(t_data *data, char **line)
+{
+	t_vector3	centre;
+	t_vector3	orient;
+	t_vector3	i_o;
+	int 		colour;
+	t_list		*tor;
+	
+	(*line)+= 2;
+	if (!get_vector3(line, &centre))
+		return (parse_error("Wrong centre vector of a torus"));
+	if (!get_vector3(line, &orient))
+		return (parse_error("Wrong orientation vector of a torus"));
+	if (orient.x > 1 || orient.y > 1 ||orient.z > 1 ||
+		orient.x < -1 || orient.y < -1 || orient.z < -1)
+		return (parse_error("Torus orientation not between [-1.0;1.0]"));
+	if ((i_o.x = ft_atof_live(line)) <= 0)
+		return (parse_error("Error in torus inner diametre"));
+	if ((i_o.y = ft_atof_live(line)) <= 0)
+		return (parse_error("Error in torus outer diametre"));
+	if (!get_rgb(line, &colour, 0))
+		return (parse_error("Wrong RGB values for torus"));
+	if (!(tor = ft_lstnew(torus_factory(centre, orient, i_o, colour))) ||
+		!((t_geo *)(tor->content)))
+		return (parse_error("Malloc for cone failed"));
+	ft_lstadd_back(&(data->objects), tor);
+	return (extra_info("Torus loaded"));
+}
+
 int load_dodecahedron(t_data *data, char **line)
 {
 	t_vector3	centre;
@@ -549,6 +578,11 @@ int load_line(t_data *data, char *line)
 	else if (*line == 'd' && line[1] == 'o')
 	{
 		if (!load_dodecahedron(data, &line))
+			return (0);
+	}
+	else if (*line == 't' && line[1] == 'o')
+	{
+		if (!load_torus(data, &line))
 			return (0);
 	}
 	else if (*line == 'p' && line[1] == 'y')

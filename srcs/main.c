@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/16 17:42:08 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/18 11:23:02 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -448,7 +448,8 @@ int main(int ac, char **av)
 	data.data_add= (int *)mlx_get_data_addr(data.mlx_img, &(data.pixsize), &(data.pixsizeline), &(data.endian));
 	data.mlx_win = mlx_new_window(data.mlx_ptr, data.res.x, data.res.y, "Dat_window");
 	data.current_cam = data.cameras->content;
-	data.max_cam = ft_lstsize(data.cameras); 
+	data.max_cam = ft_lstsize(data.cameras);
+	printf("a\n");
 	multithread_render(&data);
 	if (data.save)
 		return (save_image(&data));
