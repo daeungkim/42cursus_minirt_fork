@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/20 17:25:46 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/18 11:21:45 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/22 11:43:46 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,23 +44,24 @@ int solve_quadratic(t_vector3 abc, double *t0, double *t1)
 	return (2);
 }
 
-int solve_cubic(double *roots, double b, double c, double d)
+int solve_cubic(double *roots, double a, double b, double c, double d)
 {
 	double q;
 	double r;
     double omega;
     double s;
 
+	b /= a;
+	c /= a;
+	d /= a;
 	q = -(b * b - 3 * c) / 9;
 	r = -(-9 * b * c + 27 * d + 2 * pow(b, 3)) / 54;
-    if (q * q * q <= -r * r )
+    if (q * q * q < -r * r )
     {
         omega = acos(-r / sqrt(-(q * q * q)));
         roots[0] = -2 * sqrt(-q) * cos(omega / 3) - b / 3;
         roots[1] = -2 * sqrt(-q) * cos((omega + 2 * M_PI) / 3) - b / 3;
         roots[2] = -2 * sqrt(-q) * cos((omega - 2 * M_PI) / 3) - b / 3;
-        if (q * q * q + r * r < 1e-8 && q * q * q + r * r < -1e-8)
-            return (2);
         return (3);
     }
     else
@@ -69,6 +70,10 @@ int solve_cubic(double *roots, double b, double c, double d)
         if (r > 0)
             s = -s;
         roots[0] = - (b / 3) + (s - (s == 0 ? 0 : (q / s)));
+		roots[1] = - (b / 3) - 0.5 * (s - (s == 0 ? 0 : (q / s)));
+		roots[2] = 0.5 * sqrt(3.0) * (s + (s == 0 ? 0 : (q / s)));
+		if (fabs(roots[2]) < 1e-14)
+			return (2);
         return (1);
     }
 }
@@ -96,7 +101,15 @@ static void  dblSort3( double *a, double *b, double *c) // make: a <= b <= c
 	}
 }
 
-int solve_quartic(t_quartic q, t_rt_param *p)
+double N4Step(double x, double a,double b,double c,double d)	// one Newton step for x^4 + a*x^3 + b*x^2 + c*x + d
+{
+	double fxs= ((4*x+3*a)*x+2*b)*x+c;	// f'(x)
+	if (fxs == 0) return x;	//return 1e99; <<-- FIXED!
+	double fx = (((x+a)*x+b)*x+c)*x+d;	// f(x)
+	return x - fx/fxs;
+} 
+
+int get_roots_4(t_quartic q, t_rt_param *p)
 {
 	t_vector3 pqr;
 	double roots[4];
@@ -107,19 +120,23 @@ int solve_quartic(t_quartic q, t_rt_param *p)
 	pqr.z = q.e - q.b * q.d / 4 + (-3 * pow(q.b, 4) +
 			16 * q.c * pow(q.b, 2)) / 256;
 
-	res = solve_cubic(roots, 2 * pqr.x, pow(pqr.x, 2) - 4 * pqr.z, -pow(pqr.y, 2));
-
+	res = solve_cubic(roots, 1, 2 * pqr.x, pow(pqr.x, 2) - 4 * pqr.z, -pow(pqr.y, 2));
 	if(res > 1)
 	{				
 		dblSort3(&(roots[0]), &(roots[1]), &(roots[2]));	// sort roots to x[0] <= x[1] <= x[2]
 		// Note: x[0]*x[1]*x[2]= c*c > 0
+		
 		if(roots[0] > 0) // all roots are positive
 		{
 			double sz1 = sqrt(roots[0]);
 			double sz2 = sqrt(roots[1]);
 			double sz3 = sqrt(roots[2]);
 			// Note: sz1*sz2*sz3= -c (and not equal to 0)
-			if( q.d>0 )
+			p->v = 1;
+			p->v_2 = 1;
+			p->v_3 = 1;
+			p->v_4 = 1;
+			if( pqr.y > 0 )
 			{
 				p->i = (-sz1 -sz2 -sz3)/2;
 				p->i_2 = (-sz1 +sz2 +sz3)/2;
@@ -134,11 +151,9 @@ int solve_quartic(t_quartic q, t_rt_param *p)
 			return 4;
 		}
 		return 0;
-	} // if( res3>1 )	// 3 real roots, 
-	// now resoventa have 1 real and pair of compex roots
-	// x[0] - real root, and x[0]>0, 
-	// x[1]�i*x[2] - complex roots, 
-	// x[0] must be >=0. But one times x[0]=~ 1e-17, so:
+	}
+	p->v = 1;
+	p->v_2 = 1;
 	if (roots[0] < 0)
 		roots[0] = 0;
 	double sz1 = sqrt(roots[0]);
@@ -158,6 +173,29 @@ int solve_quartic(t_quartic q, t_rt_param *p)
 	roots[2] = -sz1/2;
 	roots[3] = szi;
 	return 2;
+}
+
+int solve_quartic(t_quartic q, t_rt_param *p)
+{
+	int res;
+
+	q.b /= q.a;
+    q.c /= q.a;
+    q.d /= q.a;
+    q.e /= q.a;
+	res = get_roots_4(q, p);
+	if ( res > 0)
+	{
+		p->i -= q.b / 4;
+		p->i_2 -= q.b / 4;
+		p->i_3 -= q.b / 4;
+		p->i_4 -= q.b / 4;
+		p->i = N4Step(p->i, q.b, q.c, q.d, q.e);
+		p->i_2 = N4Step(p->i_2, q.b, q.c, q.d, q.e);
+		p->i_3 = N4Step(p->i_3, q.b, q.c, q.d, q.e);
+		p->i_4 = N4Step(p->i_4, q.b, q.c, q.d, q.e);
+	}
+	return (res);
 }
 
 int solve_square_boundaries(t_rt_param *param, t_square *square)

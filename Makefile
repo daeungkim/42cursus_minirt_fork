@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2019/12/18 18:08:22 by cjaimes          ###   ########.fr        #
+#    Updated: 2019/12/21 17:20:15 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,9 @@ INCLUDE		=	includes
 SRC			=	main.c \
 				bmp.c \
 				inputs/camera.c \
-				inputs/objects.c \
+				inputs/objects_rotation.c \
+				inputs/objects_movement.c \
+				inputs/objects_normal_calc.c \
 				parser/parser.c \
 				parser/helper.c \
 				parser/helper_2.c \

@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/18 18:14:08 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/22 11:44:02 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,10 @@ t_rt_param set_param(t_vector3 o, t_vector3 r, double i, void *ob)
 	param.v = 0;
 	param.i_2 = -1;
 	param.v_2 = 0;
+	param.i_3 = -1;
+	param.v_3 = 0;
+	param.i_4 = -1;
+	param.v_4 = 0;
 	param.object = ob;
 	return (param);
 }
@@ -428,4 +432,26 @@ int main(int ac, char **av)
 	mlx_destroy_window(data.mlx_ptr, data.mlx_win);
 	return (0);
 
+}
+
+int main11()
+{
+    t_quartic q;
+    t_rt_param p;
+    q.a = -1.7;
+    q.b = -3.09;
+    q.c = 1.6;
+    q.d = 2.76;
+    q.e = 0.0;
+
+    p = set_param(create_vector(0, 0, 0), create_vector(0, 0, 0), 0, 0);
+    
+	int res;
+	
+	printf("%d real solutions\n",res = solve_quartic(q, &p));
+	if (p.v && p.v_2)
+        printf("1st root = %g\n2nd root = %g\n", p.i, p.i_2);
+    if (p.v_3 && p.v_4)
+        printf("1st root = %g\n2nd root = %g\n", p.i_3, p.i_4);
+		return (0);
 }

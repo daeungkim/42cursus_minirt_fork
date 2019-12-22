@@ -6,11 +6,12 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/18 17:58:11 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/18 17:58:28 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/22 12:07:04 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
+#include <stdio.h>
 
 int load_cylinder(t_data *data, char **line)
 {
@@ -90,6 +91,8 @@ int load_torus(t_data *data, char **line)
 		return (parse_error("Error in torus inner diametre"));
 	if ((i_o.y = ft_atof_live(line)) <= 0)
 		return (parse_error("Error in torus outer diametre"));
+	printf("inner = %g\n", i_o.x);
+	printf("inner = %g\n", i_o.y);
 	if (!get_rgb(line, &colour, 0))
 		return (parse_error("Wrong RGB values for torus"));
 	if (!(tor = ft_lstnew(torus_factory(centre, orient, i_o, colour))) ||

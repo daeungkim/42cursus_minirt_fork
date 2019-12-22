@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 17:07:36 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/18 18:06:18 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/22 14:45:57 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,11 @@ t_geo *torus_factory(t_vector3 centre, t_vector3 orient, t_vector3 i_o, int colo
 	torus->centre = centre;
 	torus->orient = orient;
 	torus->normal = apply_orientation(create_vector(0, 1, 0), orient);
-	torus->i_dia = i_o.x;
-	torus->o_dia = i_o.y;
+	torus->i_dia = i_o.x / 2;
+	torus->o_dia = i_o.y / 2;
 	torus_obj->obj = torus;
 	torus_obj->find_inter = &raytrace_torus;
 	torus_obj->get_normal_vector = &normal_vector_torus;
-	torus_obj->obj_type = e_cone;
+	torus_obj->obj_type = e_torus;
 	return (torus_obj);
 }

@@ -6,13 +6,12 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 15:24:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/10 13:02:33 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/21 17:10:53 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 #include "key.h"
-#include <stdio.h>
 
 void apply_rotation(t_camera *cam)
 {

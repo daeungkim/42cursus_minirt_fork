@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/18 18:01:19 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/22 14:48:57 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@
 #include <pthread.h>
 
 # define SCREEN_L 10
-# define CORES 4
+# define CORES 12
 
 enum	obj_type	{e_sphere = 0, e_plane = 1, e_sq = 2, e_tri = 3, e_cyl = 4,
-					e_disk = 5, e_cone = 6};	
+					e_disk = 5, e_cone = 6, e_torus = 7};	
 
 typedef struct	s_resolution
 {
@@ -289,6 +289,8 @@ double		to_rad(double deg);
 double		solve_poly_2(double a, double b);
 void		d_swap(double *a, double *b);
 int			solve_quartic(t_quartic q, t_rt_param *p);
+int			solve_cubic(double *roots, double a, double b, double c, double d);
+double N4Step(double x, double a,double b,double c,double d);
 
 int			load_data(t_data *data, char *rt_file);
 
@@ -378,6 +380,15 @@ int			handle_camera_rotation(t_data *data, int key);
 int			change_camera(t_data *data, int key);
 int			handle_object_movement(t_data *data, int key);
 int			handle_object_rotation(t_data *data, int key);
+
+//object movements
+
+void		recalc_sq_vect(t_square *sq);
+void		recalc_dk_norm(t_disk *dk);
+void		recalc_pl_norm(t_plane *pl);
+void		recalc_cy_norm(t_cylindre *cy);
+void		recalc_cone_norm(t_cone *co);
+void		recalc_torus_norm(t_orus *to);
 
 //rgb functions
 int			get_blue(int colour);
