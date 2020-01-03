@@ -6,12 +6,12 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 13:15:01 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/16 18:01:16 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/03 15:07:37 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
-#include <stdio.h>
+
 static int check_cone_solve(t_rt_param *param, t_cone *cone)
 {
 	t_vector3	d_x_t;

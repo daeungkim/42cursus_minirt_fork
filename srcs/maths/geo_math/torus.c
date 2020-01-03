@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/17 10:15:01 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/22 21:16:13 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/25 22:05:35 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,36 +70,22 @@ int raytrace_torus(t_rt_param *par)
 	t_orus *t;
 
 	t = par->object;
-
 	t_vector3 x = sub_vect(par->origin, t->centre);
 	double dx = dot(par->ray, x);
 	double xv = dot(x, t->normal);
 	double xx = dot_same(x);
 	double dv = dot(par->ray, t->normal);
 	double Rr = t->o_dia * t->o_dia - t->i_dia * t->i_dia;
-
-
 	q.a = 1;
 	q.b = 4 * dx;
 	q.c = 4 * dx * dx + 2 * xx + 2 * Rr - 4 * t->o_dia * t->o_dia * (1 - dv * dv);
 	q.d = 4 * dx * xx + 4 * Rr * dx - 8 * t->o_dia * t->o_dia * (dx - dv * xv);
 	q.e = xx * xx + Rr * Rr + 2 * Rr * xx - 4 * t->o_dia * t->o_dia * (xx - xv * xv);
 
-	// find roots of the quartic equation
-
 	sol = solve_quartic(q, par);
-	
-	if (sol == 0)  // ray misses the torus
-		return(0);
-
-	//printf("a = %g | b = %g | c = %g | d = %g | e = %g\n", q.a, q.b, q.c, q.d, q.e);
-	//printf("%d real solutions\n",sol);
-	// if (par->v && par->v_2)
-    //     printf("1st root = %g\n2nd root = %g\n", par->i, par->i_2);
-    // if (par->v_3 && par->v_4)
-    //     printf("1st root = %g\n2nd root = %g\n", par->i_3, par->i_4);
 	if (sol >= 2)
 	{
+		//printf("a = %g\nb = %g\nc = %g\nd = %g\ne = %g\n", q.a, q.b, q.c, q.d, q.e);
 		par->v = 1;
 		par->v_2 = 1;
 		if (par->i > par->i_2)
@@ -123,7 +109,7 @@ int raytrace_torus(t_rt_param *par)
 	return (sol);
 }
 
-t_vector3 normal_vector_torus(t_vector3 point, void *tor)
+t_vector3 normal_vector_torus1(t_vector3 point, void *tor)
 {
 	t_orus	*t;
 	double		k;
@@ -137,4 +123,19 @@ t_vector3 normal_vector_torus(t_vector3 point, void *tor)
 	return (sub_vect(
 		direction_vector(a, point),
 		scalar_vect(sub_vect(t->centre, a), m / (t->o_dia + m))));
+}
+
+t_vector3 normal_vector_torus(t_vector3 point, void *tor)
+{
+	t_orus	*t;
+	double		k;
+	t_vector3	a;
+	t_vector3	pr;
+
+	t = tor;
+	k = dot(sub_vect(point, t->centre), t->normal);
+	a = point_from_ray(point, t->normal, -k);
+	pr = normalise_vector(sub_vect(a, t->centre));
+	pr = point_from_ray(t->centre, pr, t->o_dia);
+	return (direction_vector(pr, point));
 }

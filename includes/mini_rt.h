@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/22 14:48:57 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/03 15:49:13 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,6 +279,17 @@ double		angle_between_vectors(t_vector3 a, t_vector3 b);
 
 t_vector3	apply_orientation(t_vector3 base, t_vector3 orient);
 t_vector3	rot_axis(t_vector3 axis, t_vector3 vec, double angle);
+t_vector3	get_normal_vector(t_vector3 point, t_geo *geo);
+int			raytrace(t_geo *geo, t_rt_param *param);
+t_rt_param	set_param(t_vector3 o, t_vector3 r, double i, void *ob);
+
+//ray and light
+t_vector3   compute_ray(const t_data *data, t_camera *cam,
+                        const double x, const double y);
+t_geo       *find_closest_hit(t_data *data, t_vector3 ray, double *hit);
+int			raytrace(t_geo *geo, t_rt_param *param);
+t_vector3	get_normal_vector(t_vector3 point, t_geo *geo);
+int calc_colour_from_light(t_data data, t_geo *rt_obj);
 
 // maths
 int			solve_quadratic(t_vector3 abc, double *t0, double *t1);
@@ -289,6 +300,7 @@ double		to_rad(double deg);
 double		solve_poly_2(double a, double b);
 void		d_swap(double *a, double *b);
 int			solve_quartic(t_quartic q, t_rt_param *p);
+int			solve_quartic1(t_quartic q, t_rt_param *p);
 int			solve_cubic(double *roots, double a, double b, double c, double d);
 double N4Step(double x, double a,double b,double c,double d);
 

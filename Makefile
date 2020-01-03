@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2019/12/21 17:20:15 by cjaimes          ###   ########.fr        #
+#    Updated: 2020/01/03 15:45:39 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +48,9 @@ SRC			=	main.c \
 				maths/vector_maths/vector_maths2.c \
 				maths/vector_maths/vector_maths3.c \
 				maths/colour_functions.c \
+				maths/ray_maths.c \
+				maths/light_maths.c \
+				maths/geo_math/geo.c \
 				maths/geo_math/sphere.c \
 				maths/geo_math/plane.c \
 				maths/geo_math/square.c \

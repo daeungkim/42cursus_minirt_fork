@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/20 17:25:46 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/22 11:43:46 by cjaimes          ###   ########.fr       */
+/*   Updated: 2019/12/25 22:09:01 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int solve_quadratic(t_vector3 abc, double *t0, double *t1)
 	return (2);
 }
 
-int solve_cubic(double *roots, double a, double b, double c, double d)
+int solve_cubic1(double *roots, double a, double b, double c, double d)
 {
 	double q;
 	double r;
@@ -58,7 +58,12 @@ int solve_cubic(double *roots, double a, double b, double c, double d)
 	r = -(-9 * b * c + 27 * d + 2 * pow(b, 3)) / 54;
     if (q * q * q < -r * r )
     {
-        omega = acos(-r / sqrt(-(q * q * q)));
+        omega =-r / sqrt(-(q * q * q));
+		// if (omega < -1)
+		// 	omega = -1;
+		// if (omega > 1)
+		// 	omega = 1;
+		omega = acos(omega);
         roots[0] = -2 * sqrt(-q) * cos(omega / 3) - b / 3;
         roots[1] = -2 * sqrt(-q) * cos((omega + 2 * M_PI) / 3) - b / 3;
         roots[2] = -2 * sqrt(-q) * cos((omega - 2 * M_PI) / 3) - b / 3;
@@ -66,7 +71,7 @@ int solve_cubic(double *roots, double a, double b, double c, double d)
     }
     else
     {
-        s = -cbrt(fabs(r) + sqrt(r * r + q * q * q));
+        s = -pow(fabs(r) + sqrt(r * r + q * q * q), 1.0 / 3);
         if (r > 0)
             s = -s;
         roots[0] = - (b / 3) + (s - (s == 0 ? 0 : (q / s)));
@@ -74,6 +79,48 @@ int solve_cubic(double *roots, double a, double b, double c, double d)
 		roots[2] = 0.5 * sqrt(3.0) * (s + (s == 0 ? 0 : (q / s)));
 		if (fabs(roots[2]) < 1e-14)
 			return (2);
+        return (1);
+    }
+}
+
+int solve_cubic(double *roots, double a, double b, double c, double d)
+{
+	double q;
+	double r;
+    double omega;
+    double s;
+
+	b /= a;
+	c /= a;
+	d /= a;
+	q = (b * b - 3 * c) / 9;
+	r = (-9 * b * c + 27 * d + 2 * pow(b, 3)) / 54;
+    if (q * q * q > r * r )
+    {
+        omega = r / sqrt((q * q * q));
+		if (omega < -1)
+			omega = -1;
+		if (omega > 1)
+			omega = 1;
+		omega = acos(omega);
+        roots[0] = -2 * sqrt(q) * cos(omega / 3) - b / 3;
+        roots[1] = -2 * sqrt(q) * cos((omega + 2 * M_PI) / 3) - b / 3;
+        roots[2] = -2 * sqrt(q) * cos((omega - 2 * M_PI) / 3) - b / 3;
+        return (3);
+    }
+    else
+    {
+        s = -pow(fabs(r) + sqrt(r * r - q * q * q), 1.0 / 3);
+        if (r < 0)
+            s = -s;
+        roots[0] = - (b / 3) + (s + (s == 0 ? 0 : (q / s)));
+		roots[1] = - (b / 3) - 0.5 * (s + (s == 0 ? 0 : (q / s)));
+		roots[2] = 0.5 * sqrt(3.0) * (s + (s == 0 ? 0 : (q / s)));
+		if (fabs(roots[2]) < 1e-14)
+		{
+			roots[2] = roots[1];
+			return (2);
+		}
         return (1);
     }
 }
@@ -115,12 +162,13 @@ int get_roots_4(t_quartic q, t_rt_param *p)
 	double roots[4];
 	int res;
 
-	pqr.x = q.c - (3 * pow(q.b, 2)) / 8;
-	pqr.y = q.d + (pow(q.b, 3) - 4 * q.b * q.c) / 8;
-	pqr.z = q.e - q.b * q.d / 4 + (-3 * pow(q.b, 4) +
+	pqr.x = q.c - 0.375 * pow(q.b, 2);
+	pqr.y = q.d + pow(q.b, 3) * 0.125 - 0.5 * q.b * q.c;
+	pqr.z = q.e - q.b * q.d * 0.25 + (-3 * pow(q.b, 4) +
 			16 * q.c * pow(q.b, 2)) / 256;
 
-	res = solve_cubic(roots, 1, 2 * pqr.x, pow(pqr.x, 2) - 4 * pqr.z, -pow(pqr.y, 2));
+	res = solve_cubic1(roots, 1, 2 * pqr.x, pow(pqr.x, 2) - 4 * pqr.z, - pow(pqr.y, 2));
+	//printf("sol is %d\nroot is %g\nroot is %g\nroot is %g\n", res, roots[0], roots[1], roots[2]);
 	if(res > 1)
 	{				
 		dblSort3(&(roots[0]), &(roots[1]), &(roots[2]));	// sort roots to x[0] <= x[1] <= x[2]
@@ -194,6 +242,79 @@ int solve_quartic(t_quartic q, t_rt_param *p)
 		p->i_2 = N4Step(p->i_2, q.b, q.c, q.d, q.e);
 		p->i_3 = N4Step(p->i_3, q.b, q.c, q.d, q.e);
 		p->i_4 = N4Step(p->i_4, q.b, q.c, q.d, q.e);
+	}
+	return (res);
+}
+
+int solve_quartic1(t_quartic q, t_rt_param *p)
+{
+	q.b /= q.a;
+    q.c /= q.a;
+    q.d /= q.a;
+    q.e /= q.a;
+	
+	double a3 = -q.c;
+	double b3 =  q.b * q.d -4. * q.e;
+	double c3 = -q.b*q.b*q.e - q.d*q.d + 4.*q.c*q.e;
+	double roots[3];
+	double y;
+
+	int res = solve_cubic(roots, 1, a3, b3, c3);
+	y = roots[0];
+	if (res != 1)
+	{
+		if (fabs(roots[1]) > fabs(y))
+			y = roots[1];
+		if (fabs(roots[2]) > fabs(y))
+			y = roots[2];
+	}
+	double D = y * y - 4 * q.e;
+	double q1, q2, p1, p2, sqD;
+	res = 0;
+	if (fabs(D) < 1e-14)
+	{
+		q1 = y * 0.5;
+		q2 = q1;
+		D = q.b * q.b - 4 * (q.c - y);
+		if (fabs(D) < 1e-14)
+		{
+			p1 = q.b * 0.5;
+			p2 = p1;
+		}
+		else
+		{
+			sqD = sqrt(D);
+			p1 = (q.b + sqD) * 0.5;
+			p2 = (q.b - sqD) * 0.5;
+		}
+	}
+	else
+	{
+		sqD = sqrt(D);
+		q1 = (y + sqD) * 0.5;
+		q2 = (y - sqD) * 0.5;
+		p1 = (q.b*q1-q.d)/(q1-q2);
+		p2 = (q.d-q.b*q2)/(q1-q2);
+	}
+	D = p1 * p1 - 4 * q1;
+	if (D > 0.0)
+	{
+		sqD = sqrt(D);
+		p->v = 1;
+		p->v_2 = 1;
+		p->i = (-p1 + sqD) * 0.5;
+		p->i_2 = (-p1 - sqD) * 0.5;
+		res += 2;
+	}
+	D = p2*p2 - 4*q2;
+	if (D > 0.0)
+	{
+		sqD = sqrt(D);
+		p->v_4 = 1;
+		p->v_3 = 1;
+		p->i_3 = (-p2 + sqD) * 0.5;
+		p->i_4 = (-p2 - sqD) * 0.5;
+		res += 2;
 	}
 	return (res);
 }
