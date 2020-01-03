@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/03 15:49:13 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/03 17:28:54 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "libft.h"
 #include <math.h>
 #include <pthread.h>
+#include "mlx.h"
 
 # define SCREEN_L 10
 # define CORES 12
@@ -234,6 +235,11 @@ typedef struct 		s_bmp
 	int				imp_colour;
 }					t_bmp;
 
+//events
+int			proper_exit(t_data *data);
+int			key_release(int key, t_data *data);
+int			handle_click(int button, int x, int y, t_data *data);
+
 //parsing
 int			parse_error(char *err);
 int			extra_info(char *err);
@@ -289,7 +295,7 @@ t_vector3   compute_ray(const t_data *data, t_camera *cam,
 t_geo       *find_closest_hit(t_data *data, t_vector3 ray, double *hit);
 int			raytrace(t_geo *geo, t_rt_param *param);
 t_vector3	get_normal_vector(t_vector3 point, t_geo *geo);
-int calc_colour_from_light(t_data data, t_geo *rt_obj);
+int			calc_colour_from_light(t_data data, t_geo *rt_obj);
 
 // maths
 int			solve_quadratic(t_vector3 abc, double *t0, double *t1);
@@ -302,7 +308,7 @@ void		d_swap(double *a, double *b);
 int			solve_quartic(t_quartic q, t_rt_param *p);
 int			solve_quartic1(t_quartic q, t_rt_param *p);
 int			solve_cubic(double *roots, double a, double b, double c, double d);
-double N4Step(double x, double a,double b,double c,double d);
+double		N4Step(double x, double a,double b,double c,double d);
 
 int			load_data(t_data *data, char *rt_file);
 

@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/03 15:12:36 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/03 15:41:46 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/03 17:23:14 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,24 @@ static void  check_first_hit(t_geo **hit_obj, t_rt_param p,
         *hit = p.i_2;
         *hit_obj = first->content;
     }
+}
+
+t_rt_param set_param(t_vector3 o, t_vector3 r, double i, void *ob)
+{
+	t_rt_param param;
+
+	param.origin = o;
+	param.ray = r;
+	param.i = i;
+	param.v = 0;
+	param.i_2 = -1;
+	param.v_2 = 0;
+	param.i_3 = -1;
+	param.v_3 = 0;
+	param.i_4 = -1;
+	param.v_4 = 0;
+	param.object = ob;
+	return (param);
 }
 
 /*
