@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/03 15:12:36 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/09 13:36:09 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 16:22:33 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,24 @@
 static void	check_first_hit(t_geo **hit_obj, t_rt_param p,
 			double *hit, t_list *first)
 {
-	if (p.v && (((p.i > 0 && *hit < 0) || (p.i > 0 && p.i < *hit))))
+	if (p.v && p.i > 0 && (*hit < 0 || p.i < *hit))
 	{
 		*hit = p.i;
 		*hit_obj = first->content;
 	}
-	else if (((t_geo *)(first->content))->obj_type == e_cyl &&
-		p.v_2 && ((p.i_2 > 0 && *hit < 0) || (p.i_2 > 0 && p.i_2 < *hit)))
+	if (p.v_2 && p.i_2 > 0 && (*hit < 0 || p.i_2 < *hit))
 	{
 		*hit = p.i_2;
+		*hit_obj = first->content;
+	}
+	if (p.v_3 && p.i_3 > 0 && (*hit < 0 || p.i_3 < *hit))
+	{
+		*hit = p.i_3;
+		*hit_obj = first->content;
+	}
+	if (p.v_4 && p.i_4 > 0 && (*hit < 0 || p.i_4 < *hit))
+	{
+		*hit = p.i_4;
 		*hit_obj = first->content;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 12:05:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/09 13:50:07 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 15:24:10 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int		load_line(t_data *data, char *line)
 {
 	int (*parse_functions[256][256])(t_data *d, char **l);
 
+	skip_whitespace(&line);
 	populate_functions(parse_functions);
 	if (ft_strlen(line) < 2)
 		return (1);
