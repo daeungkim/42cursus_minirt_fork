@@ -6,16 +6,15 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/18 17:53:22 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/18 17:53:41 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 11:54:04 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
-#include <stdio.h>
 
 int	load_res(t_data *data, char **line)
 {
-	if(data->res.loaded)
+	if (data->res.loaded)
 		return (parse_error("Resolution already loaded"));
 	data->res.x = 0;
 	data->res.y = 0;
@@ -35,7 +34,7 @@ int	load_res(t_data *data, char **line)
 	return (1);
 }
 
-int load_amb(t_data *data, char **line)
+int	load_amb(t_data *data, char **line)
 {
 	if (data->amb.loaded)
 		return (parse_error("Ambient light already loaded"));
@@ -56,12 +55,12 @@ int load_amb(t_data *data, char **line)
 	return (1);
 }
 
-int load_light(t_data *data, char **line)
+int	load_light(t_data *data, char **line)
 {
-	t_vector3 coor;
-	double	intensity;
-	int		colour;
-	t_list	*light;
+	t_vector3	coor;
+	double		intensity;
+	int			colour;
+	t_list		*light;
 
 	(*line)++;
 	skip_whitespace(line);
@@ -82,11 +81,10 @@ int load_light(t_data *data, char **line)
 			!((t_light *)(light->content)))
 		return (parse_error("Malloc failed for light"));
 	ft_lstadd_back(&(data->lights), light);
-	extra_info("Light loaded");
-	return (1);
+	return (extra_info("Light loaded"));
 }
 
-int load_camera(t_data *data, char **line)
+int	load_camera(t_data *data, char **line)
 {
 	t_vector3	coor;
 	t_vector3	vector;
@@ -98,7 +96,7 @@ int load_camera(t_data *data, char **line)
 		return (parse_error("Wrong coordinate vector of a camera"));
 	if (!get_vector3(line, &vector))
 		return (parse_error("Wrong orientation vector of a camera"));
-	if (vector.x > 1 || vector.y > 1 ||vector.z > 1 ||
+	if (vector.x > 1 || vector.y > 1 || vector.z > 1 ||
 		vector.x < -1 || vector.y < -1 || vector.z < -1)
 		return (parse_error("Camera orienation values not between [-1.0;1.0]"));
 	skip_whitespace(line);

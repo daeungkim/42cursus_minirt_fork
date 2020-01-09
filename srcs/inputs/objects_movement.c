@@ -6,14 +6,14 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/21 17:16:06 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/22 14:50:04 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 13:38:24 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 #include "key.h"
 
-void change_centre_y(void *obj, short id, double dist)
+void	change_centre_y(void *obj, short id, double dist)
 {
 	if (id == e_sphere)
 		((t_sphere *)obj)->centre.y += dist;
@@ -37,7 +37,7 @@ void change_centre_y(void *obj, short id, double dist)
 	}
 }
 
-void change_centre_z(void *obj, short id, double dist)
+void	change_centre_z(void *obj, short id, double dist)
 {
 	if (id == e_sphere)
 		((t_sphere *)obj)->centre.z += dist;
@@ -61,7 +61,7 @@ void change_centre_z(void *obj, short id, double dist)
 	}
 }
 
-void change_centre_x(void *obj, short id, double dist)
+void	change_centre_x(void *obj, short id, double dist)
 {
 	if (id == e_sphere)
 		((t_sphere *)obj)->centre.x += dist;
@@ -85,7 +85,7 @@ void change_centre_x(void *obj, short id, double dist)
 	}
 }
 
-int handle_object_movement(t_data *data, int key)
+int		handle_object_movement(t_data *data, int key)
 {
 	t_vector3 pos;
 

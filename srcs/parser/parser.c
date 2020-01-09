@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 12:05:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/18 18:01:52 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 13:50:07 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ void	populate_functions(int (*tab[256][256])(t_data *, char **))
 	tab['c']['y'] = &load_cylinder;
 	tab['p']['y'] = &load_pyramid;
 }
-int load_line(t_data *data, char *line)
+
+int		load_line(t_data *data, char *line)
 {
 	int (*parse_functions[256][256])(t_data *d, char **l);
 
@@ -61,21 +62,14 @@ int load_line(t_data *data, char *line)
 	if (ft_strlen(line) < 2)
 		return (1);
 	if (*line == '#')
-	 	return (1);
+		return (1);
 	if (is_white_space(line[1]))
-	{
-		if (!parse_functions[(int)*line][0](data, &line))
-			return (0);
-	}
+		return (parse_functions[(int)*line][0](data, &line));
 	else
-	{
-		if (!parse_functions[(int)*line][(int)line[1]](data, &line))
-			return (0);
-	}
-	return (1);
+		return (parse_functions[(int)*line][(int)line[1]](data, &line));
 }
 
-int load_data(t_data *data, char *rt_file)
+int		load_data(t_data *data, char *rt_file)
 {
 	int		fd;
 	int		ret;
@@ -96,7 +90,7 @@ int load_data(t_data *data, char *rt_file)
 			extra_info("Parsing stopped.");
 			free(line);
 			close(fd);
-			return  (0);
+			return (0);
 		}
 		free(line);
 	}

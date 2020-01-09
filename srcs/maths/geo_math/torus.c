@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/17 10:15:01 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/25 22:05:35 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 13:26:01 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,14 @@ int raytrace_torus1(t_rt_param *par)
 	t_quartic	q;
 	t_vector3	o;
 	int 		sol;
-	t_orus *t;
+	t_orus		*t;
 
 	t = par->object;
 
 	o = sub_vect(par->origin, t->centre);
 	double a = 1 - pow(dot(par->ray, t->normal), 2);
-	double b = 2 * (dot(o, par->ray) - dot(t->normal, o) * dot(t->normal, par->ray));
+	double b = 2 * (dot(o, par->ray) -
+			dot(t->normal, o) * dot(t->normal, par->ray));
 	double c = dot_same(o) - dot(t->normal, o) * dot(t->normal, par->ray);
 	double d = dot_same(o) + pow(t->o_dia, 2) - pow(t->i_dia, 2);
 	q.a = 1;
@@ -32,12 +33,6 @@ int raytrace_torus1(t_rt_param *par)
 	q.d = q.b * d - 4 * pow(t->o_dia, 2) * b;
 	q.e = d * d - 4 * pow(t->o_dia, 2) * c;
 	sol = solve_quartic(q, par);
-	//printf("a = %g | b = %g | c = %g | d = %g | e = %g\n", q.a, q.b, q.c, q.d, q.e);
-	//printf("%d real solutions\n",sol);
-	// if (par->v && par->v_2)
-    //     printf("1st root = %g\n2nd root = %g\n", par->i, par->i_2);
-    // if (par->v_3 && par->v_4)
-    //     printf("1st root = %g\n2nd root = %g\n", par->i_3, par->i_4);
 	if (sol >= 2)
 	{
 		par->v = 1;
@@ -81,11 +76,9 @@ int raytrace_torus(t_rt_param *par)
 	q.c = 4 * dx * dx + 2 * xx + 2 * Rr - 4 * t->o_dia * t->o_dia * (1 - dv * dv);
 	q.d = 4 * dx * xx + 4 * Rr * dx - 8 * t->o_dia * t->o_dia * (dx - dv * xv);
 	q.e = xx * xx + Rr * Rr + 2 * Rr * xx - 4 * t->o_dia * t->o_dia * (xx - xv * xv);
-
 	sol = solve_quartic(q, par);
 	if (sol >= 2)
 	{
-		//printf("a = %g\nb = %g\nc = %g\nd = %g\ne = %g\n", q.a, q.b, q.c, q.d, q.e);
 		par->v = 1;
 		par->v_2 = 1;
 		if (par->i > par->i_2)
@@ -111,7 +104,7 @@ int raytrace_torus(t_rt_param *par)
 
 t_vector3 normal_vector_torus1(t_vector3 point, void *tor)
 {
-	t_orus	*t;
+	t_orus		*t;
 	double		k;
 	double		m;
 	t_vector3	a;
@@ -127,7 +120,7 @@ t_vector3 normal_vector_torus1(t_vector3 point, void *tor)
 
 t_vector3 normal_vector_torus(t_vector3 point, void *tor)
 {
-	t_orus	*t;
+	t_orus		*t;
 	double		k;
 	t_vector3	a;
 	t_vector3	pr;

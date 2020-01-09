@@ -6,14 +6,14 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 13:46:39 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/05 18:26:51 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 13:33:38 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 #include <math.h>
 
-void d_swap(double *a, double *b)
+void	d_swap(double *a, double *b)
 {
 	double t;
 
@@ -22,12 +22,12 @@ void d_swap(double *a, double *b)
 	*b = t;
 }
 
-double solve_poly_2(double a, double b)
+double	solve_poly_2(double a, double b)
 {
 	return (a * a + b * b + 2 * (a * b));
 }
 
-double to_rad(double deg)
+double	to_rad(double deg)
 {
 	return (deg * M_PI / 180.0);
 }

@@ -6,21 +6,21 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/03 17:26:20 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/03 17:26:51 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 13:40:40 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 #include "key.h"
 
-int proper_exit(t_data *data)
+int	proper_exit(t_data *data)
 {
 	mlx_destroy_window(data->mlx_ptr, data->mlx_win);
 	exit(EXIT_SUCCESS);
 	return (0);
 }
 
-int key_release(int key, t_data *data)
+int	key_release(int key, t_data *data)
 {
 	if (key == KEY_ESC)
 		proper_exit(data);
@@ -43,7 +43,7 @@ int key_release(int key, t_data *data)
 	return (0);
 }
 
-int handle_click(int button, int x, int y, t_data *data)
+int	handle_click(int button, int x, int y, t_data *data)
 {
 	if (button == LFT_MOUSE)
 	{

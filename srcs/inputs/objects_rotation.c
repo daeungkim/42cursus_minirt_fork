@@ -6,14 +6,14 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/10 15:41:41 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/22 14:48:16 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 13:53:28 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 #include "key.h"
 
-void change_obj_normal_x(void *obj, short id, double val)
+void	change_obj_normal_x(void *obj, short id, double val)
 {
 	if (id == e_plane)
 	{
@@ -30,24 +30,10 @@ void change_obj_normal_x(void *obj, short id, double val)
 		((t_disk *)obj)->orient.x += val;
 		recalc_dk_norm(obj);
 	}
-	if (id == e_cyl)
-	{
-		((t_cylindre *)obj)->real_ori.x += val;
-		recalc_cy_norm(obj);
-	}
-	if (id == e_cone)
-	{
-		((t_cone *)obj)->orient.x += val;
-		recalc_cone_norm(obj);
-	}
-	if (id == e_torus)
-	{
-		((t_orus *)obj)->orient.x += val;
-		recalc_torus_norm(obj);
-	}
+	change_obj_normal_x_2(obj, id, val);
 }
 
-void change_obj_normal_y(void *obj, short id, double val)
+void	change_obj_normal_y(void *obj, short id, double val)
 {
 	if (id == e_plane)
 	{
@@ -64,24 +50,10 @@ void change_obj_normal_y(void *obj, short id, double val)
 		((t_disk *)obj)->orient.y += val;
 		recalc_dk_norm(obj);
 	}
-	if (id == e_cyl)
-	{
-		((t_cylindre *)obj)->real_ori.y += val;
-		recalc_cy_norm(obj);
-	}
-	if (id == e_cone)
-	{
-		((t_cone *)obj)->orient.y += val;
-		recalc_cone_norm(obj);
-	}
-	if (id == e_torus)
-	{
-		((t_orus *)obj)->orient.y += val;
-		recalc_torus_norm(obj);
-	}
+	change_obj_normal_y_2(obj, id, val);
 }
 
-void change_obj_normal_z(void *obj, short id, double val)
+void	change_obj_normal_z(void *obj, short id, double val)
 {
 	if (id == e_plane)
 	{
@@ -98,24 +70,10 @@ void change_obj_normal_z(void *obj, short id, double val)
 		((t_disk *)obj)->orient.z += val;
 		recalc_dk_norm(obj);
 	}
-	if (id == e_cyl)
-	{
-		((t_cylindre *)obj)->real_ori.z += val;
-		recalc_cy_norm(obj);
-	}
-	if (id == e_cone)
-	{
-		((t_cone *)obj)->orient.z += val;
-		recalc_cone_norm(obj);
-	}
-	if (id == e_torus)
-	{
-		((t_orus *)obj)->orient.z += val;
-		recalc_torus_norm(obj);
-	}
+	change_obj_normal_z_2(obj, id, val);
 }
 
-int handle_object_rotation(t_data *data, int key)
+int		handle_object_rotation(t_data *data, int key)
 {
 	short type;
 

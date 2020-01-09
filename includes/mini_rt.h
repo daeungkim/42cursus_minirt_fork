@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/03 17:28:54 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 13:52:08 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include "mlx.h"
 
 # define SCREEN_L 10
-# define CORES 12
+# define CORES 4
 
 enum	obj_type	{e_sphere = 0, e_plane = 1, e_sq = 2, e_tri = 3, e_cyl = 4,
 					e_disk = 5, e_cone = 6, e_torus = 7};	
@@ -407,6 +407,9 @@ void		recalc_pl_norm(t_plane *pl);
 void		recalc_cy_norm(t_cylindre *cy);
 void		recalc_cone_norm(t_cone *co);
 void		recalc_torus_norm(t_orus *to);
+void		change_obj_normal_x_2(void *obj, short id, double val);
+void		change_obj_normal_y_2(void *obj, short id, double val);
+void		change_obj_normal_z_2(void *obj, short id, double val);
 
 //rgb functions
 int			get_blue(int colour);

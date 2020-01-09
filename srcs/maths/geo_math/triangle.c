@@ -6,23 +6,23 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 17:33:32 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/07 21:00:50 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 13:22:47 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 
-t_vector3 define_tri_plane(t_vector3 p1, t_vector3 p2, t_vector3 p3)
+t_vector3	define_tri_plane(t_vector3 p1, t_vector3 p2, t_vector3 p3)
 {
-    t_vector3 ab;
-    t_vector3 ac;
+	t_vector3	ab;
+	t_vector3	ac;
 
-    ab = direction_vector(p1, p2);
-    ac = direction_vector(p1, p3);
-    return (normalise_vector(cross_prod(ac, ab)));
+	ab = direction_vector(p1, p2);
+	ac = direction_vector(p1, p3);
+	return (normalise_vector(cross_prod(ac, ab)));
 }
 
-int	raytrace_triangle(t_rt_param *param)
+int			raytrace_triangle(t_rt_param *param)
 {
 	t_triangle	*tri;
 	double		t;
@@ -35,12 +35,12 @@ int	raytrace_triangle(t_rt_param *param)
 		return (0);
 	param->i = t / denom;
 	if (param->i > 0)
-        if (solve_triangle_boundaries(param, tri))
-            return ((param->v = 1));
+		if (solve_triangle_boundaries(param, tri))
+			return ((param->v = 1));
 	return (0);
 }
 
-t_vector3 normal_vector_triangle(t_vector3 point, void *triangle)
+t_vector3	normal_vector_triangle(t_vector3 point, void *triangle)
 {
 	t_triangle	*tr;
 

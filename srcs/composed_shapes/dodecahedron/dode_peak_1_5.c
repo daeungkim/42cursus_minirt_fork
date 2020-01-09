@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 19:53:04 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/11 20:43:30 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 14:05:57 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ t_list	*generate_triangles_peak_1(t_vector3 *v, t_vector3 *p, int colour)
 {
 	t_list *ele;
 	t_list *new;
+
 	ele = 0;
 	new = ft_lstnew(tri_factory(p[0], v[0], v[16], colour));
 	if (!new || !(new->content))
@@ -45,6 +46,7 @@ t_list	*generate_triangles_peak_2(t_vector3 *v, t_vector3 *p, int colour)
 {
 	t_list *ele;
 	t_list *new;
+
 	ele = 0;
 	new = ft_lstnew(tri_factory(p[1], v[0], v[16], colour));
 	if (!new || !(new->content))
@@ -73,6 +75,7 @@ t_list	*generate_triangles_peak_3(t_vector3 *v, t_vector3 *p, int colour)
 {
 	t_list *ele;
 	t_list *new;
+
 	ele = 0;
 	new = ft_lstnew(tri_factory(p[2], v[17], v[16], colour));
 	if (!new || !(new->content))
@@ -101,6 +104,7 @@ t_list	*generate_triangles_peak_4(t_vector3 *v, t_vector3 *p, int colour)
 {
 	t_list *ele;
 	t_list *new;
+
 	ele = 0;
 	new = ft_lstnew(tri_factory(p[3], v[11], v[3], colour));
 	if (!new || !(new->content))
@@ -129,6 +133,7 @@ t_list	*generate_triangles_peak_5(t_vector3 *v, t_vector3 *p, int colour)
 {
 	t_list *ele;
 	t_list *new;
+
 	ele = 0;
 	new = ft_lstnew(tri_factory(p[4], v[15], v[12], colour));
 	if (!new || !(new->content))

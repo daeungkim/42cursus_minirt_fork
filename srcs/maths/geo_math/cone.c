@@ -6,18 +6,18 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 13:15:01 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/03 15:07:37 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 13:21:41 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 
-static int check_cone_solve(t_rt_param *param, t_cone *cone)
+static int	check_cone_solve(t_rt_param *param, t_cone *cone)
 {
 	t_vector3	d_x_t;
 	t_vector3	abc;
 	double		k;
-	int 		sol;
+	int			sol;
 
 	k = cone->diametre / (2.0 * cone->height);
 	d_x_t.x = dot(param->ray, cone->normal);
@@ -35,9 +35,9 @@ static int check_cone_solve(t_rt_param *param, t_cone *cone)
 	return (sol);
 }
 
-int	raytrace_cone(t_rt_param *param)
+int			raytrace_cone(t_rt_param *param)
 {
-	t_cone	*cone;
+	t_cone		*cone;
 	double		h1;
 	double		h2;
 
@@ -56,7 +56,7 @@ int	raytrace_cone(t_rt_param *param)
 			(param->v_2 && h2 < cone->height));
 }
 
-t_vector3 normal_vector_cone(t_vector3 point, void *con)
+t_vector3	normal_vector_cone(t_vector3 point, void *con)
 {
 	t_cone		*cone;
 	double		h;

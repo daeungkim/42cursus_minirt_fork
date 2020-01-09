@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/12 17:14:17 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/13 19:17:37 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 14:08:58 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ t_square	*get_sq(t_list *tl)
 	return (((t_geo *)tl->content)->obj);
 }
 
-int create_cube(t_data *data, t_square *sq, int colour, t_vector3 o)
+int			create_cube(t_data *data, t_square *sq, int colour, t_vector3 o)
 {
-	t_list      *tl;
-	t_vector3   new;
-	t_square 	*nsq;
+	t_list		*tl;
+	t_vector3	new;
+	t_square	*nsq;
 
 	if (!(tl = ft_lstnew(square_factory(sq->centre, o, sq->height, colour))) ||
 		!((t_geo *)(tl->content)))
@@ -46,12 +46,12 @@ int create_cube(t_data *data, t_square *sq, int colour, t_vector3 o)
 	return (1);
 }
 
-int create_cube_2(t_data *data, t_square *sq, int colour)
+int			create_cube_2(t_data *data, t_square *sq, int colour)
 {
-	t_vector3   o;
-	t_list      *tl;
-	t_square 	*nsq;
-	t_vector3   new;
+	t_vector3	o;
+	t_list		*tl;
+	t_square	*nsq;
+	t_vector3	new;
 
 	o = sq->orient;
 	if (!(tl = ft_lstnew(square_factory(sq->centre, o, sq->height, colour))) ||

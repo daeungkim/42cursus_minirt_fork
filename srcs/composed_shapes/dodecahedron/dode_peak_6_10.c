@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 19:53:07 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/11 20:44:21 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 14:07:28 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ t_list	*generate_triangles_peak_6(t_vector3 *v, t_vector3 *p, int colour)
 {
 	t_list *ele;
 	t_list *new;
+
 	ele = 0;
 	new = ft_lstnew(tri_factory(p[5], v[9], v[1], colour));
 	if (!new || !(new->content))
@@ -40,10 +41,12 @@ t_list	*generate_triangles_peak_6(t_vector3 *v, t_vector3 *p, int colour)
 	ft_lstadd_back(&(ele), new);
 	return (ele);
 }
+
 t_list	*generate_triangles_peak_7(t_vector3 *v, t_vector3 *p, int colour)
 {
 	t_list *ele;
 	t_list *new;
+
 	ele = 0;
 	new = ft_lstnew(tri_factory(p[6], v[10], v[2], colour));
 	if (!new || !(new->content))
@@ -67,10 +70,12 @@ t_list	*generate_triangles_peak_7(t_vector3 *v, t_vector3 *p, int colour)
 	ft_lstadd_back(&(ele), new);
 	return (ele);
 }
+
 t_list	*generate_triangles_peak_8(t_vector3 *v, t_vector3 *p, int colour)
 {
 	t_list *ele;
 	t_list *new;
+
 	ele = 0;
 	new = ft_lstnew(tri_factory(p[7], v[15], v[12], colour));
 	if (!new || !(new->content))
@@ -94,10 +99,12 @@ t_list	*generate_triangles_peak_8(t_vector3 *v, t_vector3 *p, int colour)
 	ft_lstadd_back(&(ele), new);
 	return (ele);
 }
+
 t_list	*generate_triangles_peak_9(t_vector3 *v, t_vector3 *p, int colour)
 {
 	t_list *ele;
 	t_list *new;
+
 	ele = 0;
 	new = ft_lstnew(tri_factory(p[8], v[15], v[7], colour));
 	if (!new || !(new->content))
@@ -121,10 +128,12 @@ t_list	*generate_triangles_peak_9(t_vector3 *v, t_vector3 *p, int colour)
 	ft_lstadd_back(&(ele), new);
 	return (ele);
 }
+
 t_list	*generate_triangles_peak_10(t_vector3 *v, t_vector3 *p, int colour)
 {
 	t_list *ele;
 	t_list *new;
+
 	ele = 0;
 	new = ft_lstnew(tri_factory(p[9], v[7], v[8], colour));
 	if (!new || !(new->content))

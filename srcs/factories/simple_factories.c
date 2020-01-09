@@ -6,13 +6,13 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/18 18:04:15 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/19 19:55:53 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 13:55:49 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 
-t_geo *sphere_factory(t_vector3 centre, double diametre, int colour)
+t_geo	*sphere_factory(t_vector3 centre, double diametre, int colour)
 {
 	t_sphere	*sp;
 	t_geo		*sp_obj;
@@ -33,9 +33,9 @@ t_geo *sphere_factory(t_vector3 centre, double diametre, int colour)
 	return (sp_obj);
 }
 
-t_geo *plane_factory(t_vector3 centre, t_vector3 orient, int colour)
+t_geo	*plane_factory(t_vector3 centre, t_vector3 orient, int colour)
 {
-	t_plane *plane;
+	t_plane	*plane;
 	t_geo	*plane_obj;
 
 	if (!(plane = malloc(sizeof(t_plane))))
@@ -55,10 +55,11 @@ t_geo *plane_factory(t_vector3 centre, t_vector3 orient, int colour)
 	return (plane_obj);
 }
 
-t_geo *square_factory(t_vector3 centre, t_vector3 orient, double height, int colour)
+t_geo	*square_factory(t_vector3 centre, t_vector3 orient,
+			double height, int colour)
 {
-	t_square *square;
-	t_geo	*square_obj;
+	t_square	*square;
+	t_geo		*square_obj;
 
 	if (!(square = malloc(sizeof(t_square))))
 		return (NULL);
@@ -80,10 +81,10 @@ t_geo *square_factory(t_vector3 centre, t_vector3 orient, double height, int col
 	return (square_obj);
 }
 
-t_geo *tri_factory(t_vector3 p1, t_vector3 p2, t_vector3 p3, int colour)
+t_geo	*tri_factory(t_vector3 p1, t_vector3 p2, t_vector3 p3, int colour)
 {
-	t_triangle *triangle;
-	t_geo	*tri_obj;
+	t_triangle	*triangle;
+	t_geo		*tri_obj;
 
 	if (!(triangle = malloc(sizeof(t_square))))
 		return (NULL);
@@ -101,9 +102,10 @@ t_geo *tri_factory(t_vector3 p1, t_vector3 p2, t_vector3 p3, int colour)
 	return (tri_obj);
 }
 
-t_geo *disk_factory(t_vector3 centre, t_vector3 orient, double diametre, int colour)
+t_geo	*disk_factory(t_vector3 centre, t_vector3 orient,
+			double diametre, int colour)
 {
-	t_disk *disk;
+	t_disk	*disk;
 	t_geo	*disk_obj;
 
 	if (!(disk = malloc(sizeof(t_disk))))

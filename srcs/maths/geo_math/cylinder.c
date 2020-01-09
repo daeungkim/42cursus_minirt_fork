@@ -6,18 +6,18 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 16:41:07 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/16 16:17:15 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 13:23:15 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 #include <stdio.h>
 
-static int check_cyl_solve(t_rt_param *param, t_cylindre *cyl)
+static int	check_cyl_solve(t_rt_param *param, t_cylindre *cyl)
 {
 	t_vector3	d_x_t;
 	t_vector3	abc;
-	int 		sol;
+	int			sol;
 
 	d_x_t.x = dot(param->ray, cyl->orient);
 	d_x_t.y = dot(sub_vect(param->origin, cyl->centre), cyl->orient);
@@ -34,7 +34,7 @@ static int check_cyl_solve(t_rt_param *param, t_cylindre *cyl)
 	return (sol);
 }
 
-int	raytrace_cyl(t_rt_param *param)
+int			raytrace_cyl(t_rt_param *param)
 {
 	t_cylindre	*cyl;
 	double		h1;
@@ -55,7 +55,7 @@ int	raytrace_cyl(t_rt_param *param)
 			(param->v_2 && h2 < cyl->height));
 }
 
-t_vector3 normal_vector_cyl(t_vector3 point, void *cyl)
+t_vector3	normal_vector_cyl(t_vector3 point, void *cyl)
 {
 	t_cylindre	*cy;
 	double		h;

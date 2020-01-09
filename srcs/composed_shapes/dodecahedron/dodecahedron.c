@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 16:47:49 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/11 20:37:22 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 14:07:50 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 #include <math.h>
 #include <stdio.h>
 
-void	compute_peaks(t_vector3 *planes, t_vector3 *peaks, double r, t_vector3 origin)
+void	compute_peaks(t_vector3 *planes, t_vector3 *peaks,
+		double r, t_vector3 origin)
 {
 	int i;
 
@@ -23,7 +24,8 @@ void	compute_peaks(t_vector3 *planes, t_vector3 *peaks, double r, t_vector3 orig
 		peaks[i] = point_from_ray(origin, planes[i], r * 2);
 }
 
-t_list	*create_dodecahedron(double radius, t_vector3 orient, t_vector3 centre, int colour)
+t_list	*create_dodecahedron(double radius, t_vector3 orient,
+		t_vector3 centre, int colour)
 {
 	t_vector3	v[20];
 	t_vector3	n[12];

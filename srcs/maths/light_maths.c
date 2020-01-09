@@ -6,13 +6,13 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/03 15:43:43 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/03 15:44:18 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 13:32:19 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 
-t_vector3 angle_cases(t_data data, t_geo *rt_obj, t_vector3 inter_point,
+t_vector3	angle_cases(t_data data, t_geo *rt_obj, t_vector3 inter_point,
 					t_light *light)
 {
 	t_rt_param	param1;
@@ -40,7 +40,9 @@ t_vector3 angle_cases(t_data data, t_geo *rt_obj, t_vector3 inter_point,
 /*
 ** Will need a lot of refactoring
 */
-double get_light_angle(t_data data, t_light *light, double t, t_geo *rt_obj)
+
+double		get_light_angle(t_data data, t_light *light, double t,
+			t_geo *rt_obj)
 {
 	t_vector3	inter_point;
 	t_vector3	norm_vect;
@@ -64,8 +66,9 @@ double get_light_angle(t_data data, t_light *light, double t, t_geo *rt_obj)
 /*
 ** Shit's too long. REFACTOR YOU NOOB
 */
-int is_light_obstructed(t_data data, t_geo *rt_obj, t_light *light)
-{	
+
+int			is_light_obstructed(t_data data, t_geo *rt_obj, t_light *light)
+{
 	t_vector3	start;
 	t_vector3	light_ray;
 	t_list		*ele;
@@ -89,7 +92,7 @@ int is_light_obstructed(t_data data, t_geo *rt_obj, t_light *light)
 			}
 			else if (raytrace(ele->content, &param))
 			{
-				if (distance(start, light->pos) > 
+				if (distance(start, light->pos) >
 				distance(light->pos, point_from_ray(start, light_ray, param.i > 0 ? param.i : param.i_2)) &&
 				distance(start, light->pos) > distance (start, point_from_ray(start, light_ray, param.i > 0 ? param.i : param.i_2)))
 					return (1);
@@ -131,13 +134,13 @@ int is_light_obstructed(t_data data, t_geo *rt_obj, t_light *light)
 	return (0);
 }
 
-int calc_colour_from_light(t_data data, t_geo *rt_obj)
+int			calc_colour_from_light(t_data data, t_geo *rt_obj)
 {
-	t_list *first;
-	t_light *light;
-	double ang;
-	int final_light;
-	int l_val;
+	t_list	*first;
+	t_light	*light;
+	double	ang;
+	int		final_light;
+	int		l_val;
 
 	final_light = 0;
 	first = data.lights;

@@ -6,13 +6,14 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 17:07:36 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/22 14:45:57 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 13:55:34 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 
-t_geo *cyl_factory(t_vector3 centre, t_vector3 orient, t_vector3 dia_height, int colour)
+t_geo	*cyl_factory(t_vector3 centre, t_vector3 orient,
+			t_vector3 dia_height, int colour)
 {
 	t_cylindre	*cyl;
 	t_geo		*cyl_obj;
@@ -34,7 +35,8 @@ t_geo *cyl_factory(t_vector3 centre, t_vector3 orient, t_vector3 dia_height, int
 	return (cyl_obj);
 }
 
-t_geo *cone_factory(t_vector3 centre, t_vector3 orient, t_vector3 dia_height, int colour)
+t_geo	*cone_factory(t_vector3 centre, t_vector3 orient,
+		t_vector3 dia_height, int colour)
 {
 	t_cone	*cone;
 	t_geo	*cone_obj;
@@ -56,7 +58,8 @@ t_geo *cone_factory(t_vector3 centre, t_vector3 orient, t_vector3 dia_height, in
 	return (cone_obj);
 }
 
-t_geo *torus_factory(t_vector3 centre, t_vector3 orient, t_vector3 i_o, int colour)
+t_geo	*torus_factory(t_vector3 centre, t_vector3 orient,
+			t_vector3 i_o, int colour)
 {
 	t_orus	*torus;
 	t_geo	*torus_obj;

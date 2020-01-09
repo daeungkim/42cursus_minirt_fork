@@ -6,13 +6,13 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/18 18:04:33 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/18 18:05:26 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 13:54:58 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 
-t_camera *camera_factory(t_vector3 pos, t_vector3 orient, double fov)
+t_camera	*camera_factory(t_vector3 pos, t_vector3 orient, double fov)
 {
 	t_camera *cam;
 
@@ -31,7 +31,7 @@ t_camera *camera_factory(t_vector3 pos, t_vector3 orient, double fov)
 	return (cam);
 }
 
-t_light *light_factory(t_vector3 pos, double ratio, int colour)
+t_light		*light_factory(t_vector3 pos, double ratio, int colour)
 {
 	t_light *light;
 

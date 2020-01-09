@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2020/01/03 17:27:07 by cjaimes          ###   ########.fr        #
+#    Updated: 2020/01/09 13:42:26 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ SRC			=	main.c \
 				inputs/objects_rotation.c \
 				inputs/objects_movement.c \
 				inputs/objects_normal_calc.c \
+				inputs/objects_normal_calc_2.c \
 				parser/parser.c \
 				parser/helper.c \
 				parser/helper_2.c \
@@ -50,6 +51,7 @@ SRC			=	main.c \
 				maths/vector_maths/vector_maths2.c \
 				maths/vector_maths/vector_maths3.c \
 				maths/colour_functions.c \
+				maths/colour_functions_2.c \
 				maths/ray_maths.c \
 				maths/light_maths.c \
 				maths/geo_math/geo.c \

@@ -6,17 +6,17 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/03 17:23:56 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/03 17:28:49 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 13:57:39 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 
-void *compute_render_t(void *data)
+void	*compute_render_t(void *data)
 {
-	int i;
-	int j;
-	t_data *d;
+	int			i;
+	int			j;
+	t_data		*d;
 
 	d = data;
 	i = d->start - 1;
@@ -40,12 +40,12 @@ void *compute_render_t(void *data)
 	return (NULL);
 }
 
-void multithread_render(t_data *data)
+void	multithread_render(t_data *data)
 {
 	pthread_t	th[CORES];
 	t_data		dups[CORES];
-	int i;
-	
+	int			i;
+
 	i = -1;
 	while (++i < CORES)
 	{

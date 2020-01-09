@@ -6,14 +6,14 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 15:24:19 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/21 17:10:53 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 13:40:56 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 #include "key.h"
 
-void apply_rotation(t_camera *cam)
+void		apply_rotation(t_camera *cam)
 {
 	if (cam->orient.x != 0)
 	{
@@ -32,7 +32,7 @@ void apply_rotation(t_camera *cam)
 	}
 }
 
-t_camera *get_cam(t_data *data, int index)
+t_camera	*get_cam(t_data *data, int index)
 {
 	t_list *cam;
 
@@ -45,7 +45,7 @@ t_camera *get_cam(t_data *data, int index)
 	return (cam->content);
 }
 
-int change_camera(t_data *data, int key)
+int			change_camera(t_data *data, int key)
 {
 	if (data->max_cam <= 1)
 		return (0);
@@ -63,24 +63,24 @@ int change_camera(t_data *data, int key)
 	return (0);
 }
 
-int handle_camera_movement(t_data *data, int key)
+int			handle_camera_movement(t_data *data, int key)
 {
-	t_vector3 pos;
-	t_camera *cam;
+	t_vector3	pos;
+	t_camera	*cam;
 
 	cam = data->current_cam;
 	pos = data->current_cam->pos;
 	if (data->render_mode)
 		return (0);
-    if (key == KEY_Q)
+	if (key == KEY_Q)
 		data->current_cam->pos = point_from_ray(pos, cam->vector_y, 0.3);
-    else if (key == KEY_E)
+	else if (key == KEY_E)
 		data->current_cam->pos = point_from_ray(pos, cam->vector_y, -0.3);
-    else if (key == KEY_D)
+	else if (key == KEY_D)
 		data->current_cam->pos = point_from_ray(pos, cam->vector_z, 0.3);
 	else if (key == KEY_A)
 		data->current_cam->pos = point_from_ray(pos, cam->vector_z, -0.3);
-    else if (key == KEY_W)
+	else if (key == KEY_W)
 		data->current_cam->pos = point_from_ray(pos, cam->vector_x, 0.3);
 	else if (key == KEY_S)
 		data->current_cam->pos = point_from_ray(pos, cam->vector_x, -0.3);
@@ -91,23 +91,22 @@ int handle_camera_movement(t_data *data, int key)
 	return (1);
 }
 
-int handle_camera_rotation(t_data *data, int key)
+int			handle_camera_rotation(t_data *data, int key)
 {
 	data->current_cam->orient.x = 0;
 	data->current_cam->orient.y = 0;
 	data->current_cam->orient.z = 0;
-
 	if (data->render_mode)
 		return (0);
-    if (key == KEY_U)
+	if (key == KEY_U)
 		data->current_cam->orient.x += 0.05;
-    else if (key == KEY_O)
+	else if (key == KEY_O)
 		data->current_cam->orient.x -= 0.05;
-    else if (key == KEY_I)
+	else if (key == KEY_I)
 		data->current_cam->orient.z += 0.05;
 	else if (key == KEY_K)
 		data->current_cam->orient.z -= 0.05;
-    else if (key == KEY_J)
+	else if (key == KEY_J)
 		data->current_cam->orient.y += 0.05;
 	else if (key == KEY_L)
 		data->current_cam->orient.y -= 0.05;

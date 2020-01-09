@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/30 15:35:22 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/04 18:31:09 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 13:22:08 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 ** ray can be expressed with R = O + Dt with O being camera coordinates
 ** and D its normalised orientation vector
 */
-int	raytrace_sphere(t_rt_param *param)
+
+int			raytrace_sphere(t_rt_param *param)
 {
 	t_vector3	abc;
 	t_sphere	*sp;
@@ -38,9 +39,9 @@ int	raytrace_sphere(t_rt_param *param)
 	return (1);
 }
 
-t_vector3 normal_vector_sphere(t_vector3 point, void *sphere)
+t_vector3	normal_vector_sphere(t_vector3 point, void *sphere)
 {
-	t_vector3 normal;
+	t_vector3	normal;
 	t_sphere	*sp;
 
 	sp = (t_sphere *)sphere;

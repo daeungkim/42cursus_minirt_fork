@@ -6,20 +6,20 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/18 17:53:59 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/18 17:56:53 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 12:13:49 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 
-int load_sphere(t_data *data, char **line)
+int	load_sphere(t_data *data, char **line)
 {
-	t_vector3	centre;
-	double		diametre;
-	int 		colour;
-	t_list		*sp;
-	
-	(*line)+= 2;
+	t_vector3		centre;
+	double			diametre;
+	t_list			*sp;
+	int				colour;
+
+	(*line) += 2;
 	if (!get_vector3(line, &centre))
 		return (parse_error("Wrong centre vector of a sphere"));
 	skip_whitespace(line);
@@ -35,19 +35,19 @@ int load_sphere(t_data *data, char **line)
 	return (1);
 }
 
-int load_plane(t_data *data, char **line)
+int	load_plane(t_data *data, char **line)
 {
 	t_vector3	centre;
 	t_vector3	orient;
-	int 		colour;
 	t_list		*pl;
-	
-	(*line)+= 2;
+	int			colour;
+
+	(*line) += 2;
 	if (!get_vector3(line, &centre))
 		return (parse_error("Wrong centre vector of a plane"));
 	if (!get_vector3(line, &orient))
 		return (parse_error("Wrong orientation vector of a plane"));
-	if (orient.x > 1 || orient.y > 1 ||orient.z > 1 ||
+	if (orient.x > 1 || orient.y > 1 || orient.z > 1 ||
 		orient.x < -1 || orient.y < -1 || orient.z < -1)
 		return (parse_error("Plane orienation values not between [-1.0;1.0]"));
 	if (!get_rgb(line, &colour, 0))
@@ -60,20 +60,20 @@ int load_plane(t_data *data, char **line)
 	return (1);
 }
 
-int load_square(t_data *data, char **line)
+int	load_square(t_data *data, char **line)
 {
 	t_vector3	centre;
 	t_vector3	orient;
 	double		height;
-	int 		colour;
+	int			colour;
 	t_list		*sq;
-	
-	(*line)+= 2;
+
+	(*line) += 2;
 	if (!get_vector3(line, &centre))
 		return (parse_error("Wrong centre vector of a square"));
 	if (!get_vector3(line, &orient))
 		return (parse_error("Wrong orientation vector of a square"));
-	if (orient.x > 1 || orient.y > 1 ||orient.z > 1 ||
+	if (orient.x > 1 || orient.y > 1 || orient.z > 1 ||
 		orient.x < -1 || orient.y < -1 || orient.z < -1)
 		return (parse_error("Square orientation not between [-1.0;1.0]"));
 	skip_whitespace(line);
@@ -89,20 +89,20 @@ int load_square(t_data *data, char **line)
 	return (1);
 }
 
-int load_disk(t_data *data, char **line)
+int	load_disk(t_data *data, char **line)
 {
 	t_vector3	centre;
 	t_vector3	orient;
 	double		diametre;
-	int 		colour;
 	t_list		*dk;
-	
-	(*line)+= 2;
+	int			colour;
+
+	(*line) += 2;
 	if (!get_vector3(line, &centre))
 		return (parse_error("Wrong centre vector of a disk"));
 	if (!get_vector3(line, &orient))
 		return (parse_error("Wrong orientation vector of a disk"));
-	if (orient.x > 1 || orient.y > 1 ||orient.z > 1 ||
+	if (orient.x > 1 || orient.y > 1 || orient.z > 1 ||
 		orient.x < -1 || orient.y < -1 || orient.z < -1)
 		return (parse_error("Disk orientation not between [-1.0;1.0]"));
 	skip_whitespace(line);
@@ -118,20 +118,20 @@ int load_disk(t_data *data, char **line)
 	return (1);
 }
 
-int load_triangle(t_data *data, char **line)
+int	load_triangle(t_data *data, char **line)
 {
 	t_vector3	p1;
 	t_vector3	p2;
 	t_vector3	p3;
-	int 		colour;
 	t_list		*tri;
-	
-	(*line)+= 2;
+	int			colour;
+
+	(*line) += 2;
 	if (!get_vector3(line, &p1))
 		return (parse_error("Wrong p1 of a triangle"));
 	if (!get_vector3(line, &p2))
 		return (parse_error("Wrong p2 of a triangle"));
-		if (!get_vector3(line, &p3))
+	if (!get_vector3(line, &p3))
 		return (parse_error("Wrong p3 of a triangle"));
 	if (!get_rgb(line, &colour, 0))
 		return (parse_error("Wrong RGB values for triangle"));

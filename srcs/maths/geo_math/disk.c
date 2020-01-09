@@ -6,13 +6,13 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 14:21:06 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/04 18:34:27 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 13:17:37 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 
-int	raytrace_disk(t_rt_param *param)
+int			raytrace_disk(t_rt_param *param)
 {
 	t_disk	*disk;
 	double	t;
@@ -30,7 +30,7 @@ int	raytrace_disk(t_rt_param *param)
 	return (0);
 }
 
-t_vector3 normal_vector_disk(t_vector3 point, void *disk)
+t_vector3	normal_vector_disk(t_vector3 point, void *disk)
 {
 	t_disk	*dk;
 

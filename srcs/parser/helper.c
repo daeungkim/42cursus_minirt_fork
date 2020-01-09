@@ -6,14 +6,13 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/18 17:48:02 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/18 17:48:46 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 11:26:21 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
-#include <stdio.h>
 
-int parse_error(char *err)
+int		parse_error(char *err)
 {
 	ft_putstr("Error\n");
 	ft_putstr(err);
@@ -21,19 +20,19 @@ int parse_error(char *err)
 	return (0);
 }
 
-int extra_info(char *err)
+int		extra_info(char *err)
 {
 	ft_putstr(err);
 	ft_putstr("\n");
 	return (1);
 }
 
-int is_white_space(char c)
+int		is_white_space(char c)
 {
 	return (c == ' ' || c == '\t');
 }
 
-void skip_whitespace(char **line)
+void	skip_whitespace(char **line)
 {
 	while (is_white_space(**line))
 		(*line)++;

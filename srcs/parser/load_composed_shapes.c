@@ -6,26 +6,26 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/18 17:59:06 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/18 18:00:35 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 12:12:42 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 
-int load_dodecahedron(t_data *data, char **line)
+int	load_dodecahedron(t_data *data, char **line)
 {
 	t_vector3	centre;
 	t_vector3	orient;
 	double		diametre;
-	int 		colour;
+	int			colour;
 	t_list		*tris;
-	
-	(*line)+= 2;
+
+	(*line) += 2;
 	if (!get_vector3(line, &centre))
 		return (parse_error("Wrong centre vector of a dodecahedron"));
 	if (!get_vector3(line, &orient))
 		return (parse_error("Wrong orientation vector of a dodecahedron"));
-	if (orient.x > 1 || orient.y > 1 ||orient.z > 1 ||
+	if (orient.x > 1 || orient.y > 1 || orient.z > 1 ||
 		orient.x < -1 || orient.y < -1 || orient.z < -1)
 		return (parse_error("Dode orientation not between [-1.0;1.0]"));
 	if ((diametre = ft_atof_live(line)) <= 0)
@@ -39,7 +39,7 @@ int load_dodecahedron(t_data *data, char **line)
 	return (1);
 }
 
-int load_cube(t_data *data, char **line)
+int	load_cube(t_data *data, char **line)
 {
 	t_list		*sq;
 	t_geo		*obj;
@@ -61,7 +61,7 @@ int load_cube(t_data *data, char **line)
 	return (1);
 }
 
-int load_pyramid(t_data *data, char **line)
+int	load_pyramid(t_data *data, char **line)
 {
 	double		height;
 	t_list		*sq;

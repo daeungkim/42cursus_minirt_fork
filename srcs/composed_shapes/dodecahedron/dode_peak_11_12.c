@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 19:53:09 by cjaimes           #+#    #+#             */
-/*   Updated: 2019/12/11 20:46:02 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 14:08:19 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ t_list	*generate_triangles_peak_11(t_vector3 *v, t_vector3 *p, int colour)
 {
 	t_list *ele;
 	t_list *new;
+
 	ele = 0;
 	new = ft_lstnew(tri_factory(p[10], v[18], v[19], colour));
 	if (!new || !(new->content))
@@ -45,6 +46,7 @@ t_list	*generate_triangles_peak_12(t_vector3 *v, t_vector3 *p, int colour)
 {
 	t_list *ele;
 	t_list *new;
+
 	ele = 0;
 	new = ft_lstnew(tri_factory(p[11], v[18], v[4], colour));
 	if (!new || !(new->content))
@@ -69,7 +71,7 @@ t_list	*generate_triangles_peak_12(t_vector3 *v, t_vector3 *p, int colour)
 	return (ele);
 }
 
-t_list *generate_tri_1_5(t_vector3 *v, t_vector3 *p, int colour)
+t_list	*generate_tri_1_5(t_vector3 *v, t_vector3 *p, int colour)
 {
 	t_list		*ele;
 	t_list		*new;
@@ -93,7 +95,7 @@ t_list *generate_tri_1_5(t_vector3 *v, t_vector3 *p, int colour)
 	return (ele);
 }
 
-t_list *generate_tri_6_10(t_vector3 *v, t_vector3 *p, int colour)
+t_list	*generate_tri_6_10(t_vector3 *v, t_vector3 *p, int colour)
 {
 	t_list		*ele;
 	t_list		*new;
@@ -117,7 +119,7 @@ t_list *generate_tri_6_10(t_vector3 *v, t_vector3 *p, int colour)
 	return (ele);
 }
 
-t_list *generate_tri_11_12(t_vector3 *v, t_vector3 *p, int colour)
+t_list	*generate_tri_11_12(t_vector3 *v, t_vector3 *p, int colour)
 {
 	t_list		*ele;
 	t_list		*new;
