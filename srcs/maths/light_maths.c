@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/03 15:43:43 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/09 16:15:22 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/09 18:00:41 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,13 @@ double get_valid_t(t_rt_param param)
 int			is_light_obstructed(t_data data, t_geo *rt_obj, t_light *light)
 {
 	t_vector3	start;
+	t_vector3	start_cpy;
 	t_vector3	light_ray;
 	t_list		*ele;
 	t_rt_param	param;
 
 	start = point_from_ray(data.current_cam->pos, data.ray, data.t);
+	start_cpy = start;
 	start = add_vect(start,
 			scalar_vect(get_normal_vector(start, rt_obj, &data), 0.0001));
 	light_ray = normalise_vector(direction_vector(start, light->pos));
@@ -61,7 +63,7 @@ int			is_light_obstructed(t_data data, t_geo *rt_obj, t_light *light)
 		if (raytrace(ele->content, &param))
 		{
 			valid_t = get_valid_t(param);
-			if (distance(start, light->pos) > distance(point_from_ray(start, light_ray, valid_t), light->pos))
+			if (distance(start, light->pos) > distance(point_from_ray(start_cpy, light_ray, valid_t), light->pos))
 				return (1);
 		}
 		ele = ele->next;
