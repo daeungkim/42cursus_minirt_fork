@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/09 14:01:14 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/10 16:55:58 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,32 +68,5 @@ int		main(int ac, char **av)
 	mlx_hook(data.mlx_win, 5, (1L << 0), handle_click, &data);
 	mlx_loop(data.mlx_ptr);
 	mlx_destroy_window(data.mlx_ptr, data.mlx_win);
-	return (0);
-}
-
-int		main1(void)
-{
-	t_quartic	q;
-	t_rt_param	p;
-	int			res;
-
-	q.a = -1.7;
-	q.b = -1.5;
-	q.c = 1.6;
-	q.d = 3.8;
-	q.e = -2.32;
-	p = set_param(create_vector(0, 0, 0),
-		create_vector(0, 0, 0), 0, 0);
-	printf("%d real solutions\n", res = solve_quartic(q, &p));
-	if (p.v && p.v_2)
-		printf("1st root = %g\n2nd root = %g\n", p.i, p.i_2);
-	if (p.v_3 && p.v_4)
-		printf("1st root = %g\n2nd root = %g\n", p.i_3, p.i_4);
-	p = set_param(create_vector(0, 0, 0), create_vector(0, 0, 0), 0, 0);
-	printf("%d real solutions for 2nd\n", res = solve_quartic1(q, &p));
-	if (p.v && p.v_2)
-		printf("1st root = %g\n2nd root = %g\n", p.i, p.i_2);
-	if (p.v_3 && p.v_4)
-		printf("1st root = %g\n2nd root = %g\n", p.i_3, p.i_4);
 	return (0);
 }

@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2020/01/09 13:42:26 by cjaimes          ###   ########.fr        #
+#    Updated: 2020/01/10 16:51:56 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,6 +45,7 @@ SRC			=	main.c \
 				factories/base_factories.c \
 				factories/simple_factories.c \
 				factories/complex_factories.c \
+				maths/quartic.c \
 				maths/math_functions.c \
 				maths/math_functions_2.c \
 				maths/vector_maths/vector_maths.c \

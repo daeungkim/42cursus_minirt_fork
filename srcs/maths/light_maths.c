@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/03 15:43:43 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/09 21:27:45 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/10 10:31:36 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ double		get_light_angle(t_data data, t_light *light, double t,
 								direction_vector(inter_point, light->pos)));
 }
 
-double get_valid_t(t_rt_param param)
+double		get_valid_t(t_rt_param param)
 {
 	double valid;
 
@@ -53,7 +53,7 @@ int			is_light_obstructed(t_data data, t_geo *rt_obj, t_light *light)
 	start = point_from_ray(data.current_cam->pos, data.ray, data.t);
 	light_ray = normalise_vector(direction_vector(start, light->pos));
 	start = add_vect(start,
-			scalar_vect(get_normal_vector(start, rt_obj, &data), 0.0001));
+			scalar_vect(get_normal_vector(start, rt_obj, &data), 0.01));
 	ele = data.objects;
 	while (ele)
 	{
