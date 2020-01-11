@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/21 17:16:06 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/09 13:38:24 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/11 18:03:39 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,6 @@ int		handle_object_movement(t_data *data, int key)
 	t_vector3 pos;
 
 	pos = data->current_cam->pos;
-	if (!data->render_mode)
-		return (0);
 	if (key == KEY_Q)
 		change_centre_y(data->cur_obj->obj, data->cur_obj->obj_type, 0.3);
 	else if (key == KEY_E)

@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/03 15:43:43 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/10 10:31:36 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/11 17:00:56 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,8 @@ double		get_light_angle(t_data data, t_light *light, double t,
 {
 	t_vector3	inter_point;
 	t_vector3	norm_vect;
-	t_camera	*cam;
 
-	cam = data.current_cam;
-	inter_point = point_from_ray(cam->pos, data.ray, t);
+	inter_point = point_from_ray(data.ray_origin, data.ray, t);
 	norm_vect = get_normal_vector(inter_point, rt_obj, &data);
 	return (angle_between_vectors(norm_vect,
 								direction_vector(inter_point, light->pos)));
@@ -50,7 +48,7 @@ int			is_light_obstructed(t_data data, t_geo *rt_obj, t_light *light)
 	t_rt_param	param;
 	double		valid_t;
 
-	start = point_from_ray(data.current_cam->pos, data.ray, data.t);
+	start = point_from_ray(data.ray_origin, data.ray, data.t);
 	light_ray = normalise_vector(direction_vector(start, light->pos));
 	start = add_vect(start,
 			scalar_vect(get_normal_vector(start, rt_obj, &data), 0.01));
@@ -97,5 +95,5 @@ int			calc_colour_from_light(t_data data, t_geo *rt_obj)
 	}
 	final_light = add_lights(final_light,
 					!data.render_mode ? data.no_render_amb : data.amb.colour);
-	return (filter_colours_rgb(final_light, rt_obj->colour));
+	return (filter_colours_rgb(final_light, rt_obj, data.ref_lvl));
 }

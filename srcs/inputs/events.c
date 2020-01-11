@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/03 17:26:20 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/09 13:40:40 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/11 15:23:57 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	handle_click(int button, int x, int y, t_data *data)
 		multithread_render(data);
 		data->t = -1;
 		data->ray = compute_ray(data, data->current_cam, x, y);
-		if ((data->cur_obj = find_closest_hit(data, data->ray, &(data->t))))
+		if ((data->cur_obj = find_closest_hit_non_ref(data)))
 		{
 			data->obj_selected = 1;
 			mlx_string_put(data->mlx_ptr, data->mlx_win, 50, 50,

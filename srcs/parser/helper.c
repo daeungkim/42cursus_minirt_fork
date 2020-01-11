@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/18 17:48:02 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/09 11:26:21 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/11 15:14:27 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,12 @@ void	skip_whitespace(char **line)
 {
 	while (is_white_space(**line))
 		(*line)++;
+}
+
+int		check_ref(char **line)
+{
+	skip_whitespace(line);
+	if (**line == 'R')
+		return (1);
+	return (0);
 }

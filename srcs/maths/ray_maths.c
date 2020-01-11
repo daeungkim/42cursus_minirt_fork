@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/03 15:12:36 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/09 16:22:33 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/11 17:51:06 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,36 @@ t_vector3	compute_ray(const t_data *data, t_camera *cam,
 	return (ray);
 }
 
-t_geo		*find_closest_hit(t_data *data, t_vector3 ray, double *hit)
+t_geo		*find_closest_hit(t_data *d)
+{
+	t_geo		*hit_obj;
+	t_list		*first;
+	t_rt_param	p;
+	t_vector3	norm;
+
+	hit_obj = 0;
+	first = d->objects;
+	while (first)
+	{
+		p = set_param(d->ray_origin, d->ray, -1, 0);
+		if (raytrace(first->content, &p))
+			check_first_hit(&hit_obj, p, &(d->t), first);
+		first = first->next;
+	}
+	if (hit_obj && hit_obj->ref && d->t > 0 && d->ref_lvl < MAX_REFLECTION)
+	{
+		d->ref_lvl++;
+		d->ray_origin = point_from_ray(d->ray_origin, d->ray, d->t);
+		norm = get_normal_vector(d->ray_origin, hit_obj, d);
+		d->ray_origin = add_vect(d->ray_origin, scalar_vect(norm, 0.001));
+		d->ray = reflect_vector(d->ray, norm);
+		d->t = -1.0;
+		return (find_closest_hit(d));
+	}
+	return (hit_obj);
+}
+
+t_geo		*find_closest_hit_non_ref(t_data *data)
 {
 	t_geo		*hit_obj;
 	t_list		*first;
@@ -90,9 +119,9 @@ t_geo		*find_closest_hit(t_data *data, t_vector3 ray, double *hit)
 	first = data->objects;
 	while (first)
 	{
-		p = set_param(data->current_cam->pos, ray, -1, 0);
+		p = set_param(data->current_cam->pos, data->ray, -1, 0);
 		if (raytrace(first->content, &p))
-			check_first_hit(&hit_obj, p, hit, first);
+			check_first_hit(&hit_obj, p, &(data->t), first);
 		first = first->next;
 	}
 	return (hit_obj);

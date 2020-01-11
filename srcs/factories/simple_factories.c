@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/18 18:04:15 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/09 13:55:49 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/11 14:20:25 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ t_geo	*sphere_factory(t_vector3 centre, double diametre, int colour)
 	sp_obj->find_inter = &raytrace_sphere;
 	sp_obj->get_normal_vector = &normal_vector_sphere;
 	sp_obj->obj_type = e_sphere;
+	sp_obj->ref = 0;
 	return (sp_obj);
 }
 
@@ -52,6 +53,7 @@ t_geo	*plane_factory(t_vector3 centre, t_vector3 orient, int colour)
 	plane_obj->find_inter = &raytrace_plane;
 	plane_obj->get_normal_vector = &normal_vector_plane;
 	plane_obj->obj_type = e_plane;
+	plane_obj->ref = 0;
 	return (plane_obj);
 }
 
@@ -78,6 +80,7 @@ t_geo	*square_factory(t_vector3 centre, t_vector3 orient,
 	square_obj->find_inter = &raytrace_square;
 	square_obj->get_normal_vector = &normal_vector_square;
 	square_obj->obj_type = e_sq;
+	square_obj->ref = 0;
 	return (square_obj);
 }
 
@@ -121,5 +124,6 @@ t_geo	*disk_factory(t_vector3 centre, t_vector3 orient,
 	disk_obj->find_inter = &raytrace_disk;
 	disk_obj->get_normal_vector = &normal_vector_disk;
 	disk_obj->obj_type = e_disk;
+	disk_obj->ref = 0;
 	return (disk_obj);
 }

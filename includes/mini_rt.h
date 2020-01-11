@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/10 17:32:57 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/11 17:50:37 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include "mlx.h"
 
 # define SCREEN_L 10
+# define MAX_REFLECTION 6
 # define CORES 4
 
 typedef enum		e_obj_type
@@ -176,6 +177,7 @@ typedef struct		s_geo_obj
 	int				(*find_inter)(t_rt_param *param);
 	t_vector3		(*get_normal_vector)(t_vector3 point, void *obj);
 	int				colour;
+	int8_t			ref;
 	int8_t			obj_type;
 }					t_geo;
 
@@ -196,6 +198,8 @@ typedef struct		s_data
 	t_list			*cameras;
 	t_list			*objects;
 	t_vector3		ray;
+	t_vector3		ray_origin;
+	int				ref_lvl;
 	double			t;
 	t_camera		*current_cam;
 	t_geo			*cur_obj;
@@ -244,6 +248,7 @@ int					parse_error(char *err);
 int					extra_info(char *err);
 int					is_white_space(char c);
 void				skip_whitespace(char **line);
+int					check_ref(char **line);
 int					ft_atoi_live(char **line);
 double				ft_atof_live(char **line);
 int					get_rgb(char **line, int *colour, int value);
@@ -285,6 +290,7 @@ double				dot(t_vector3 a, t_vector3 b);
 double				dot_same(t_vector3 a);
 t_vector3			cross_prod(t_vector3 a, t_vector3 b);
 double				angle_between_vectors(t_vector3 a, t_vector3 b);
+t_vector3			reflect_vector(t_vector3 ray, t_vector3 normal);
 
 t_vector3			apply_orientation(t_vector3 base, t_vector3 orient);
 t_vector3			rot_axis(t_vector3 axis, t_vector3 vec, double angle);
@@ -298,8 +304,8 @@ t_rt_param			set_param(t_vector3 o, t_vector3 r, double i, void *ob);
 
 t_vector3			compute_ray(const t_data *data, t_camera *cam,
 					const double x, const double y);
-t_geo				*find_closest_hit(t_data *data, t_vector3 ray,
-					double *hit);
+t_geo				*find_closest_hit(t_data *data);
+t_geo				*find_closest_hit_non_ref(t_data *data);
 int					raytrace(t_geo *geo, t_rt_param *param);
 int					calc_colour_from_light(t_data data, t_geo *rt_obj);
 
@@ -500,7 +506,7 @@ int					get_red(int colour);
 int					encode_rgb(int red, int green, int blue);
 void				decode_rgb(int colour, int *red, int *green, int *blue);
 int					apply_intensity_rgb(int colour, double intensity);
-int					filter_colours_rgb(int source, int surface);
+int					filter_colours_rgb(int source, t_geo * obj, int lvl);
 int					add_lights(int a, int b);
 
 int					parse_error(char *err);

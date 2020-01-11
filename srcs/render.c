@@ -6,11 +6,17 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/03 17:23:56 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/10 16:55:45 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/11 18:11:27 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
+
+static int bcgrd_colour(int lvl)
+{
+	return (encode_rgb(50 * pow(0.94, lvl),
+			50 * pow(0.975, lvl), 50 * pow(0.94, lvl)));
+}
 
 void	*compute_render_t(void *data)
 {
@@ -29,11 +35,13 @@ void	*compute_render_t(void *data)
 		while (++j < d->res.x)
 		{
 			d->t = -1;
+			d->ref_lvl = 0;
 			d->ray = compute_ray(d, d->current_cam, j, i);
-			if ((d->cur_obj = find_closest_hit(d, d->ray, &(d->t))))
+			d->ray_origin = d->current_cam->pos;
+			if ((d->cur_obj = find_closest_hit(d)))
 				d->workable[j] = calc_colour_from_light(*d, d->cur_obj);
 			else
-				d->workable[j] = encode_rgb(50, 50, 50);
+				d->workable[j] = bcgrd_colour(d->ref_lvl);
 		}
 	}
 	d->cur_obj = 0;

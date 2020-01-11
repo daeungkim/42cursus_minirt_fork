@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/18 17:53:59 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/09 12:13:49 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/11 15:17:30 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ int	load_sphere(t_data *data, char **line)
 	if (!(sp = ft_lstnew(sphere_factory(centre, diametre, colour))) ||
 			!((t_geo *)(sp->content)))
 		return (parse_error("Malloc for sphere failed"));
+	if (check_ref(line))
+		((t_geo *)(sp->content))->ref = 1;
 	ft_lstadd_back(&(data->objects), sp);
 	extra_info("Sphere loaded");
 	return (1);
