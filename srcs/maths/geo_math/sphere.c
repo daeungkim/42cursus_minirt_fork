@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/30 15:35:22 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/09 13:22:08 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/11 14:27:06 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ int			raytrace_sphere(t_rt_param *param)
 {
 	t_vector3	abc;
 	t_sphere	*sp;
-	double		t0;
-	double		t1;
+	int 		res;
 
 	sp = param->object;
 	abc.x = dot(param->ray, param->ray);
@@ -30,13 +29,14 @@ int			raytrace_sphere(t_rt_param *param)
 	abc.z = dot(sub_vect(param->origin, sp->centre),
 				sub_vect(param->origin, sp->centre)) -
 				(sp->diametre * (sp->diametre / 4.0));
-	if (!solve_quadratic(create_vector(abc.x, abc.y, abc.z), &t0, &t1))
+	if (!solve_quadratic(create_vector(abc.x, abc.y, abc.z), &(param->i), &(param->i_2)))
 		return (0);
-	if (t0 < 0)
-		return (0);
-	param->i = t0;
-	param->v = 1;
-	return (1);
+	res = 0;
+	if (param->i > 0)
+		param->v = 1;
+	if (param->i_2 > 0)
+		param->v_2 = 1;
+	return (param->v + param->v_2);
 }
 
 t_vector3	normal_vector_sphere(t_vector3 point, void *sphere)
