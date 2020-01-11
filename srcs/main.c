@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/10 16:55:58 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/11 19:22:00 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	set_data(t_data *data)
 	data->render_mode = 1;
 	data->cam_num = 0;
 	data->obj_selected = 0;
+	data->max_ref = 0;
 }
 
 int		exe_rt(t_data *d, char *file)

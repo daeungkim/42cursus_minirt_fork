@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 12:05:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/09 15:24:10 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/11 19:21:44 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	populate_functions(int (*tab[256][256])(t_data *, char **))
 {
 	init_tab(tab);
 	tab['R'][0] = &load_res;
+	tab['R']['E'] = &load_max_reflection;
 	tab['A'][0] = &load_amb;
 	tab['l'][0] = &load_light;
 	tab['c'][0] = &load_camera;

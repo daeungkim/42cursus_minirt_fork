@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 13:27:34 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/11 16:52:50 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/11 19:32:08 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ int		filter_colours_rgb(int source, t_geo * obj, int lvl)
 		surf.b = src.b;
 	if (lvl)
 	{
-		surf.r = (double)surf.r * pow(0.94, lvl);
-		surf.g = (double)surf.g * pow(0.975, lvl);
-		surf.b = (double)surf.b * pow(0.94, lvl);
+		surf.r = (double)surf.r * pow(0.97, lvl);
+		surf.g = (double)surf.g * pow(0.995, lvl);
+		surf.b = (double)surf.b * pow(0.97, lvl);
 	}
 	return (encode_rgb(surf.r, surf.g, surf.b));
 }

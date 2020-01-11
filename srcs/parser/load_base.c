@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/18 17:53:22 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/09 11:54:04 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/11 19:22:33 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,5 +107,20 @@ int	load_camera(t_data *data, char **line)
 		return (0);
 	ft_lstadd_back(&(data->cameras), cam);
 	extra_info("Camera loaded");
+	return (1);
+}
+
+int	load_max_reflection(t_data *data, char **line)
+{
+	if (data->max_ref > 0)
+		return (parse_error("Max reflection level already loaded"));
+	data->max_ref = 0;
+	(*line) += 2;
+	skip_whitespace(line);
+	if (ft_isdigit(**line) || **line == '-')
+		data->max_ref = ft_atoi_live(line);
+	if (data->max_ref < 0)
+		return (parse_error("Max refelction level cannot be below 0"));
+	extra_info("Max reflection level set");
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/11 17:50:37 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/11 19:22:47 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 # include "mlx.h"
 
 # define SCREEN_L 10
-# define MAX_REFLECTION 6
 # define CORES 4
 
 typedef enum		e_obj_type
@@ -200,6 +199,7 @@ typedef struct		s_data
 	t_vector3		ray;
 	t_vector3		ray_origin;
 	int				ref_lvl;
+	int				max_ref;
 	double			t;
 	t_camera		*current_cam;
 	t_geo			*cur_obj;
@@ -256,6 +256,7 @@ int					get_vector3(char **line, t_vector3 *vector);
 int					check_points_unique(t_vector3 p1, t_vector3 p2,
 					t_vector3 p3);
 int					load_res(t_data *data, char **line);
+int					load_max_reflection(t_data *data, char **line);
 int					load_amb(t_data *data, char **line);
 int					load_light(t_data *data, char **line);
 int					load_camera(t_data *data, char **line);

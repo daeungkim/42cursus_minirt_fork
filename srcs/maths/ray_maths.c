@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/03 15:12:36 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/11 17:51:06 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/11 19:23:02 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ t_geo		*find_closest_hit(t_data *d)
 			check_first_hit(&hit_obj, p, &(d->t), first);
 		first = first->next;
 	}
-	if (hit_obj && hit_obj->ref && d->t > 0 && d->ref_lvl < MAX_REFLECTION)
+	if (hit_obj && hit_obj->ref && d->t > 0 && d->ref_lvl < d->max_ref)
 	{
 		d->ref_lvl++;
 		d->ray_origin = point_from_ray(d->ray_origin, d->ray, d->t);

@@ -6,13 +6,13 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/18 17:59:06 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/09 12:12:42 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/11 19:10:39 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 
-int	load_dodecahedron(t_data *data, char **line)
+int			load_dodecahedron(t_data *data, char **line)
 {
 	t_vector3	centre;
 	t_vector3	orient;
@@ -39,29 +39,39 @@ int	load_dodecahedron(t_data *data, char **line)
 	return (1);
 }
 
-int	load_cube(t_data *data, char **line)
+static void	add_ref(void *obj)
+{
+	((t_geo *)obj)->ref = 1;
+	return ;
+}
+
+int			load_cube(t_data *data, char **line)
 {
 	t_list		*sq;
+	t_list		*first;
 	t_geo		*obj;
 	t_square	*squ;
 
 	if (!load_square(data, line))
-		return (parse_error("Base of pyramid failed to load"));
+		return (parse_error("Base of cube failed to load"));
 	sq = data->objects;
+	first = sq;
 	sq = ft_lstlast(sq);
 	obj = sq->content;
 	squ = obj->obj;
 	if (!create_cube(data, obj->obj, obj->colour, squ->orient))
-		return (parse_error("Roof of pyramid failed to load"));
+		return (parse_error("Part1 of cube failed to load"));
 	sq = ft_lstlast(sq);
 	obj = sq->content;
 	if (!create_cube_2(data, obj->obj, obj->colour))
-		return (parse_error("Roof of pyramid failed to load"));
+		return (parse_error("Part 2 of cube failed to load"));
 	extra_info("cube loaded");
+	if (check_ref(line))
+		ft_lstiter(first, &add_ref);
 	return (1);
 }
 
-int	load_pyramid(t_data *data, char **line)
+int			load_pyramid(t_data *data, char **line)
 {
 	double		height;
 	t_list		*sq;

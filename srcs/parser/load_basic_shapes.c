@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/18 17:53:59 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/11 15:17:30 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/11 19:00:48 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	load_plane(t_data *data, char **line)
 int	load_square(t_data *data, char **line)
 {
 	t_vector3	centre;
-	t_vector3	orient;
+	t_vector3	o;
 	double		height;
 	int			colour;
 	t_list		*sq;
@@ -73,22 +73,22 @@ int	load_square(t_data *data, char **line)
 	(*line) += 2;
 	if (!get_vector3(line, &centre))
 		return (parse_error("Wrong centre vector of a square"));
-	if (!get_vector3(line, &orient))
+	if (!get_vector3(line, &o))
 		return (parse_error("Wrong orientation vector of a square"));
-	if (orient.x > 1 || orient.y > 1 || orient.z > 1 ||
-		orient.x < -1 || orient.y < -1 || orient.z < -1)
+	if (o.x > 1 || o.y > 1 || o.z > 1 || o.x < -1 || o.y < -1 || o.z < -1)
 		return (parse_error("Square orientation not between [-1.0;1.0]"));
 	skip_whitespace(line);
 	if ((height = ft_atof_live(line)) <= 0)
 		return (parse_error("Error in square height"));
 	if (!get_rgb(line, &colour, 0))
 		return (parse_error("Wrong RGB values for square"));
-	if (!(sq = ft_lstnew(square_factory(centre, orient, height, colour))) ||
+	if (!(sq = ft_lstnew(square_factory(centre, o, height, colour))) ||
 		!((t_geo *)(sq->content)))
 		return (parse_error("Malloc for square failed"));
+	if (check_ref(line))
+		((t_geo *)(sq->content))->ref = 1;
 	ft_lstadd_back(&(data->objects), sq);
-	extra_info("Square loaded");
-	return (1);
+	return (extra_info("Square loaded"));
 }
 
 int	load_disk(t_data *data, char **line)
