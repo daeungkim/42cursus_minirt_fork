@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/03 15:12:36 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/11 19:23:02 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/13 15:09:22 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ t_geo		*find_closest_hit(t_data *d)
 	t_geo		*hit_obj;
 	t_list		*first;
 	t_rt_param	p;
-	t_vector3	norm;
 
 	hit_obj = 0;
 	first = d->objects;
@@ -97,15 +96,10 @@ t_geo		*find_closest_hit(t_data *d)
 		first = first->next;
 	}
 	if (hit_obj && hit_obj->ref && d->t > 0 && d->ref_lvl < d->max_ref)
-	{
-		d->ref_lvl++;
-		d->ray_origin = point_from_ray(d->ray_origin, d->ray, d->t);
-		norm = get_normal_vector(d->ray_origin, hit_obj, d);
-		d->ray_origin = add_vect(d->ray_origin, scalar_vect(norm, 0.001));
-		d->ray = reflect_vector(d->ray, norm);
-		d->t = -1.0;
-		return (find_closest_hit(d));
-	}
+		return (check_reflection(d, hit_obj));
+	else if (hit_obj && hit_obj->gl &&
+			hit_obj->obj_type == e_sphere && d->t > 0)
+		return (check_refraction(d, hit_obj));
 	return (hit_obj);
 }
 

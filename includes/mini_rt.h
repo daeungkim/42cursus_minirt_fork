@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/11 19:22:47 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/13 15:10:50 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,6 +177,7 @@ typedef struct		s_geo_obj
 	t_vector3		(*get_normal_vector)(t_vector3 point, void *obj);
 	int				colour;
 	int8_t			ref;
+	int8_t			gl;
 	int8_t			obj_type;
 }					t_geo;
 
@@ -211,6 +212,8 @@ typedef struct		s_data
 	int				pixsize;
 	int				pixsizeline;
 	int				endian;
+	int				out;
+	int				has_ref;
 }					t_data;
 
 typedef struct		s_bmp
@@ -292,6 +295,7 @@ double				dot_same(t_vector3 a);
 t_vector3			cross_prod(t_vector3 a, t_vector3 b);
 double				angle_between_vectors(t_vector3 a, t_vector3 b);
 t_vector3			reflect_vector(t_vector3 ray, t_vector3 normal);
+t_vector3			refract_vector(t_vector3 ray, t_vector3 normal, t_data *d);
 
 t_vector3			apply_orientation(t_vector3 base, t_vector3 orient);
 t_vector3			rot_axis(t_vector3 axis, t_vector3 vec, double angle);
@@ -307,6 +311,8 @@ t_vector3			compute_ray(const t_data *data, t_camera *cam,
 					const double x, const double y);
 t_geo				*find_closest_hit(t_data *data);
 t_geo				*find_closest_hit_non_ref(t_data *data);
+t_geo				*check_reflection(t_data *d, t_geo *hit_obj);
+t_geo				*check_refraction(t_data *d, t_geo *hit_obj);
 int					raytrace(t_geo *geo, t_rt_param *param);
 int					calc_colour_from_light(t_data data, t_geo *rt_obj);
 
@@ -507,7 +513,7 @@ int					get_red(int colour);
 int					encode_rgb(int red, int green, int blue);
 void				decode_rgb(int colour, int *red, int *green, int *blue);
 int					apply_intensity_rgb(int colour, double intensity);
-int					filter_colours_rgb(int source, t_geo * obj, int lvl);
+int					filter_colours_rgb(int source, t_geo *obj, int lvl);
 int					add_lights(int a, int b);
 
 int					parse_error(char *err);

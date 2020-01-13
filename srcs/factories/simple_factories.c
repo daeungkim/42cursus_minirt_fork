@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/18 18:04:15 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/11 14:20:25 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/13 14:38:52 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ t_geo	*sphere_factory(t_vector3 centre, double diametre, int colour)
 	sp_obj->get_normal_vector = &normal_vector_sphere;
 	sp_obj->obj_type = e_sphere;
 	sp_obj->ref = 0;
+	sp_obj->gl = 0;
 	return (sp_obj);
 }
 
@@ -54,6 +55,7 @@ t_geo	*plane_factory(t_vector3 centre, t_vector3 orient, int colour)
 	plane_obj->get_normal_vector = &normal_vector_plane;
 	plane_obj->obj_type = e_plane;
 	plane_obj->ref = 0;
+	plane_obj->gl = 0;
 	return (plane_obj);
 }
 
@@ -81,6 +83,7 @@ t_geo	*square_factory(t_vector3 centre, t_vector3 orient,
 	square_obj->get_normal_vector = &normal_vector_square;
 	square_obj->obj_type = e_sq;
 	square_obj->ref = 0;
+	square_obj->gl = 0;
 	return (square_obj);
 }
 
@@ -102,6 +105,8 @@ t_geo	*tri_factory(t_vector3 p1, t_vector3 p2, t_vector3 p3, int colour)
 	tri_obj->find_inter = &raytrace_triangle;
 	tri_obj->get_normal_vector = &normal_vector_triangle;
 	tri_obj->obj_type = e_tri;
+	tri_obj->ref = 0;
+	tri_obj->gl = 0;
 	return (tri_obj);
 }
 
@@ -125,5 +130,6 @@ t_geo	*disk_factory(t_vector3 centre, t_vector3 orient,
 	disk_obj->get_normal_vector = &normal_vector_disk;
 	disk_obj->obj_type = e_disk;
 	disk_obj->ref = 0;
+	disk_obj->gl = 0;
 	return (disk_obj);
 }

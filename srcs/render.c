@@ -6,19 +6,31 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/03 17:23:56 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/11 18:11:27 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/13 14:49:01 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 
-static int bcgrd_colour(int lvl)
+static int	bcgrd_colour(int lvl, t_data *d)
 {
+	if (d->has_ref)
+		return (encode_rgb(50 * 0.94, 50 * 0.975, 50 * 0.94));
 	return (encode_rgb(50 * pow(0.94, lvl),
 			50 * pow(0.975, lvl), 50 * pow(0.94, lvl)));
 }
 
-void	*compute_render_t(void *data)
+static void	init_pixel(t_data *d, int i, int j)
+{
+	d->t = -1;
+	d->ref_lvl = 0;
+	d->ray = compute_ray(d, d->current_cam, j, i);
+	d->ray_origin = d->current_cam->pos;
+	d->out = 1;
+	d->has_ref = 0;
+}
+
+void		*compute_render_t(void *data)
 {
 	int			i;
 	int			j;
@@ -34,21 +46,18 @@ void	*compute_render_t(void *data)
 		j = -1;
 		while (++j < d->res.x)
 		{
-			d->t = -1;
-			d->ref_lvl = 0;
-			d->ray = compute_ray(d, d->current_cam, j, i);
-			d->ray_origin = d->current_cam->pos;
+			init_pixel(d, i, j);
 			if ((d->cur_obj = find_closest_hit(d)))
 				d->workable[j] = calc_colour_from_light(*d, d->cur_obj);
 			else
-				d->workable[j] = bcgrd_colour(d->ref_lvl);
+				d->workable[j] = bcgrd_colour(d->ref_lvl, d);
 		}
 	}
 	d->cur_obj = 0;
 	return (NULL);
 }
 
-void	multithread_render(t_data *data)
+void		multithread_render(t_data *data)
 {
 	pthread_t	th[CORES];
 	t_data		dups[CORES];

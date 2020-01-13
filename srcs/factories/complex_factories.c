@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 17:07:36 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/11 15:28:06 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/13 14:39:14 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ t_geo	*cyl_factory(t_vector3 centre, t_vector3 orient,
 	cyl_obj->get_normal_vector = &normal_vector_cyl;
 	cyl_obj->obj_type = e_cyl;
 	cyl_obj->ref = 0;
+	cyl_obj->gl = 0;
 	return (cyl_obj);
 }
 
@@ -57,6 +58,7 @@ t_geo	*cone_factory(t_vector3 centre, t_vector3 orient,
 	cone_obj->get_normal_vector = &normal_vector_cone;
 	cone_obj->obj_type = e_cone;
 	cone_obj->ref = 0;
+	cone_obj->gl = 0;
 	return (cone_obj);
 }
 
@@ -81,5 +83,6 @@ t_geo	*torus_factory(t_vector3 centre, t_vector3 orient,
 	torus_obj->get_normal_vector = &normal_vector_torus;
 	torus_obj->obj_type = e_torus;
 	torus_obj->ref = 0;
+	torus_obj->gl = 0;
 	return (torus_obj);
 }

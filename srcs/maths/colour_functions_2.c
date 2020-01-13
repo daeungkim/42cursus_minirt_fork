@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 13:27:34 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/12 16:31:00 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/13 14:49:19 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int		apply_intensity_rgb(int colour, double intensity)
 	return (encode_rgb(red, green, blue));
 }
 
-int		filter_colours_rgb(int source, t_geo * obj, int lvl)
+int		filter_colours_rgb(int source, t_geo *obj, int lvl)
 {
 	t_rgb	src;
 	t_rgb	surf;

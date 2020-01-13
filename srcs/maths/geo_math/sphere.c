@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/30 15:35:22 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/11 14:27:06 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/13 10:52:01 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int			raytrace_sphere(t_rt_param *param)
 {
 	t_vector3	abc;
 	t_sphere	*sp;
-	int 		res;
+	int			res;
 
 	sp = param->object;
 	abc.x = dot(param->ray, param->ray);
@@ -29,7 +29,8 @@ int			raytrace_sphere(t_rt_param *param)
 	abc.z = dot(sub_vect(param->origin, sp->centre),
 				sub_vect(param->origin, sp->centre)) -
 				(sp->diametre * (sp->diametre / 4.0));
-	if (!solve_quadratic(create_vector(abc.x, abc.y, abc.z), &(param->i), &(param->i_2)))
+	if (!solve_quadratic(create_vector(abc.x, abc.y, abc.z),
+		&(param->i), &(param->i_2)))
 		return (0);
 	res = 0;
 	if (param->i > 0)

@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/03 15:35:14 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/11 15:59:34 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/13 10:51:30 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int			raytrace(t_geo *geo, t_rt_param *param)
 t_vector3	get_normal_vector(t_vector3 point, t_geo *geo, t_data *d)
 {
 	t_vector3 normal;
-	
+
 	normal = geo->get_normal_vector(point, geo->obj);
 	if (dot(normal, d->ray) > 0)
 		normal = scalar_vect(normal, -1.0);
