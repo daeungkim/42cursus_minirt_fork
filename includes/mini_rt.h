@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/14 11:35:31 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/14 12:20:33 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,6 +274,7 @@ int					load_torus(t_data *data, char **line);
 int					load_dodecahedron(t_data *data, char **line);
 int					load_cube(t_data *data, char **line);
 int					load_pyramid(t_data *data, char **line);
+int					load_spherocylinder(t_data *data, char **line);
 
 /*
 ** vector functions
@@ -471,6 +472,12 @@ int					create_roof_2(t_data *data, t_square *sq, double height,
 int					create_cube(t_data *data, t_square *sq, int colour,
 					t_vector3 o);
 int					create_cube_2(t_data *data, t_square *sq, int colour);
+
+/*
+** spherocylinder
+*/
+
+int					create_endings(t_data *data, t_cylindre *cy, int colour);
 
 /*
 ** render

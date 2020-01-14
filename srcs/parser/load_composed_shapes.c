@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/18 17:59:06 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/11 19:10:39 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/14 12:21:30 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,5 +91,20 @@ int			load_pyramid(t_data *data, char **line)
 	if (!create_roof_2(data, obj->obj, height, obj->colour))
 		return (parse_error("Roof of pyramid failed to load"));
 	extra_info("Pyramid loaded");
+	return (1);
+}
+
+int			load_spherocylinder(t_data *data, char **line)
+{
+	t_list		*cy;
+	t_geo		*obj;
+
+	if (!load_cylinder(data, line))
+		return (parse_error("Cylinder of spherocylinder failed to load"));
+	cy = data->objects;
+	cy = ft_lstlast(cy);
+	obj = cy->content;
+	if (!create_endings(data, obj->obj, obj->colour))
+		return (parse_error("Failed to load endings on sc"));
 	return (1);
 }

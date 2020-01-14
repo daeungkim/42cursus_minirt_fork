@@ -6,7 +6,7 @@
 #    By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/18 18:36:00 by cjaimes           #+#    #+#              #
-#    Updated: 2020/01/13 15:06:23 by cjaimes          ###   ########.fr        #
+#    Updated: 2020/01/14 12:13:53 by cjaimes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,6 +72,7 @@ SRC			=	main.c \
 				composed_shapes/dodecahedron/dode_peak_11_12.c \
 				composed_shapes/dodecahedron/dode_pl_pk.c \
 				composed_shapes/pyramid/pyramid.c \
+				composed_shapes/spherocylinder/spherocylinder.c \
 				composed_shapes/cube/cube.c
 
 SRCS		=	${addprefix ${SRC_DIR}, ${SRC}}
@@ -106,6 +107,7 @@ ${OBJ_DIR}%.o :	${SRC_DIR}%.c
 			@mkdir -p ${OBJ_DIR}composed_shapes
 			@mkdir -p ${OBJ_DIR}composed_shapes/dodecahedron
 			@mkdir -p ${OBJ_DIR}composed_shapes/pyramid
+			@mkdir -p ${OBJ_DIR}composed_shapes/spherocylinder
 			@mkdir -p ${OBJ_DIR}composed_shapes/cube
 			@mkdir -p ${OBJ_DIR}maths/geo_math
 			@mkdir -p ${OBJ_DIR}maths/vector_maths

@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 12:05:18 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/11 19:21:44 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/14 12:15:28 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	populate_functions(int (*tab[256][256])(t_data *, char **))
 	tab['c']['o'] = &load_cone;
 	tab['c']['y'] = &load_cylinder;
 	tab['p']['y'] = &load_pyramid;
+	tab['s']['c'] = &load_spherocylinder;
 }
 
 int		load_line(t_data *data, char *line)
