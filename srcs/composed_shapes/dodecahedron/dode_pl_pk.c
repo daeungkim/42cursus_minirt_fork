@@ -6,13 +6,12 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 20:12:45 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/09 14:06:53 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/14 11:40:29 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 #include <math.h>
-#include <stdio.h>
 
 void		make_dode_verts(double r, t_vector3 *vertices)
 {

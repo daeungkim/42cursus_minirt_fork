@@ -6,12 +6,11 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 16:41:07 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/09 13:23:15 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/14 11:40:29 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
-#include <stdio.h>
 
 static int	check_cyl_solve(t_rt_param *param, t_cylindre *cyl)
 {

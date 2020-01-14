@@ -6,12 +6,11 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/17 10:15:01 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/10 17:24:21 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/14 11:40:29 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
-#include <stdio.h>
 
 static void	fill_params(t_quartic *q, t_orus *t, t_rt_param *par, t_vector3 x)
 {

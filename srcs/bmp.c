@@ -6,11 +6,12 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/09 00:05:32 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/09 13:56:38 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/14 11:35:53 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
+#include <time.h>
 
 void	set_bmp(t_bmp *bmp, t_data *data)
 {
@@ -51,18 +52,33 @@ void	write_header(const int fd, t_bmp *bmp)
 	write(fd, &(bmp->imp_colour), 4);
 }
 
-int		save_image(t_data *data)
+char	*get_current_time_name(char *str)
+{
+	time_t		t;
+	struct tm	*info;
+	size_t		str_len;
+
+	time(&t);
+	ft_memset(str, 0, 50);
+	info = localtime(&t);
+	ft_strcpy(str, "screenshot_");
+	str_len = strftime(str + 11, 39, "%F-%T", info);
+	ft_strcat(str, ".bmp");
+	free(info);
+	return (str);
+}
+
+int		save_image(t_data *data, int x, int y)
 {
 	t_bmp	bmp;
 	int		fd;
-	int		x;
-	int		y;
 	char	*add;
+	char	name[50];
 
 	ft_putstr("Saving...\n");
 	add = (char *)data->data_add;
 	set_bmp(&bmp, data);
-	fd = open("screenshot.bmp", O_CREAT | O_WRONLY | O_TRUNC, 0666);
+	fd = open(get_current_time_name(name), O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	write_header(fd, &bmp);
 	y = data->res.y - 1;
 	while (y >= 0)

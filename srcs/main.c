@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/11 19:22:00 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/14 11:40:29 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "mini_rt.h"
 #include "key.h"
 #include <unistd.h>
-#include <stdio.h>
 #include <time.h>
 
 void	set_data(t_data *data)
@@ -63,7 +62,7 @@ int		main(int ac, char **av)
 	if (!exe_rt(&data, av[1]))
 		return (0);
 	if (data.save)
-		return (save_image(&data));
+		return (save_image(&data, 0, 0));
 	mlx_hook(data.mlx_win, 2, (1L << 0), key_release, &data);
 	mlx_hook(data.mlx_win, 17, (1L << 17), proper_exit, &data);
 	mlx_hook(data.mlx_win, 5, (1L << 0), handle_click, &data);

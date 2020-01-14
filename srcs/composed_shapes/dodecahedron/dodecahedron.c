@@ -6,13 +6,12 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 16:47:49 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/09 14:07:50 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/14 11:39:52 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 #include <math.h>
-#include <stdio.h>
 
 void	compute_peaks(t_vector3 *planes, t_vector3 *peaks,
 		double r, t_vector3 origin)
