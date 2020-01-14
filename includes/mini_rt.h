@@ -6,7 +6,7 @@
 /*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/13 15:10:50 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/01/14 11:35:31 by cjaimes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -518,6 +518,6 @@ int					add_lights(int a, int b);
 
 int					parse_error(char *err);
 
-int					save_image(t_data *data);
+int					save_image(t_data *data, int x, int y);
 int					load_data(t_data *data, char *rt_file);
 #endif
