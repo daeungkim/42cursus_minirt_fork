@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector_maths3.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dakim <dakim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 14:46:01 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/09 13:15:17 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/07/06 14:19:10 by dakim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ double		dot_same(t_vector3 a)
 ** base vector is (1.0, 0.0, 0.0)
 */
 
+// orient를 기준으로 상,하로 90도 좌우로 90도 앞뒤로 90도에 해당하는 벡터를 계산함
 t_vector3	apply_orientation(t_vector3 base, t_vector3 orient)
 {
 	t_vector3	ret;

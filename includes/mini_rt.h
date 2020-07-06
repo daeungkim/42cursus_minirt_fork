@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_rt.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjaimes <cjaimes@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dakim <dakim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 15:39:03 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/01/14 12:20:33 by cjaimes          ###   ########.fr       */
+/*   Updated: 2020/07/06 14:20:43 by dakim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,17 @@ typedef struct		s_para_light
 typedef struct		s_camera
 {
 	t_vector3		pos;
+	//	카메라의 위치값
 	t_vector3		vector_x;
+	// 보는 방향기준으로 x축에서 90도에 해당하는 값으로 추정
 	t_vector3		vector_y;
+	// 보는 방향기준으로 y축에서 90도에 해당하는 값으로 추정
 	t_vector3		vector_z;
+	// 보는 방향기준으로 z축에서 90도에 해당하는 값으로 추정
 	t_vector3		orient;
+	// 카메라의 보는 방향
 	double			fov;
+	// 카메라의 가로 화각
 }					t_camera;
 
 typedef struct		s_phere
@@ -202,7 +208,9 @@ typedef struct		s_data
 	int				ref_lvl;
 	int				max_ref;
 	double			t;
+	// object와의 거리 저장하는 변수
 	t_camera		*current_cam;
+	// 이미지를 랜더링하는 현재의 카메라 저장
 	t_geo			*cur_obj;
 	int				bckgd_colour;
 	int				no_render_amb;
