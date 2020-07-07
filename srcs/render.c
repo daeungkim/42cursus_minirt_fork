@@ -6,7 +6,7 @@
 /*   By: dakim <dakim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/03 17:23:56 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/07/06 15:08:41 by dakim            ###   ########.fr       */
+/*   Updated: 2020/07/07 12:33:33 by dakim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static void	init_pixel(t_data *d, int i, int j)
 	d->ray = compute_ray(d, d->current_cam, j, i);
 	// 픽셀의 스크린상의 위치 계산하는 함수로 추정
 	// 잘 이해가 가지 않음
+	// maths/ray_maths.c에 있음
 	d->ray_origin = d->current_cam->pos;
 	d->out = 1;
 	d->has_ref = 0;
@@ -53,7 +54,7 @@ void		*compute_render_t(void *data)
 		while (++j < d->res.x)
 		{
 			init_pixel(d, i, j);
-			// 각각의 픽셀이 스크린상에서 어디에 위치하는지 계산하는 함수로 추정
+			// 각각의 픽셀이 스크린상에서 어디에 위치하는지 계산
 			if ((d->cur_obj = find_closest_hit(d)))
 				d->workable[j] = calc_colour_from_light(*d, d->cur_obj);
 			else

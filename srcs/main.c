@@ -6,7 +6,7 @@
 /*   By: dakim <dakim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 18:31:26 by cjaimes           #+#    #+#             */
-/*   Updated: 2020/07/06 13:11:10 by dakim            ###   ########.fr       */
+/*   Updated: 2020/07/07 12:30:54 by dakim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ int		exe_rt(t_data *d, char *file)
 	d->max_cam = ft_lstsize(d->cameras);
 	// 최대 카메라 개수 저장
 	multithread_render(d);
+	// 레이트레이싱 수행
+	// render.c에 있음
 	return (1);
 }
 
@@ -72,7 +74,7 @@ int		main(int ac, char **av)
 	// 용도를 모르겠음 / 주석처리하여도 큰 문제 없이 돌아가는것 같음
 	if (!exe_rt(&data, av[1]))
 		return (0);
-	// raytracing을 execute하는 함수인것 같음
+	// raytracing을 execute하는 함수
 	if (data.save)
 		return (save_image(&data, 0, 0));
 	// 이미지파일로 만들어야하는 경우 이미지 저장을 수행하는것으로 추정
